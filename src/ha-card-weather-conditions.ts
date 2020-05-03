@@ -4,9 +4,7 @@ import {
   customElement,
   property,
   CSSResult,
-  TemplateResult,
-  css,
-  PropertyValues
+  TemplateResult
 } from "lit-element";
 
 import {HomeAssistant} from "custom-card-helpers";

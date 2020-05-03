@@ -8,7 +8,7 @@ function t(t,e,i,s){var n,r=arguments.length,o=r<3?e:null===s?s=Object.getOwnPro
       <ha-icon icon="${i}"></ha-icon>${void 0!==t?t:"Na"} ${e}
     </li>
   `,bt=(t,e,i,s)=>{let n,r,o,a,l,d;const c=s||t.selectedLanguage||t.language;let h=e.sun?t.states[e.sun]:void 0;if(h&&(l=new Date(h.attributes.next_rising),d=new Date(h.attributes.next_setting)),e.forecast){let e=i.temperature_high?Object.entries(i.temperature_high):void 0,s=i.temperature_low?Object.entries(i.temperature_low):void 0,l=i.precipitation_probability?Object.entries(i.precipitation_probability):void 0,d=i.precipitation_intensity?Object.entries(i.precipitation_intensity):void 0;n=e?Math.round(parseFloat(t.states[e[0][1]].state)):void 0,r=s?Math.round(parseFloat(t.states[s[0][1]].state)):void 0,o=l?Math.round(parseFloat(t.states[l[0][1]].state)):void 0,a=d?Math.round(parseFloat(t.states[d[0][1]].state)):void 0}let p=e.precipitation?Math.round(parseFloat(t.states[e.precipitation].state)):void 0,u=e.humidity?parseFloat(t.states[e.humidity].state):void 0,m=e.wind_bearing?parseFloat(t.states[e.wind_bearing].state):void 0,g=e.wind_speed?Math.round(10*parseFloat(t.states[e.wind_speed].state))/10:void 0,_=e.pressure?Math.round(parseFloat(t.states[e.pressure].state)):void 0,y=e.visibility?Math.round(parseFloat(t.states[e.visibility].state)):void 0;return F`
-    <ul class="variations ${"spacer"}">
+    <ul class="variations">
         ${!e.forecast||void 0===o&&void 0===a?"":vt(o,"%",a,ft(t,"precipitation")+"/h","mdi:weather-rainy")}
         ${!e.forecast||void 0===r&&void 0===n?"":vt(r,"",n,ft(t,"temperature"),"mdi:thermometer")}
         ${void 0!==p&&p>0?F`
@@ -303,7 +303,7 @@ function t(t,e,i,s){var n,r=arguments.length,o=r<3?e:null===s?s=Object.getOwnPro
       <ha-card class="ha-card-weather-conditions">
         ${this._header?F`
             ${this._hasCurrent&&this._displayTop?((t,e,i,s)=>{let n=t.states[e.sun].state,r=e.current_conditions?t.states[e.current_conditions].state:"",o=parseFloat(t.states[e.temperature].state);return F`
-      <div class="current ${""}">
+      <div class="current">
         <span class="icon bigger" style="background: none,
             url('${yt(r.toLowerCase(),s,n)}') no-repeat ; 
             background-size: contain;">${r}</span>
@@ -325,7 +325,7 @@ function t(t,e,i,s){var n,r=arguments.length,o=r<3?e:null===s?s=Object.getOwnPro
     </ul>
   `}(this.hass,this._config.pollen):""}
             ${this._hasForecast?((t,e,i,s,n)=>{let r=new Date,o=t.states[e.sun].state,a=i.icons?Object.entries(i.icons):void 0,l=i.temperature_high?Object.entries(i.temperature_high):void 0,d=i.temperature_low?Object.entries(i.temperature_low):void 0,c=i.precipitation_probability?Object.entries(i.precipitation_probability):void 0,h=i.precipitation_intensity?Object.entries(i.precipitation_intensity):void 0,p=Math.max(a?a.length:0,l?l.length:0,d?d.length:0,c?c.length:0,h?h.length:0),u=1,m=p>0?Array(p-u).fill(1,0,p-u).map(()=>u++):Array();return p>1?F`
-      <div class="forecast clear ${"spacer"}">
+      <div class="forecast clear">
         ${m.map(e=>{let i=new Date(r.setDate(r.getDate()+1)).toLocaleDateString(n,{weekday:"short"}),p=a?t.states[a[e][1]].state.toLowerCase():void 0,u=d?Math.round(parseFloat(t.states[d[e][1]].state)):void 0,m=l?Math.round(parseFloat(t.states[l[e][1]].state)):void 0,g=c?Math.round(parseFloat(t.states[c[e][1]].state)):void 0,_=h?Math.round(parseFloat(t.states[h[e][1]].state)):void 0;return F`
           <div class="day ${e}">
               <div class="dayname">${i}</div>

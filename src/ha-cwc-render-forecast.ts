@@ -64,7 +64,7 @@ export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, foreca
     : Array();
 
   return maxDays > 1 ? html`
-      <div class="forecast clear ${2 > 1 ? "spacer" : ""}">
+      <div class="forecast clear">
         ${days.map(day => {
     let date = new Date(forecastDate.setDate(forecastDate.getDate() + 1))
       .toLocaleDateString(lang, {weekday: "short"});

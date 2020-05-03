@@ -19,7 +19,7 @@ export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: st
   let temperature: number = parseFloat(hass.states[currentCfg.temperature].state) ;
 
   return html`
-      <div class="current ${1 > 1 ? "spacer" : ""}">
+      <div class="current">
         <span class="icon bigger" style="background: none,
             url('${getWeatherIcon(current_conditions.toLowerCase(), iconsConfig, sun)}') no-repeat ; 
             background-size: contain;">${current_conditions}</span>
