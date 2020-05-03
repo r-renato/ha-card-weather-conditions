@@ -29,6 +29,7 @@ resources:
 ```
 
 ## **Card variables**
+
 | **Name**     | **Type**      | **Requirement** | **Default**                       | **Description**                                                                               |
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
@@ -40,14 +41,14 @@ resources:
 | air_quality  | object        | Optional        |                                   | It's the Air Quality object, see the specific session.                                                       |
 | weather      | object        | Optional        |                                   | It's the Weather object, see the specific session.                                                    |
 
-#### **Pollen object**    
+### **Pollen object**    
 | **Name** |  **Type**   | **Requirement** | **Description**         |
 |----------|-------------|-----------------|-------------------------|
 | tree     | object list | Optional        | Pollen tree             |
 | weed     | object list | Optional        | Pollen weed             |
 | grass    | object list | Optional        | Pollen grass            |
 
-##### *Pollen object list*
+#### *Pollen object list*
 This objects list is applicable to all of them `tree` and `weed` and `grass`.
 
 | **Name** |  **Type**   | **Requirement** | **Description**                            |
@@ -58,7 +59,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 | low      | number      | Optional        | Low Pollen value (min < low < high < max)  |
 | high     | number      | Optional        | High Pollen value (min < low < high < max) |
 
-#### **Air Quality object**    
+### **Air Quality object**    
 |       **Name**        |  **Type**   | **Requirement** | **Description**         |
 |-----------------------|-------------|-----------------|-------------------------|
 | pm25                  | string      | Optional        | It is the sensor id     |
@@ -70,14 +71,14 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 | epa_aqi               | string      | Optional        | It is the sensor id     |
 | epa_health_concern    | string      | Optional        | It is the sensor id     |
 
-#### **Weather object**    
+### **Weather object**    
 |       **Name**        |  **Type**   | **Requirement** | **Default** | **Description**                                                                                          |
 |-----------------------|-------------|-----------------|-------------|----------------------------------------------------------------------------------------------------------|
 | icons_model           | string      | Optional        | `climacell` | This is the icon model you want to use. It can take the values: `climacell`, `darksky`, `openweathermap` |
 | current               | object list | Optional        |             | It is for the current weather data                                                                       |
 | forecast              | object list | Optional        |             | It is for the forecast weather data                                                                      |
 
-##### *Weather **current** object list*
+#### *Weather **current** object list*
 |       **Name**        |  **Type**   | **Requirement** | **Default** | **Description**     |
 |-----------------------|-------------|-----------------|-------------|---------------------|
 | sun                   | string      | Optional        |             | It is the sensor id |
@@ -91,7 +92,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 | precipitation         | string      | Optional        |             | It is the sensor id |
 | forecast              | boolean     | Optional        | `false`     | It can take the values: `true` or `true`. If `true` then the summary layer will also show the daily forecast for temperature and precipitation (day_1). |
 
-##### *Weather **forecast** object list*
+#### *Weather **forecast** object list*
 |       **Name**            |  **Type**   | **Requirement** | **Description**     |
 |---------------------------|-------------|-----------------|---------------------|
 | meteogram                 | string      | Optional        | It is the camera id |
@@ -101,7 +102,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 | precipitation_probability | object list | Optional        | It is the sensor id |
 | precipitation_intensity   | object list | Optional        | It is the sensor id |
 
-###### *Weather **forecast:** object list*
+##### *Weather **forecast:** object list*
 | **Name** |  **Type**   | **Requirement** | **Description**                                                         |
 |----------|-------------|-----------------|-------------------------------------------------------------------------|
 | day_1    | string      | Optional        | It is the sensor id. The day_1 sensor is for the current day forecast.  |
@@ -111,8 +112,8 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 | day_5    | string      | Optional        | It is the sensor id                                                     |
 
 
-### **Examples**
-#### - **Climacell data provider** -
+## **Examples**
+### - **Climacell data provider** -
 ```yaml
   type: custom:ha-card-weather-conditions
   name: "cc_test"
