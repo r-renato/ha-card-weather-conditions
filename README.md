@@ -28,7 +28,7 @@ resources:
     type: module
 ```
 
-### **Card variables**
+## **Card variables**
 | **Name**     | **Type**      | **Requirement** | **Default**                       | **Description**                                                                               |
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
