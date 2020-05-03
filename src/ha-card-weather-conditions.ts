@@ -102,8 +102,8 @@ setTimeout(function () {
         this._name = config.name;
       }
       if (config.language && config.language.length > 0) {
-        this._language = config.language;
-      }
+        this._language = config.language.toLowerCase() ;
+      } else this._language = 'en' ;
 
       if (undefined !== config.display) {
         this._displayTop = config.display.findIndex(item => 'top' === item.toLowerCase()) >= 0;
