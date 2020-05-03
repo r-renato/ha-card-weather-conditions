@@ -1,0 +1,13 @@
+# ####### ####### #######
+# Folders
+
+.idea
+__pycache__
+/node_modules/
+/.rpt2_cache/
+/trash/
+
+# ####### ####### #######
+# Files
+package-lock.json
+

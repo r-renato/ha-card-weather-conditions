@@ -1,0 +1,4 @@
+{
+  "name": "HA (Lovelace) Card Weather Conditions",
+  "domains": ["plugin"]
+}
