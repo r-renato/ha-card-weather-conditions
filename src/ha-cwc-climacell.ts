@@ -49,5 +49,5 @@ export const cwcClimacellNightIcons: { [key: string]: string; } = {
   mostly_cloudy: "cloudy-night-3",
   partly_cloudy: "cloudy-night-2",
   mostly_clear: "cloudy-night-1",
-  clear: "day-night"
+  clear: "night"
 };
