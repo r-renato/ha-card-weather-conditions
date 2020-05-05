@@ -199,7 +199,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
         day_5: sensor.cc_test_max_precipitation_4d
 ```
 
-<img src="https://raw.githubusercontent.com/r-renato/ha-card-weather-conditions/master/md.images/ha-card-weather-condition-full.png"  width="40%" height="40%" alt="Home Assistant lovelace card">
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-full.png"  width="40%" height="40%" alt="Home Assistant lovelace card">
 
 [license-shield]:https://img.shields.io/github/license/r-renato/ha-card-weather-conditions
 [buymecoffee]: https://www.buymeacoffee.com/0D3WbkKrn
