@@ -199,6 +199,8 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
         day_5: sensor.cc_test_max_precipitation_4d
 ```
 
-[license-shield]:https://img.shields.io/github/license/r-renato/hass-xiaomi-mi-flora-and-flower-care
+<img src="https://gitlab.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-full.png"  width="40%" height="40%" alt="Home Assistant lovelace card">
+
+[license-shield]:https://img.shields.io/github/license/r-renato/ha-card-weather-conditions
 [buymecoffee]: https://www.buymeacoffee.com/0D3WbkKrn
 [buymecoffeebadge]: https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow?style=for-the-badge
