@@ -28,5 +28,5 @@ export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: st
         <span class="tempc"> ${getUnit(hass,"temperature")}</span>
       </div>
       `;
-}
+} ;
 

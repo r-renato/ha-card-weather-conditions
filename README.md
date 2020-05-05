@@ -119,10 +119,6 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
   name: "cc_test"
   language: it
   animation: true
-  display:
-    - top
-    - current
-    - forecast
   camera: camera.cc_test_c1
   pollen:
     tree:

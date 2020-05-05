@@ -82,9 +82,9 @@ setTimeout(function () {
     private _hasAirQuality: boolean = false ;
     private _hasPollen: boolean = false ;
 
-    private _displayTop: boolean = false ;
-    private _displayCurrent: boolean = false ;
-    private _displayForecast: boolean = false ;
+    private _displayTop: boolean = true ;
+    private _displayCurrent: boolean = true ;
+    private _displayForecast: boolean = true ;
 
     /**
      *
@@ -108,7 +108,7 @@ setTimeout(function () {
       if (undefined !== config.display) {
         this._displayTop = config.display.findIndex(item => 'top' === item.toLowerCase()) >= 0;
         this._displayCurrent = config.display.findIndex(item => 'current' === item.toLowerCase()) >= 0;
-        this._displayTop = config.display.findIndex(item => 'forecast' === item.toLowerCase()) >= 0;
+        this._displayForecast = config.display.findIndex(item => 'forecast' === item.toLowerCase()) >= 0;
       }
 
       this._hasCurrent = (!!config.weather) && (!!config.weather.current);
@@ -200,8 +200,8 @@ setTimeout(function () {
 
     /**
      *
-     * @param meteogram
-     * @private
+     * @param hass
+     * @param camId
      */
     renderCamera(hass: HomeAssistant, camId: string) {
       let camera = hass.states[camId];
@@ -210,7 +210,7 @@ setTimeout(function () {
       return entity_picture ? html`
         <div @click=${e => this.handlePopup(e, camId)} class="container">
           <div class="mainImage">
-            <img src="${entity_picture}"/>
+            <img src="${entity_picture}" alt="${camera.attributes.friendly_name}"/>
           </div>
         </div>
       ` : html``;

@@ -5,7 +5,8 @@ import {IconsConfig} from "./types";
 /**
  *
  * @param condition
- * @param sun
+ * @param iconsConfig
+ * @param sunState
  */
 export const getWeatherIcon = (condition: string, iconsConfig: IconsConfig, sunState: string) => {
   let isNight = sunState && sunState == "below_horizon" ;
@@ -98,18 +99,18 @@ export const getWindDirections = (wd: number, locale: string) => {
   return null;
 } ;
 
-/**
- *
- * @param e
- * @param entityId
- */
-export const handlePopup = (e, entityId: string) => {
-  e.stopPropagation();
-
-  let ne = new Event('hass-more-info', {composed: true});
-  // @ts-ignore
-  ne.detail = {entityId};
-  dispatchEvent(ne);
-} ;
+// /**
+//  *
+//  * @param e
+//  * @param entityId
+//  */
+// export const handlePopup = (e, entityId: string) => {
+//   e.stopPropagation();
+//
+//   let ne = new Event('hass-more-info', {composed: true});
+//   // @ts-ignore
+//   ne.detail = {entityId};
+//   dispatchEvent(ne);
+// } ;
 
 
