@@ -158,6 +158,7 @@ setTimeout(function () {
      * @return {TemplateResult}
      */
     render() {
+      this._iconsConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
       if (this.invalidConfig) return html`
             <ha-card class="ha-card-weather-conditions">
                 <div class='banner'>
