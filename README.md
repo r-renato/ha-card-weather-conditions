@@ -18,6 +18,11 @@
 * Display camera meteogram
 * Display preferred camera
 
+<p float="left">
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-full.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-1.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+</p>
+    
 ## Card Configuration
 
 Import the card using:
@@ -194,8 +199,6 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
         day_4: sensor.cc_test_max_precipitation_3d
         day_5: sensor.cc_test_max_precipitation_4d
 ```
-
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-full.png"  width="40%" height="40%" alt="Home Assistant lovelace card">
 
 [license-shield]:https://img.shields.io/github/license/r-renato/ha-card-weather-conditions
 [buymecoffee]: https://www.buymeacoffee.com/0D3WbkKrn
