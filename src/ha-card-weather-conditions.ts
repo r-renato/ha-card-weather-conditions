@@ -14,44 +14,29 @@ import {cwcDarkskyDayIcons, cwcDarkskyNightIcons} from "./ha-cwc-darksky" ;
 import {cwcOpenWeatherMapDayIcons, cwcOpenWeatherMapNightIcons} from "./ha-cwc-openweathermap" ;
 
 import {IconsConfig, CardConfig} from "./types" ;
+import style from './style' ;
+
+import {imageExist} from "./ha-cwc-utils" ;
 import {renderSummary} from "./ha-cwc-render-summary" ;
 import {renderPresent} from "./ha-cwc-render-present" ;
 import {renderForecasts} from "./ha-cwc-render-forecast" ;
 import {renderPollens} from "./ha-cwc-render-pollen";
 import {renderAirQualities} from "./ha-cwc-render-airquality";
 
-import style from './style' ;
-
 const hacsImagePath: string = "/local/community/ha-card-weather-conditions/icons" ;
 const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 
-let hacsImagePathExist: boolean = false ;
-let manImagePathExist: boolean = false ;
-
-function imageExist(imageSrc, good, bad) {
-  let img = new Image();
-  img.onload = good;
-  img.onerror = bad;
-  img.src = imageSrc;
-}
-
-/**
- *
- */
-imageExist(hacsImagePath + "/weather/cloudy.svg",
-  function(){ hacsImagePathExist = true },
-  function(){ hacsImagePathExist = false } );
-
-/**
- *
- */
-imageExist(manImagePath + "/icons/static/cloudy.svg",
-  function(){ manImagePathExist = true },
-  function(){ manImagePathExist = false } );
+export let hacsImagePathExist: boolean = false ;
+export let manImagePathExist: boolean = false ;
 
 console.info("%c WEATHER-CONDITION-CARD %c 1.0.0 ", "color: white; background: green; font-weight: 700;", "color: coral; background: white; font-weight: 700;");
 
-setTimeout(function () {
+Promise.all([imageExist(hacsImagePath + "/weather/cloudy.svg"),
+                    imageExist(manImagePath + "/weather/cloudy.svg"), ]).then((testResults) => {
+  let hacsImages: boolean, manImages: boolean ;
+
+  hacsImages = hacsImagePathExist = testResults[0] ;
+  manImages = manImagePathExist = testResults[1] ;
 
   @customElement("ha-card-weather-conditions")
   class HaCardWeatherConditions extends LitElement {
@@ -117,7 +102,7 @@ setTimeout(function () {
       this._hasAirQuality = !!config.air_quality;
       this._hasPollen = !!config.pollen && (!!config.pollen.tree || !!config.pollen.weed || !!config.pollen.grass);
 
-      this._iconsConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
+      this._iconsConfig.path = hacsImages ? hacsImagePath : manImages ? manImagePath : null;
       // this._iconsConfig.iconType = config.animation ? "animated" : "static";
       this._iconsConfig.iconType = config.animation ? "animated" : "static";
       this._iconsConfig.iconsDay = cwcClimacellDayIcons ;
@@ -158,7 +143,10 @@ setTimeout(function () {
      * @return {TemplateResult}
      */
     render() {
-      this._iconsConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
+      if (!this._iconsConfig.path) {
+        this._iconsConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
+      }
+
       if (this.invalidConfig) return html`
             <ha-card class="ha-card-weather-conditions">
                 <div class='banner'>
@@ -184,14 +172,14 @@ setTimeout(function () {
       <ha-card class="ha-card-weather-conditions">
         ${this._header ? html`
             ${this._hasCurrent && this._displayTop
-              ? renderSummary(this.hass, this._config.weather.current, this._config.name, this._iconsConfig) : ""}
-            ${this._hasCurrent && this._displayCurrent 
-              ? renderPresent(this.hass, this._config.weather.current, this._config.weather.forecast, this._language) : ""}
+        ? renderSummary(this.hass, this._config.weather.current, this._config.name, this._iconsConfig) : ""}
+            ${this._hasCurrent && this._displayCurrent
+        ? renderPresent(this.hass, this._config.weather.current, this._config.weather.forecast, this._language) : ""}
             ${this._hasAirQuality ? renderAirQualities(this.hass, this._config.air_quality) : "" }
             ${this._hasPollen ? renderPollens(this.hass, this._config.pollen) : ""}
-            ${this._hasForecast 
-              ? renderForecasts(this.hass, this._config.weather.current, this._config.weather.forecast, 
-                  this._iconsConfig, this._language) : ""}
+            ${this._hasForecast
+        ? renderForecasts(this.hass, this._config.weather.current, this._config.weather.forecast,
+          this._iconsConfig, this._language) : ""}
             ${this._hasMeteogram ? this.renderCamera(this.hass, this._config.weather.forecast.meteogram) : ""}
             ${this._config.camera ? this.renderCamera(this.hass, this._config.camera) : ""}
         ` : html``}
@@ -232,7 +220,7 @@ setTimeout(function () {
     }
 
   }
-}, 2000) ;
+}) ;
 
 
 

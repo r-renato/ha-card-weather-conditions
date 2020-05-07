@@ -2,6 +2,30 @@ import {cwcLocale, cwcLocWindDirections} from "./ha-cwc-consts";
 import {HomeAssistant} from "custom-card-helpers/dist";
 import {IconsConfig} from "./types";
 
+import {hacsImagePathExist, manImagePathExist} from "./ha-card-weather-conditions" ;
+
+/**
+ *
+ * @param imageSrc
+ */
+export function imageExist(imageSrc: string) {
+  return new Promise<boolean>((resolve)  => {
+    setTimeout(() => {
+      let img = new Image();
+      img.onload = () => { resolve(true) ; };
+      img.onerror = () => { resolve(false) ; };
+      img.src = imageSrc;
+    }, 100);
+  });
+}
+
+// export async function imageExist(imageSrc, good, bad) {
+//   let img = new Image();
+//   img.onload = good;
+//   img.onerror = bad;
+//   img.src = imageSrc;
+// }
+
 /**
  *
  * @param condition
@@ -11,8 +35,11 @@ import {IconsConfig} from "./types";
 export const getWeatherIcon = (condition: string, iconsConfig: IconsConfig, sunState: string) => {
   let isNight = sunState && sunState == "below_horizon" ;
 
-  if (iconsConfig.path == null)
-    console.info("Image path not found.") ;
+  if (iconsConfig.path == null) {
+    console.info("Image path not found. (hacsImagePathExist=" + hacsImagePathExist
+                  + ")(manImagePathExist=" + manImagePathExist) ;
+  }
+
 
   //console.info(this._config.weather.icons_model + ' - ' + condition + ' - ' + this._weatherIconsDay[condition]) ;
   return `${iconsConfig.path}/${iconsConfig.iconType}/${isNight 
