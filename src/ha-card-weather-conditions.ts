@@ -29,7 +29,12 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-console.info("%c WEATHER-CONDITION-CARD %c 1.0.0 ", "color: white; background: green; font-weight: 700;", "color: coral; background: white; font-weight: 700;");
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.0.1" ;
+let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
+let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
+let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
+
+console.info(logo, optConsoleParam1, optConsoleParam2);
 
 Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
                     imageExist(manImagePath + "/static/cloudy.svg"), ]).then((testResults) => {
@@ -37,6 +42,10 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
 
   hacsImages = hacsImagePathExist = testResults[0] ;
   manImages = manImagePathExist = testResults[1] ;
+
+  if( hacsImages ) console.info(logo + "%c use HACS path to retrieve icons.", optConsoleParam1, optConsoleParam2, optConsoleParam3);
+  else if ( manImages ) console.info(logo + "%c use www root path to retrieve icons.", optConsoleParam1, optConsoleParam2, optConsoleParam3);
+  else console.info(logo + "%c error setting right icons path.", optConsoleParam1, optConsoleParam2, optConsoleParam3);
 
   @customElement("ha-card-weather-conditions")
   class HaCardWeatherConditions extends LitElement {
