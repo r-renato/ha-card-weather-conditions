@@ -14,7 +14,7 @@ import {HomeAssistant} from "custom-card-helpers/dist" ;
  * @param iconsConfig
  */
 export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: string, iconsConfig: IconsConfig) => {
-  let sun = hass.states[currentCfg.sun].state ;
+  let sun = currentCfg.sun && hass.states[currentCfg.sun] ? hass.states[currentCfg.sun].state : undefined ;
   let current_conditions = currentCfg.current_conditions ? hass.states[currentCfg.current_conditions].state : "" ;
   let temperature: number = parseFloat(hass.states[currentCfg.temperature].state) ;
 

@@ -40,7 +40,7 @@ const _renderForecast = (entity_low: number, entity_unit_low: string,
 
 export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast, iconsConfig: IconsConfig, lang: string) => {
   let forecastDate = new Date();
-  let sun = hass.states[currentCfg.sun].state;
+  let sun = currentCfg.sun && hass.states[currentCfg.sun] ? hass.states[currentCfg.sun].state : undefined ;
 
   let icons: [string, any][] = forecastCfg.icons
     ? Object.entries(forecastCfg.icons) : undefined;
