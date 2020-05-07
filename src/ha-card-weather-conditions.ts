@@ -54,6 +54,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
 
     private _iconsConfig: IconsConfig = new class implements IconsConfig {
       iconType: string;
+      icons_model: string ;
       iconsDay: { [p: string]: string };
       iconsNight: { [p: string]: string };
       path: string ;
@@ -116,15 +117,18 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       this._iconsConfig.iconType = config.animation ? "animated" : "static";
       this._iconsConfig.iconsDay = cwcClimacellDayIcons ;
       this._iconsConfig.iconsNight = cwcClimacellNightIcons ;
+      this._iconsConfig.icons_model = "climacell" ;
       if ((!!config.weather) && (!!config.weather.icons_model))
         switch (config.weather.icons_model.toLowerCase()) {
           case 'darksky':
             this._iconsConfig.iconsDay = cwcDarkskyDayIcons;
             this._iconsConfig.iconsNight = cwcDarkskyNightIcons;
+            this._iconsConfig.icons_model = "darksky" ;
             break;
           case 'openweathermap':
             this._iconsConfig.iconsDay = cwcOpenWeatherMapDayIcons;
             this._iconsConfig.iconsNight = cwcOpenWeatherMapNightIcons;
+            this._iconsConfig.icons_model = "openweathermap" ;
             break;
         }
 

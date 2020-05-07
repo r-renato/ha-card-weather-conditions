@@ -77,6 +77,7 @@ export interface Days {
 export interface IconsConfig {
   path: string ;
   iconType: string ;
+  icons_model: string ;
   iconsDay: { [key: string]: string; } ;
   iconsNight: { [key: string]: string; } ;
 

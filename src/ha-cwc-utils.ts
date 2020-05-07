@@ -33,17 +33,20 @@ export function imageExist(imageSrc: string) {
  * @param sunState
  */
 export const getWeatherIcon = (condition: string, iconsConfig: IconsConfig, sunState: string) => {
-  let isNight = sunState && sunState == "below_horizon" ;
+  let isNight:boolean = sunState && sunState == "below_horizon" ;
+  let iconName = isNight ? iconsConfig.iconsNight[condition] : iconsConfig.iconsDay[condition] ;
 
   if (iconsConfig.path == null) {
     console.info("Image path not found. (hacsImagePathExist=" + hacsImagePathExist
                   + ")(manImagePathExist=" + manImagePathExist) ;
   }
 
+  if(!!iconName)
+    console.info( "Icons issue. States: icons_model=" + iconsConfig.icons_model
+      + " - isDay=" + (!isNight) + " - condition: " + condition + ".") ;
 
   //console.info(this._config.weather.icons_model + ' - ' + condition + ' - ' + this._weatherIconsDay[condition]) ;
-  return `${iconsConfig.path}/${iconsConfig.iconType}/${isNight 
-    ? iconsConfig.iconsNight[condition] : iconsConfig.iconsDay[condition]}.svg`;
+  return `${iconsConfig.path}/${iconsConfig.iconType}/${iconName}.svg` ;
 } ;
 
 /**
