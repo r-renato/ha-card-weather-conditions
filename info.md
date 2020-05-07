@@ -91,6 +91,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 | humidity              | string      | Optional        |             | It is the sensor id |
 | pressure              | string      | Optional        |             | It is the sensor id |
 | temperature           | string      | Optional        |             | It is the sensor id |
+| feels_like            | string      | Optional        |             | It is the sensor id |
 | visibility            | string      | Optional        |             | It is the sensor id |
 | wind_bearing          | string      | Optional        |             | It is the sensor id |
 | wind_speed            | string      | Optional        |             | It is the sensor id |
