@@ -1,4 +1,5 @@
 export const cwcDarkskyDayIcons: { [key: string]: string; } = {
+  "clear" :  "day",
   "clear-day": "day",
   "rain": "rainy-2",
   "snow": "nowy-2",
@@ -11,6 +12,7 @@ export const cwcDarkskyDayIcons: { [key: string]: string; } = {
 
 export const cwcDarkskyNightIcons: { [key: string]: string; } = {
   ...cwcDarkskyDayIcons,
+  "clear" :  "day-night",
   "clear-night": "day-night",
   "wind": "cloudy-night-1",
   "partly-cloudy-night": "cloudy-night-2",

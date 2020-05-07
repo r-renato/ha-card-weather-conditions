@@ -66,18 +66,22 @@ export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, foreca
   return maxDays > 1 ? html`
       <div class="forecast clear">
         ${days.map(day => {
+    let icon: string, day_temp_low: number, day_temp_high: number, day_prec_probab: number, day_prec_intensity: number;
     let date = new Date(forecastDate.setDate(forecastDate.getDate() + 1))
       .toLocaleDateString(lang, {weekday: "short"});
-    let icon = icons ? hass.states[icons[day][1]].state.toLowerCase() : undefined;
+    
+    if( icons && icons[day] && hass.states[icons[day][1]] )
+      icon = hass.states[icons[day][1]].state.toLowerCase() ;
 
-    let day_temp_low = temperature_low 
-      ? Math.round(parseFloat(hass.states[temperature_low[day][1]].state)) : undefined ;
-    let day_temp_high = temperature_high
-      ? Math.round(parseFloat(hass.states[temperature_high[day][1]].state)) : undefined ;
-    let day_prec_probab = precipitation_probability
-      ? Math.round(parseFloat(hass.states[precipitation_probability[day][1]].state)) : undefined ;
-    let day_prec_intensity = precipitation_intensity 
-      ? Math.round(parseFloat(hass.states[precipitation_intensity[day][1]].state)) : undefined ;
+    if( temperature_low && temperature_low[day] && hass.states[temperature_low[day][1]] )
+      day_temp_low = Math.round(parseFloat(hass.states[temperature_low[day][1]].state)) ;
+    if( temperature_high && temperature_high[day] && hass.states[temperature_high[day][1]] )
+      day_temp_high = Math.round(parseFloat(hass.states[temperature_high[day][1]].state)) ;
+    
+    if( precipitation_probability && precipitation_probability[day] && hass.states[precipitation_probability[day][1]] )
+     day_prec_probab = Math.round(parseFloat(hass.states[precipitation_probability[day][1]].state)) ;
+    if( precipitation_intensity && precipitation_intensity[day] && hass.states[precipitation_intensity[day][1]] )
+      day_prec_intensity = Math.round(parseFloat(hass.states[precipitation_intensity[day][1]].state)) ;
     
     return html`
           <div class="day ${day}">
