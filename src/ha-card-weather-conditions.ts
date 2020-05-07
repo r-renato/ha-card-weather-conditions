@@ -31,8 +31,8 @@ export let manImagePathExist: boolean = false ;
 
 console.info("%c WEATHER-CONDITION-CARD %c 1.0.0 ", "color: white; background: green; font-weight: 700;", "color: coral; background: white; font-weight: 700;");
 
-Promise.all([imageExist(hacsImagePath + "/weather/cloudy.svg"),
-                    imageExist(manImagePath + "/weather/cloudy.svg"), ]).then((testResults) => {
+Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
+                    imageExist(manImagePath + "/static/cloudy.svg"), ]).then((testResults) => {
   let hacsImages: boolean, manImages: boolean ;
 
   hacsImages = hacsImagePathExist = testResults[0] ;
