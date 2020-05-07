@@ -49,6 +49,7 @@ export interface Current {
   humidity?: string ;
   pressure?: string ;
   temperature?: string ;
+  feels_like?: string ;
   visibility?: string ;
   wind_bearing?: string ;
   wind_speed?: string ;

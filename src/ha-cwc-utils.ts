@@ -41,7 +41,7 @@ export const getWeatherIcon = (condition: string, iconsConfig: IconsConfig, sunS
                   + ")(manImagePathExist=" + manImagePathExist) ;
   }
 
-  if(!!iconName)
+  if(undefined === iconName)
     console.info( "Icons issue. States: icons_model=" + iconsConfig.icons_model
       + " - isDay=" + (!isNight) + " - condition: " + condition + ".") ;
 
