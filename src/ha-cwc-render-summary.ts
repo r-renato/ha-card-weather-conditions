@@ -2,7 +2,7 @@ import {
   html
 } from "lit-element";
 
-import {getUnit, getWeatherIcon} from "./ha-cwc-utils" ;
+import {getUnit, getWeatherIcon,translate} from "./ha-cwc-utils" ;
 import {Current, IconsConfig} from "./types" ;
 import {HomeAssistant} from "custom-card-helpers/dist" ;
 
@@ -13,7 +13,7 @@ import {HomeAssistant} from "custom-card-helpers/dist" ;
  * @param name
  * @param iconsConfig
  */
-export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: string, iconsConfig: IconsConfig) => {
+export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: string, iconsConfig: IconsConfig, lang: string) => {
   let temperature, feels_like ;
   let sun = currentCfg.sun && hass.states[currentCfg.sun] ? hass.states[currentCfg.sun].state : undefined ;
   let current_conditions = currentCfg.current_conditions && hass.states[currentCfg.current_conditions]
@@ -46,7 +46,7 @@ export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: st
         <ul class="variations polles" style="border: 0;margin-top: 4px;">
           <li><ha-icon icon="none"></ha-icon><span class="unit"></span></li>
           <li>
-            <ha-icon icon="${hass.states[currentCfg.feels_like].attributes.icon}"></ha-icon>Feels Like ${feels_like}
+            <ha-icon icon="${hass.states[currentCfg.feels_like].attributes.icon}"></ha-icon>${translate('Feels Like', lang)} ${feels_like}
             <span class="unit"> ${getUnit(hass,"temperature")}</span>
           </li>
         </ul>      

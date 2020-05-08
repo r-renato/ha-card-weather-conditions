@@ -185,7 +185,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       <ha-card class="ha-card-weather-conditions">
         ${this._header ? html`
             ${this._hasCurrent && this._displayTop
-        ? renderSummary(this.hass, this._config.weather.current, this._config.name, this._iconsConfig) : ""}
+        ? renderSummary(this.hass, this._config.weather.current, this._config.name, this._iconsConfig, this._language) : ""}
             ${this._hasCurrent && this._displayCurrent
         ? renderPresent(this.hass, this._config.weather.current, this._config.weather.forecast, this._language) : ""}
             ${this._hasAirQuality ? renderAirQualities(this.hass, this._config.air_quality) : "" }

@@ -1,4 +1,4 @@
-import {cwcLocale, cwcLocWindDirections} from "./ha-cwc-consts";
+import {cwcLocale, cwcLocWindDirections, cwcTerms} from "./ha-cwc-consts";
 import {HomeAssistant} from "custom-card-helpers/dist";
 import {IconsConfig} from "./types";
 
@@ -19,12 +19,15 @@ export function imageExist(imageSrc: string) {
   });
 }
 
-// export async function imageExist(imageSrc, good, bad) {
-//   let img = new Image();
-//   img.onload = good;
-//   img.onerror = bad;
-//   img.src = imageSrc;
-// }
+/**
+ *
+ * @param term
+ * @param lang
+ */
+export const translate = (term:string, lang: string) => {
+  console.info(">>>>loc:" + lang + "" + cwcLocale[lang] ) ;
+  return cwcTerms[term][cwcLocale[lang]] ;
+} ;
 
 /**
  *
@@ -129,18 +132,5 @@ export const getWindDirections = (wd: number, locale: string) => {
   return null;
 } ;
 
-// /**
-//  *
-//  * @param e
-//  * @param entityId
-//  */
-// export const handlePopup = (e, entityId: string) => {
-//   e.stopPropagation();
-//
-//   let ne = new Event('hass-more-info', {composed: true});
-//   // @ts-ignore
-//   ne.detail = {entityId};
-//   dispatchEvent(ne);
-// } ;
 
 

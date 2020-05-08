@@ -12,8 +12,8 @@ export const cwcDarkskyDayIcons: { [key: string]: string; } = {
 
 export const cwcDarkskyNightIcons: { [key: string]: string; } = {
   ...cwcDarkskyDayIcons,
-  "clear" :  "day-night",
-  "clear-night": "day-night",
+  "clear" :  "night",
+  "clear-night": "night",
   "wind": "cloudy-night-1",
-  "partly-cloudy-night": "cloudy-night-2",
+  "partly-cloudy-day": "cloudy-night-2",
 };
