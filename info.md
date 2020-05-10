@@ -87,6 +87,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 |       **Name**        |  **Type**   | **Requirement** | **Default** | **Description**     |
 |-----------------------|-------------|-----------------|-------------|---------------------|
 | sun                   | string      | Optional        |             | It is the sensor id |
+| moon                  | string      | Optional        |             | It is the sensor id |
 | current_conditions    | string      | Optional        |             | It is the sensor id |
 | humidity              | string      | Optional        |             | It is the sensor id |
 | pressure              | string      | Optional        |             | It is the sensor id |
@@ -119,7 +120,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 
 
 ## **Examples**
-### - **Climacell data provider** -
+### - **Climacell full card** -
 ```yaml
   type: custom:ha-card-weather-conditions
   name: "cc_test"
@@ -200,6 +201,23 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
         day_4: sensor.cc_test_max_precipitation_3d
         day_5: sensor.cc_test_max_precipitation_4d
 ```
+
+### - **Climacell only summary** -
+```yaml
+  type: custom:ha-card-weather-conditions
+  name: "cc_test"
+  language: it
+  animation: true
+  weather:
+    icons_model: climacell
+    current:
+      sun: sun.sun
+      moon_phase: sensor.cc_test_moon_phase
+      current_conditions: sensor.cc_test_weather_condition
+      temperature: sensor.cc_test_temperature
+```
+
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-summary.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 
 [license-shield]:https://img.shields.io/github/license/r-renato/ha-card-weather-conditions
 [buymecoffee]: https://www.buymeacoffee.com/0D3WbkKrn

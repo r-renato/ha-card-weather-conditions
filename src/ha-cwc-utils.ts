@@ -1,4 +1,4 @@
-import {cwcLocale, cwcLocWindDirections, cwcTerms} from "./ha-cwc-consts";
+import {cwcLocale, cwcLocWindDirections, cwcTerms, cwcMoonPhaseIcons} from "./ha-cwc-consts";
 import {HomeAssistant} from "custom-card-helpers/dist";
 import {IconsConfig} from "./types";
 
@@ -25,7 +25,7 @@ export function imageExist(imageSrc: string) {
  * @param lang
  */
 export const translate = (term:string, lang: string) => {
-  console.info(">>>>loc:" + lang + "" + cwcLocale[lang] ) ;
+  // console.info(">>>>loc:" + lang + "" + cwcLocale[lang] ) ;
   return cwcTerms[term][cwcLocale[lang]] ;
 } ;
 
@@ -50,6 +50,29 @@ export const getWeatherIcon = (condition: string, iconsConfig: IconsConfig, sunS
 
   //console.info(this._config.weather.icons_model + ' - ' + condition + ' - ' + this._weatherIconsDay[condition]) ;
   return `${iconsConfig.path}/${iconsConfig.iconType}/${iconName}.svg` ;
+} ;
+
+/**
+ *
+ * @param condition
+ * @param iconsConfig
+ * @param sunState
+ */
+export const getWeatherBg = (condition: string, iconsConfig: IconsConfig, sunState: string) => {
+  let isNight:boolean = sunState && sunState == "below_horizon" ;
+  let iconName = isNight ? iconsConfig.iconsNight[condition] : iconsConfig.iconsDay[condition] ;
+
+  if (iconsConfig.path == null) {
+    console.info("Image path not found. (hacsImagePathExist=" + hacsImagePathExist
+      + ")(manImagePathExist=" + manImagePathExist) ;
+  }
+
+  if(undefined === iconName)
+    console.info( "Icons issue. States: icons_model=" + iconsConfig.icons_model
+      + " - isDay=" + (!isNight) + " - condition: " + condition + ".") ;
+
+  //console.info(this._config.weather.icons_model + ' - ' + condition + ' - ' + this._weatherIconsDay[condition]) ;
+  return `${iconsConfig.path}/background/${iconName}` ;
 } ;
 
 /**
@@ -132,5 +155,45 @@ export const getWindDirections = (wd: number, locale: string) => {
   return null;
 } ;
 
+export function getMoonIcon(phase:string) {
+  return( cwcMoonPhaseIcons[phase.toLowerCase()] ) ;
+}
 
+// export function circadianRhythm( hass: HomeAssistant, sunId: string ) {
+//   let lightRatio;
+//   // let nextUpdate;
+//
+//   let sun = hass.states[sunId] ;
+//
+//   const now = (new Date()).getTime();
+//
+//   let times = {
+//     sunrise: (new Date(sun.attributes.next_dawn)).getTime(),
+//     sunriseEnd: (new Date(sun.attributes.next_rising)).getTime(),
+//
+//     sunsetStart: (new Date(sun.attributes.next_setting)).getTime(),
+//     sunset: (new Date(sun.attributes.next_dusk)).getTime(),
+//   };
+//
+//   console.info( JSON.stringify(times));
+//   if (now > times.sunrise && now < times.sunriseEnd) {
+//     lightRatio = (now - times.sunrise) / (times.sunriseEnd - times.sunrise);
+//     // nextUpdate = now + UPDATE_FREQUENCY;
+//   } else if(now > times.sunriseEnd && now < times.sunsetStart) {
+//     lightRatio = 1;
+//     // nextUpdate = times.sunsetStart;
+//   } else if (now > times.sunsetStart && now < times.sunset) {
+//     lightRatio = (times.sunset - now) / (times.sunset - times.sunsetStart);
+//     // nextUpdate = now + UPDATE_FREQUENCY;
+//   } else {
+//     lightRatio = 0;
+//     // nextUpdate = times.sunrise;
+//   }
+//
+// // Range (in lux) from 0.0001 to 100000 in increments of 0.0001.
+//   const lightLevel = Math.round(1 + lightRatio * 999999999) / 10000;
+//
+//   console.info( "lightLevel=" + lightLevel + " - lightRatio: " + lightRatio ) ;
+//   return lightLevel ;
+// }
 

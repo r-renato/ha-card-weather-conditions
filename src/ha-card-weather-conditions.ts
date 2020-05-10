@@ -4,19 +4,27 @@ import {
   customElement,
   property,
   CSSResult,
-  TemplateResult
+  TemplateResult, css,
 } from "lit-element";
 
 import {HomeAssistant} from "custom-card-helpers";
 
-import {cwcClimacellDayIcons, cwcClimacellNightIcons} from "./ha-cwc-climacell" ;
+import style from './style' ;
+import styleSummary from './ha-style-summary' ;
+import styleMeter from './ha-style-meter' ;
+import styleForecast from './ha-style-forecast' ;
+import styleCamera from './ha-style-camera' ;
+import styleNightAndDay from './ha-style-day-night' ;
+import {getStyleNight} from './ha-style-day-night' ;
+
+import {cwcClimacellDayIcons, cwcClimacellNightIcons, cwcClimacellDayBg} from "./ha-cwc-climacell" ;
 import {cwcDarkskyDayIcons, cwcDarkskyNightIcons} from "./ha-cwc-darksky" ;
 import {cwcOpenWeatherMapDayIcons, cwcOpenWeatherMapNightIcons} from "./ha-cwc-openweathermap" ;
 
 import {IconsConfig, CardConfig} from "./types" ;
-import style from './style' ;
 
-import {imageExist} from "./ha-cwc-utils" ;
+
+import {getWeatherBg, imageExist} from "./ha-cwc-utils" ;
 import {renderSummary} from "./ha-cwc-render-summary" ;
 import {renderPresent} from "./ha-cwc-render-present" ;
 import {renderForecasts} from "./ha-cwc-render-forecast" ;
@@ -29,7 +37,7 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.0.1" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.3.0" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
@@ -59,6 +67,14 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       iconsNight: { [p: string]: string };
       path: string ;
     };
+    private _bgConfig: IconsConfig = new class implements IconsConfig {
+      iconType: string;
+      icons_model: string ;
+      iconsDay: { [p: string]: string };
+      iconsNight: { [p: string]: string };
+      path: string ;
+    };
+
     // private weatherIconsDay: { [key: string]: string; } ;
     // private weatherIconsNight: { [key: string]: string; } ;
 
@@ -80,6 +96,14 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
     private _displayTop: boolean = true ;
     private _displayCurrent: boolean = true ;
     private _displayForecast: boolean = true ;
+
+    private _classNameSuffix: string ;
+
+    private _showSummary: boolean = true ;
+    private _showPresent: boolean = true ;
+    private _showAirQuality: boolean = true ;
+    private _showPollen: boolean = true ;
+    private _showForecast: boolean = true ;
 
     /**
      *
@@ -112,7 +136,11 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       this._hasAirQuality = !!config.air_quality;
       this._hasPollen = !!config.pollen && (!!config.pollen.tree || !!config.pollen.weed || !!config.pollen.grass);
 
-      this._iconsConfig.path = hacsImages ? hacsImagePath : manImages ? manImagePath : null;
+      this._bgConfig.path = hacsImages ? hacsImagePath : manImages ? manImagePath : null ;
+      this._bgConfig.iconsDay = cwcClimacellDayBg ;
+      this._bgConfig.icons_model = "climacell" ;
+
+      this._iconsConfig.path = hacsImages ? hacsImagePath : manImages ? manImagePath : null ;
       // this._iconsConfig.iconType = config.animation ? "animated" : "static";
       this._iconsConfig.iconType = config.animation ? "animated" : "static";
       this._iconsConfig.iconsDay = cwcClimacellDayIcons ;
@@ -148,7 +176,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
      * @returns {CSSResult}
      */
     static get styles(): CSSResult {
-      return style;
+      return css`${style}${styleSummary}${styleForecast}${styleMeter}${styleCamera}${styleNightAndDay}`;
     }
 
     /**
@@ -156,9 +184,10 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
      * @return {TemplateResult}
      */
     render() {
-      if (!this._iconsConfig.path) {
-        this._iconsConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
-      }
+      // if (!this._iconsConfig.path) {
+      //   this._iconsConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
+      //   this._bgConfig.path = hacsImagePathExist ? hacsImagePath : manImagePathExist ? manImagePath : null;
+      // }
 
       if (this.invalidConfig) return html`
             <ha-card class="ha-card-weather-conditions">
@@ -179,23 +208,156 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
      * @private
      */
     _render() {
-      this.numberElements = 0;
+      let sunrise, sunriseEnd, sunsetStart, sunset, now ;
+      let dynStyle, condition, habgImage ;
+
+      let _renderedSummary, _renderedPresent, _renderedAirQuality, _renderedPollen, _renderedForecast ;
+      // let _renderSummury: boolean = false ;
+
+      let posix:number = 0 ;
+      let states = this.hass.states ;
+
+      // if( undefined == this._classNameSuffix ) {
+      //   this._classNameSuffix = 'xxxxxxxx'.replace(/[xy]/g, function(c) {
+      //     let dt = new Date().getTime();
+      //     let r = (dt + Math.random()*16)%16 | 0;
+      //     //dt = Math.floor(dt/16);
+      //     return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+      //   });
+      // }
+      //
+      // let className = 'ha-card-bg-' + this._classNameSuffix ;
+      // if(this._hasCurrent && this._config.weather.current.sun) {
+      //   now = (new Date()).getTime() ;
+      //   let sun = this.hass.states[this._config.weather.current.sun] ;
+      //
+      //   sunrise = (new Date(sun.attributes.next_dawn)).getTime() ;
+      //   sunriseEnd = (new Date(sun.attributes.next_rising)).getTime() ;
+      //   sunsetStart = (new Date(sun.attributes.next_setting)).getTime() ;
+      //   sunset = (new Date(sun.attributes.next_dusk)).getTime() ;
+      //
+      //   let d = (sunset - sunsetStart) / 1000 / 60 ;
+      //   //console.info( d ) ;
+      //   if(now > sunsetStart && now < sunset) {
+      //     // Il sole tramonta
+      //     habgImage = "ha-card-night" ;
+      //
+      //   } else if(now => sunrise && now <= sunriseEnd) {
+      //       // Il sole sorge
+      //
+      //   }
+      //
+      //   if(this._config.weather.current.current_conditions) {
+      //     console.info( '1');
+      //     let condition = this.hass.states[this._config.weather.current.current_conditions] ;
+      //     if( condition ) {
+      //       let bg = getWeatherBg(condition.state, this._bgConfig, sun.state) ;
+      //       let opacity = 0.3  ;
+      //       dynStyle = getStyleNight(className, bg, opacity) ;
+      //       console.info( '2' + bg);
+      //     }
+      //
+      //   }
+      //
+      // }
+
+      // Test if render >Summary<
+      if( this._showSummary && this._hasCurrent ) {
+        let current = this._config.weather.current ;
+
+        if((current.current_conditions && typeof states[ current.current_conditions ] !== undefined)
+          || (current.temperature && typeof states[ current.temperature ] !== undefined)) {
+          _renderedSummary = renderSummary(this.hass,
+            this._config.weather.current, this._config.name, this._iconsConfig, this._language) ;
+          posix++ ;
+        } else _renderedSummary = "" ;
+      } else _renderedSummary = "" ;
+
+      // Test if render >Present<
+      if( this._showPresent && this._hasCurrent) {
+        let current = this._config.weather.current ;
+
+        if((current.sun && typeof states[ current.sun ] !== undefined)
+          || (current.humidity && typeof states[ current.humidity ] !== undefined)
+          || (current.pressure && typeof states[ current.pressure ] !== undefined)
+          || (current.visibility && typeof states[ current.visibility ] !== undefined)
+          || (current.wind_bearing && typeof states[ current.wind_bearing ] !== undefined)
+          || (current.wind_speed && typeof states[ current.wind_speed ] !== undefined)) {
+
+          _renderedPresent = renderPresent(this.hass,
+            this._config.weather.current, this._config.weather.forecast, this._language, posix > 0) ;
+          posix++ ;
+        } else {
+          if(current.forecast && this._hasForecast) {
+            let forecast = this._config.weather.forecast ;
+
+            if((forecast.temperature_low && forecast.temperature_low.day_1 && typeof states[ forecast.temperature_low.day_1 ] !== undefined)
+              || (forecast.temperature_high && forecast.temperature_high.day_1 && typeof states[ forecast.temperature_high.day_1 ] !== undefined)
+              || (forecast.precipitation_intensity && forecast.precipitation_intensity.day_1 && typeof states[ forecast.precipitation_intensity.day_1 ] !== undefined)
+              || (forecast.precipitation_probability && forecast.precipitation_probability.day_1 && typeof states[ forecast.precipitation_probability.day_1 ] !== undefined)) {
+
+              _renderedPresent = renderPresent(this.hass,
+                this._config.weather.current, this._config.weather.forecast, this._language, posix > 0) ;
+              posix++ ;
+            } else _renderedPresent = "" ;
+          } else _renderedPresent = "" ;
+        }
+      } else _renderedPresent = "" ;
+
+      if(this._showAirQuality && this._hasAirQuality ) {
+        let airQuality = this._config.air_quality ;
+
+        if((airQuality.co && typeof states[ airQuality.co ] !== undefined)
+          || (airQuality.epa_aqi && typeof states[ airQuality.epa_aqi ] !== undefined)
+          || (airQuality.epa_health_concern && typeof states[ airQuality.epa_health_concern ] !== undefined)
+          || (airQuality.no2 && typeof states[ airQuality.no2 ] !== undefined)
+          || (airQuality.o3 && typeof states[ airQuality.o3 ] !== undefined)
+          || (airQuality.pm10 && typeof states[ airQuality.pm10 ] !== undefined)
+          || (airQuality.pm25 && typeof states[ airQuality.pm25 ] !== undefined)
+          || (airQuality.so2 && typeof states[ airQuality.so2 ] !== undefined)) {
+
+          _renderedAirQuality = renderAirQualities(this.hass, this._config.air_quality, posix > 0) ;
+          posix++ ;
+        } else _renderedAirQuality = "" ;
+      } else _renderedAirQuality = "" ;
+
+      if(this._showPollen && this._hasPollen ) {
+        let pollen = this._config.pollen ;
+
+        if((pollen.grass && pollen.grass.entity &&  typeof states[ pollen.grass.entity ] !== undefined)
+          || (pollen.tree && pollen.tree.entity &&  typeof states[ pollen.tree.entity ] !== undefined)
+          || (pollen.weed && pollen.weed.entity &&  typeof states[ pollen.weed.entity ] !== undefined)) {
+
+          _renderedPollen = renderPollens(this.hass, this._config.pollen) ;
+          posix++ ;
+        } else _renderedPollen = "" ;
+      } else _renderedPollen = "" ;
+
+      if( this._showForecast && this._hasForecast ) {
+        let forecast = this._config.weather.forecast ;
+
+        _renderedForecast = renderForecasts(this.hass,
+          this._config.weather.current, forecast, this._iconsConfig, this._language) ;
+        posix++ ;
+      } else _renderedForecast = "" ;
+
 
       return html`
-      <ha-card class="ha-card-weather-conditions">
+      ${dynStyle ? html`
+      <style>${dynStyle}</style>` : "" }
+      
+      <ha-card class="ha-card-weather-conditions ">
+        <div class="nd-container ${habgImage ? habgImage : ''}">
         ${this._header ? html`
-            ${this._hasCurrent && this._displayTop
-        ? renderSummary(this.hass, this._config.weather.current, this._config.name, this._iconsConfig, this._language) : ""}
-            ${this._hasCurrent && this._displayCurrent
-        ? renderPresent(this.hass, this._config.weather.current, this._config.weather.forecast, this._language) : ""}
-            ${this._hasAirQuality ? renderAirQualities(this.hass, this._config.air_quality) : "" }
-            ${this._hasPollen ? renderPollens(this.hass, this._config.pollen) : ""}
-            ${this._hasForecast
-        ? renderForecasts(this.hass, this._config.weather.current, this._config.weather.forecast,
-          this._iconsConfig, this._language) : ""}
+            ${_renderedSummary}
+            ${_renderedPresent}
+            ${_renderedAirQuality}
+            ${_renderedPollen}
+            ${_renderedForecast}
             ${this._hasMeteogram ? this.renderCamera(this.hass, this._config.weather.forecast.meteogram) : ""}
             ${this._config.camera ? this.renderCamera(this.hass, this._config.camera) : ""}
         ` : html``}
+        </div>
       </ha-card>
     `;
     }
@@ -210,8 +372,8 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       let entity_picture: string = camera ? camera.attributes.entity_picture : undefined ;
 
       return entity_picture ? html`
-        <div @click=${e => this.handlePopup(e, camId)} class="container">
-          <div class="mainImage">
+        <div @click=${e => this.handlePopup(e, camId)} class="camera-container">
+          <div class="camera-image">
             <img src="${entity_picture}" alt="${camera.attributes.friendly_name}"/>
           </div>
         </div>

@@ -38,8 +38,9 @@ const _renderPresentSingle = (entity, entity_unit, icon:string) => {
  * @param currentCfg
  * @param forecastCfg
  * @param language
+ * @param border
  */
-export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast, language: string) => {
+export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast, language: string, border: boolean) => {
   let temperature_high, temperature_low, precipitation_probability, precipitation_intensity ;
   let next_rising, next_setting;
 
@@ -49,6 +50,7 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
   if (sun) {
     next_rising = new Date(sun.attributes.next_rising);
     next_setting = new Date(sun.attributes.next_setting);
+    //console.log( "now:" + (new Date()).toLocaleTimeString() + " next_rising:" + next_rising.toLocaleTimeString() ) ;
   }
 
   if (currentCfg.forecast) {
@@ -83,7 +85,7 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
     ? Math.round(parseFloat(hass.states[currentCfg.visibility].state)) : undefined ;
 
   return html`
-    <ul class="variations">
+    <ul class="variations ${border ? "spacer" : ""}">
         ${currentCfg.forecast && (undefined !== precipitation_probability || undefined !== precipitation_intensity) 
           ? _renderPresentDouble( precipitation_probability, '%', 
                                   precipitation_intensity, getUnit(hass,"precipitation") + '/h', 

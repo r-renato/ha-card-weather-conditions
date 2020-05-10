@@ -44,7 +44,8 @@ export interface Weather {
 
 export interface Current {
   sun?: string ;
-  daily_summary?: string ;
+  moon_phase?: string ;
+  // daily_summary?: string ;
   current_conditions?: string
   humidity?: string ;
   pressure?: string ;

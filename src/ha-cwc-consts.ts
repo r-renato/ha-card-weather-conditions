@@ -21,5 +21,25 @@ export let cwcLocWindDirections = {
 };
 
 export let cwcTerms = {
-  'Feels Like' : ['Feels Like', 'Percepita', 'Voelt Als']
+  'Feels Like' : ['Feels Like', 'Percepita', 'Voelt Als'],
+  'new_moon': [ 'New moon', 'Novilunio', ''],
+  'waxing_crescent': ['Waxing crescent', 'Luna crescente', ''],
+  'first_quarter': ['First quarter', 'Primo Quarto', ''],
+  'waxing_gibbous': ['Waxing Gibbous', 'Gibbosa crescente', ''],
+  'full': ['Full', 'Luna piena', ''],
+  'waning_gibbous': ['Waning Gibbous', 'Gibbosa calante', ''],
+  'third_quarter': ['Third Quarter', 'Ultimo quarto', ''],
+  'waning_crescent': ['Waning Crescent', 'Luna calante', ''],
+} ;
+
+// 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌑
+export let cwcMoonPhaseIcons = {
+  new_moon : "🌑",
+  waxing_crescent: "🌒",
+  first_quarter: "🌓",
+  waxing_gibbous: "🌔",
+  full: "🌕",
+  waning_gibbous: "🌖",
+  third_quarter: "🌗",
+  waning_crescent: "🌘"
 } ;

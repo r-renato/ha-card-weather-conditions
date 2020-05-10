@@ -51,3 +51,29 @@ export const cwcClimacellNightIcons: { [key: string]: string; } = {
   mostly_clear: "cloudy-night-1",
   clear: "night"
 };
+
+export const cwcClimacellDayBg: { [key: string]: string; } = {
+  freezing_rain_heavy: "rainy-3",
+  freezing_rain: "rainy-2",
+  freezing_rain_light: "rainy-1",
+  freezing_drizzle: "rain-and-sleet-mix",
+  ice_pellets_heavy: "rain-and-snow-mix",
+  ice_pellets: "rain-and-snow-mix",
+  ice_pellets_light: "rain-and-snow-mix",
+  snow_heavy: "snowy-3",
+  snow: "snowy-2",
+  snow_light: "snowy-1",
+  flurries: "wind",
+  tstorm: "tropical-storm",
+  rain_heavy: "rainy-3",
+  rain_light: "rainy-1",
+  rain: "rainy-2",
+  drizzle: "rainy-1",
+  fog_light: "haze",
+  fog: "fog",
+  cloudy: "cloudy-original",
+  mostly_cloudy: "day-cloud-3.jpg",
+  partly_cloudy: "day-cloud-2.jpg",
+  mostly_clear: "day-cloud-1.jpg",
+  clear: "day-clear.jpg",
+};

@@ -26,7 +26,7 @@ const _renderAirQuality = (entity: HassEntity, icon: string) => {
  * @param hass
  * @param airquality
  */
-export const renderAirQualities = (hass: HomeAssistant, airquality: AirQuality) => {
+export const renderAirQualities = (hass: HomeAssistant, airquality: AirQuality, border: boolean) => {
   let pm25 = undefined !== airquality.pm25 ? _renderAirQuality(hass.states[airquality.pm25], 'pm25') : undefined ;
   let pm10 = undefined !== airquality.pm10 ? _renderAirQuality(hass.states[airquality.pm10], 'pm10') : undefined ;
   let o3 = undefined !== airquality.o3 ? _renderAirQuality(hass.states[airquality.o3], 'o3') : undefined ;
@@ -38,7 +38,7 @@ export const renderAirQualities = (hass: HomeAssistant, airquality: AirQuality) 
     ? _renderAirQuality(hass.states[airquality.epa_health_concern], 'aqi') : undefined ;
 
   return html`
-    <ul class="variations polles">
+    <ul class="variations ${border ? "spacer" : ""}">
         ${epa_aqi ? epa_aqi : ""}${epa_health_concern ? epa_health_concern : ""}
         ${pm25 ? pm25 : ""}${pm10 ? pm10 : ""}${o3 ? o3 : ""}${no2 ? no2 : ""}${co ? co : ""}${so2 ? so2 : ""}
     </ul>
