@@ -29,6 +29,7 @@ export let cwcTerms = {
   'full': ['Full', 'Luna piena', ''],
   'waning_gibbous': ['Waning Gibbous', 'Gibbosa calante', ''],
   'third_quarter': ['Third Quarter', 'Ultimo quarto', ''],
+  'last_quarter': ['Last Quarter', 'Ultimo quarto', ''],
   'waning_crescent': ['Waning Crescent', 'Luna calante', ''],
 } ;
 
@@ -41,5 +42,6 @@ export let cwcMoonPhaseIcons = {
   full: "🌕",
   waning_gibbous: "🌖",
   third_quarter: "🌗",
+  last_quarter: "🌗",
   waning_crescent: "🌘"
 } ;
