@@ -39,7 +39,7 @@ resources:
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
 | name         | string        | Optional        |                                   | Card name shown on summary layer                                                              |
-| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`                                                           |
+| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`                                                           |
 | animation    | boolean       | Optional        | `false`                           | Can take the values: `true`/`false`                                                      |
 | camera       | string        | Optional        |                                   | It is the camera id                                                        |
 | pollen       | object        | Optional        |                                   | It's the pollen object, see the specific session.                                                        |

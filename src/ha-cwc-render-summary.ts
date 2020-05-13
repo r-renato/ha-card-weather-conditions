@@ -43,8 +43,10 @@ export const renderSummary = (hass: HomeAssistant, currentCfg: Current, name: st
             background-size: contain;">${current_conditions}</span>
         ${name ? html`<span class="title"> ${name} </span>` : ""}
         ${moon ? html`<span class="moon"> ${moonIcon} <span style="font-size: 70%">${translate(moon, lang)}</span></spa>` : ""}
-        <span class="temp">${temperature}</span>
-        <span class="tempc"> ${getUnit(hass,"temperature")}</span>
+        ${temperature !== "Na" ? html`
+          <span class="temp">${temperature}</span>
+          <span class="tempc"> ${getUnit(hass,"temperature")}</span>
+        ` : ""}
       </div>
       ${feels_like !== "Na" ? html`
         <ul class="variations polles" style="border: 0;margin-top: 4px;">

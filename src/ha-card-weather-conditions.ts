@@ -37,7 +37,7 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.3.0" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.4.0" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
