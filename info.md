@@ -25,6 +25,7 @@
 <p float="left">
 <img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-2.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 </p>    
+
 ## Card Configuration
 
 Import the card using:
