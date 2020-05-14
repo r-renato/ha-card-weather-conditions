@@ -238,7 +238,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 
 <img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-summary.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 
-### - **openUV only ** -
+### - **openUV only** -
 ```yaml
   type: custom:ha-card-weather-conditions
   uv:
