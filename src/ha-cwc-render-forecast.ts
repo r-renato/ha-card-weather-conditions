@@ -38,7 +38,8 @@ const _renderForecast = (entity_low: number, entity_unit_low: string,
   }
 } ;
 
-export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast, iconsConfig: IconsConfig, lang: string) => {
+export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast,
+                                iconsConfig: IconsConfig, lang: string, border: boolean) => {
   let forecastDate = new Date();
   let sun = currentCfg.sun && hass.states[currentCfg.sun] ? hass.states[currentCfg.sun].state : undefined ;
 
@@ -64,7 +65,7 @@ export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, foreca
     : Array();
 
   return maxDays > 1 ? html`
-      <div class="forecast clear">
+      <div class="forecast clear ${border ? "spacer" : ""}">
         ${days.map(day => {
     let icon: string, day_temp_low: number, day_temp_high: number, day_prec_probab: number, day_prec_intensity: number;
     let date = new Date(forecastDate.setDate(forecastDate.getDate() + 1))

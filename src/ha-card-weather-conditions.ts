@@ -30,6 +30,7 @@ import {renderPresent} from "./ha-cwc-render-present" ;
 import {renderForecasts} from "./ha-cwc-render-forecast" ;
 import {renderPollens} from "./ha-cwc-render-pollen";
 import {renderAirQualities} from "./ha-cwc-render-airquality";
+import {renderUv} from "./ha-cwc-render-uv"
 
 const hacsImagePath: string = "/local/community/ha-card-weather-conditions/icons" ;
 const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
@@ -92,6 +93,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
     private _hasMeteogram: boolean = false ;
     private _hasAirQuality: boolean = false ;
     private _hasPollen: boolean = false ;
+    private _hasUv: boolean = false ;
 
     private _displayTop: boolean = true ;
     private _displayCurrent: boolean = true ;
@@ -101,6 +103,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
 
     private _showSummary: boolean = true ;
     private _showPresent: boolean = true ;
+    private _showUv: boolean = true ;
     private _showAirQuality: boolean = true ;
     private _showPollen: boolean = true ;
     private _showForecast: boolean = true ;
@@ -135,6 +138,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       this._hasMeteogram = this._hasForecast && (!!config.weather.forecast.meteogram);
       this._hasAirQuality = !!config.air_quality;
       this._hasPollen = !!config.pollen && (!!config.pollen.tree || !!config.pollen.weed || !!config.pollen.grass);
+      this._hasUv= !!config.uv;
 
       this._bgConfig.path = hacsImages ? hacsImagePath : manImages ? manImagePath : null ;
       this._bgConfig.iconsDay = cwcClimacellDayBg ;
@@ -211,7 +215,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
       let sunrise, sunriseEnd, sunsetStart, sunset, now ;
       let dynStyle, condition, habgImage ;
 
-      let _renderedSummary, _renderedPresent, _renderedAirQuality, _renderedPollen, _renderedForecast ;
+      let _renderedSummary, _renderedPresent, _renderedUv, _renderedAirQuality, _renderedPollen, _renderedForecast ;
       // let _renderSummury: boolean = false ;
 
       let posix:number = 0 ;
@@ -304,6 +308,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
         }
       } else _renderedPresent = "" ;
 
+      // Test AirQuality
       if(this._showAirQuality && this._hasAirQuality ) {
         let airQuality = this._config.air_quality ;
 
@@ -321,6 +326,21 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
         } else _renderedAirQuality = "" ;
       } else _renderedAirQuality = "" ;
 
+      // Test uv
+      if(this._showUv && this._hasUv ) {
+        let uv = this._config.uv ;
+
+        if((uv.protection_window && typeof states[ uv.protection_window ] !== undefined)
+          || (uv.ozone_level && typeof states[ uv.ozone_level ] !== undefined)
+          || (uv.uv_index && typeof states[ uv.uv_index ] !== undefined)
+          || (uv.uv_level && typeof states[ uv.uv_level ] !== undefined)
+          || (uv.max_uv_index && typeof states[ uv.max_uv_index ] !== undefined)) {
+
+          _renderedUv = renderUv(this.hass, this._config.uv, posix > 0) ;
+          posix++ ;
+        } else _renderedUv = "" ;
+      } else _renderedUv = "" ;
+
       if(this._showPollen && this._hasPollen ) {
         let pollen = this._config.pollen ;
 
@@ -328,7 +348,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
           || (pollen.tree && pollen.tree.entity &&  typeof states[ pollen.tree.entity ] !== undefined)
           || (pollen.weed && pollen.weed.entity &&  typeof states[ pollen.weed.entity ] !== undefined)) {
 
-          _renderedPollen = renderPollens(this.hass, this._config.pollen) ;
+          _renderedPollen = renderPollens(this.hass, this._config.pollen, posix > 0) ;
           posix++ ;
         } else _renderedPollen = "" ;
       } else _renderedPollen = "" ;
@@ -337,7 +357,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
         let forecast = this._config.weather.forecast ;
 
         _renderedForecast = renderForecasts(this.hass,
-          this._config.weather.current, forecast, this._iconsConfig, this._language) ;
+          this._config.weather.current, forecast, this._iconsConfig, this._language, posix > 0) ;
         posix++ ;
       } else _renderedForecast = "" ;
 
@@ -351,6 +371,7 @@ Promise.all([imageExist(hacsImagePath + "/static/cloudy.svg"),
         ${this._header ? html`
             ${_renderedSummary}
             ${_renderedPresent}
+            ${_renderedUv}
             ${_renderedAirQuality}
             ${_renderedPollen}
             ${_renderedForecast}

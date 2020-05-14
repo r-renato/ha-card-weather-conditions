@@ -22,7 +22,9 @@
 <img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-full.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 <img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-1.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 </p>
-    
+<p float="left">
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-2.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+</p>    
 ## Card Configuration
 
 Import the card using:
@@ -39,12 +41,28 @@ resources:
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
 | name         | string        | Optional        |                                   | Card name shown on summary layer                                                              |
-| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`                                                           |
-| animation    | boolean       | Optional        | `false`                           | Can take the values: `true`/`false`                                                      |
-| camera       | string        | Optional        |                                   | It is the camera id                                                        |
-| pollen       | object        | Optional        |                                   | It's the pollen object, see the specific session.                                                        |
-| air_quality  | object        | Optional        |                                   | It's the Air Quality object, see the specific session.                                                       |
-| weather      | object        | Optional        |                                   | It's the Weather object, see the specific session.                                                    |
+| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`                                                      |
+| animation    | boolean       | Optional        | `false`                           | Can take the values: `true`/`false`                                                           |
+| camera       | string        | Optional        |                                   | It is the camera id                                                                           |
+| uv           | object        | Optional        |                                   | It's the ultraviolet object, see the specific session.                                        |
+| pollen       | object        | Optional        |                                   | It's the pollen object, see the specific session.                                             |
+| air_quality  | object        | Optional        |                                   | It's the Air Quality object, see the specific session.                                        |
+| weather      | object        | Optional        |                                   | It's the Weather object, see the specific session.                                            |
+
+### **uv object**    
+| **Name**          | **Type** | **Requirement** | **Description**                                            |
+|-------------------|----------|-----------------|------------------------------------------------------------|
+| protection_window | string   | Optional        | Binary Sensor                                              |
+| ozone_level       | string   | Optional        | Ozone level in du (Dobson Units) from OMI data sensor      |
+| uv_index          | string   | Optional        | UV Index sensor                                            |
+| uv_level          | string   | Optional        | UV level sensor                                            |
+| max_uv_index      | string   | Optional        | max UV Index for the day (at solar noon) sensor            |
+| set_skin_type_1   | string   | Optional        | Safe exposure time (mins) till burn for Skin Type 1 sensor |
+| set_skin_type_2   | string   | Optional        | Safe exposure time (mins) till burn for Skin Type 2 sensor |
+| set_skin_type_3   | string   | Optional        | Safe exposure time (mins) till burn for Skin Type 3 sensor |
+| set_skin_type_4   | string   | Optional        | Safe exposure time (mins) till burn for Skin Type 4 sensor |
+| set_skin_type_5   | string   | Optional        | Safe exposure time (mins) till burn for Skin Type 5 sensor |
+| set_skin_type_6   | string   | Optional        | Safe exposure time (mins) till burn for Skin Type 6 sensor |
 
 ### **Pollen object**    
 | **Name** |  **Type**   | **Requirement** | **Description**         |
@@ -218,6 +236,26 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 ```
 
 <img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-summary.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+
+### - **openUV only ** -
+```yaml
+  type: custom:ha-card-weather-conditions
+  uv:
+    protection_window: binary_sensor.protection_window
+    ozone_level: sensor.current_ozone_level
+    uv_index: sensor.current_uv_index
+    uv_level: sensor.current_uv_level
+    max_uv_index: sensor.max_uv_index
+    set_skin_type_1: sensor.skin_type_1_safe_exposure_time
+    set_skin_type_2: sensor.skin_type_2_safe_exposure_time
+    set_skin_type_3: sensor.skin_type_3_safe_exposure_time
+    set_skin_type_4: sensor.skin_type_4_safe_exposure_time
+    set_skin_type_5: sensor.skin_type_5_safe_exposure_time
+    set_skin_type_6: sensor.skin_type_6_safe_exposure_time
+```
+
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-uv.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+
 
 [license-shield]:https://img.shields.io/github/license/r-renato/ha-card-weather-conditions
 [buymecoffee]: https://www.buymeacoffee.com/0D3WbkKrn

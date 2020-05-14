@@ -66,13 +66,13 @@ const _renderPollen = (hass: HomeAssistant, item: PollenItem) => {
  </meter>
  </li>
  */
-export function renderPollens(hass: HomeAssistant, pollen: Pollen) {
+export function renderPollens(hass: HomeAssistant, pollen: Pollen, border: boolean) {
   let tree = pollen.tree && pollen.tree.entity ? _renderPollen(hass, pollen.tree ): undefined ;
   let weed = pollen.weed && pollen.weed.entity ? _renderPollen(hass, pollen.weed ): undefined ;
   let grass = pollen.grass && pollen.grass.entity ? _renderPollen(hass, pollen.grass ): undefined ;
 
   return html`
-    <ul class="variations polles">
+    <ul class="variations polles ${border ? "spacer" : ""}">
         ${tree ? tree : ""}${weed ? weed : ""}${grass ? grass : ""}
     </ul>
   `;

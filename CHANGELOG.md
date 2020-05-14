@@ -3,12 +3,18 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.4.1] Unreleased
+## [1.5.1] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.5.0] 2020-05-14
+### Fixed
+- Minor bug fixing
+### Added
+- Add `uv` (ultraviolet) session
 
 ## [1.4.0] 2020-05-13
 ### Added

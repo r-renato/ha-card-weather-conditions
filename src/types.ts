@@ -4,6 +4,7 @@ export interface CardConfig {
   language?: string ;
   animation?: boolean ;
   display: string[]
+  uv?: Uv ;
   air_quality?: AirQuality ;
   pollen?: Pollen ;
   weather: Weather ;
@@ -36,6 +37,19 @@ export interface AirQuality {
   epa_health_concern?: string ;
 }
 
+export interface Uv {
+  protection_window?: string ;
+  ozone_level?: string ;
+  uv_index?: string ;
+  uv_level?: string ;
+  max_uv_index?: string ;
+  set_skin_type_1?: string ;
+  set_skin_type_2?: string ;
+  set_skin_type_3?: string ;
+  set_skin_type_4?: string ;
+  set_skin_type_5?: string ;
+  set_skin_type_6?: string ;
+}
 export interface Weather {
   icons_model: string ;
   current: Current ;
