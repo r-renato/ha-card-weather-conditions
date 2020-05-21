@@ -26,7 +26,7 @@ export function imageExist(imageSrc: string) {
  */
 export const translate = (term:string, lang: string) => {
   // console.info(">>>>loc:" + lang + "" + cwcLocale[lang] ) ;
-  return cwcTerms[term][cwcLocale[lang]] ;
+  return cwcTerms[term] ? cwcTerms[term][cwcLocale[lang]] : "ERR";
 } ;
 
 /**

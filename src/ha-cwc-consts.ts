@@ -23,6 +23,7 @@ export let cwcLocWindDirections = {
 export let cwcTerms = {
   'Feels Like' : ['Feels Like', 'Percepita', 'Voelt Als', 'Parece que'],
   'new_moon': [ 'New moon', 'Novilunio', 'Nieuwe maan', 'Luna nueva'],
+  'new': [ 'New moon', 'Novilunio', 'Nieuwe maan', 'Luna nueva'],
   'waxing_crescent': ['Waxing crescent', 'Luna crescente', 'Wassende sikkel', 'Media luna de cera'],
   'first_quarter': ['First quarter', 'Primo Quarto', 'Eerste kwartaal', 'Primer trimestre'],
   'waxing_gibbous': ['Waxing Gibbous', 'Gibbosa crescente', 'Wassen Gibbous', 'Encerado Gibbous'],
@@ -36,6 +37,7 @@ export let cwcTerms = {
 // 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌑
 export let cwcMoonPhaseIcons = {
   new_moon : "🌑",
+  new : "🌑",
   waxing_crescent: "🌒",
   first_quarter: "🌓",
   waxing_gibbous: "🌔",

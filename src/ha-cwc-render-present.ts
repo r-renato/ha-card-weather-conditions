@@ -86,7 +86,7 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
 
   return html`
     <ul class="variations ${border ? "spacer" : ""}">
-        ${currentCfg.forecast && (undefined !== precipitation_probability || undefined !== precipitation_intensity) 
+        ${void 0 !== typeof precipitation_probability || void 0 !== typeof precipitation_intensity 
           ? _renderPresentDouble( precipitation_probability, '%', 
                                   precipitation_intensity, getUnit(hass,"precipitation") + '/h', 
                             'mdi:weather-rainy') : ""}

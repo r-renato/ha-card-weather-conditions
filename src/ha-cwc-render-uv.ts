@@ -54,7 +54,7 @@ export const renderUv = (hass: HomeAssistant, uv: Uv, border: boolean) => {
   let uv_level = undefined !== uv.uv_level && hass.states[uv.uv_level]
     ? _renderUvSingle(hass.states[uv.uv_level], 'mdi:weather-sunny', false) : undefined ;
 
-  let uv_index = _renderUvDouble( hass.states[uv.uv_index], hass.states[uv.max_uv_index], 'mdi:weather-sunny')
+  let uv_index = _renderUvDouble( hass.states[uv.uv_index], hass.states[uv.max_uv_index], 'mdi:weather-sunny') ;
   let ozone_level = undefined !== uv.ozone_level && hass.states[uv.ozone_level]
     ? _renderUvSingle(hass.states[uv.ozone_level], 'mdi:vector-triangle', true) : undefined ;
 
@@ -68,7 +68,7 @@ export const renderUv = (hass: HomeAssistant, uv: Uv, border: boolean) => {
     ${[1,2,3,4,5,6].map(stypen => {
       let stype = 'set_skin_type_' + stypen ;
       let sensorId = uv[stype] ;
-      let sstate = sensorId ? hass.states[sensorId] : undefined ;
+      let sstate = sensorId && hass.states[sensorId] ? hass.states[sensorId] : undefined ;
       return sstate ? html`
         <div class="day ${stypen}">
             <div id="rectangle" style="color: black; background: ${colors[stypen-1]};width:32px;height:32px;display: table;margin: 0 auto;">${num[stypen-1]}</div>
