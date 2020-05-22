@@ -42,7 +42,7 @@ resources:
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
 | name         | string        | Optional        |                                   | Card name shown on summary layer                                                              |
-| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`                                                      |
+| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`/`de`/`fr`                                                 |
 | animation    | boolean       | Optional        | `false`                           | Can take the values: `true`/`false`                                                           |
 | camera       | string        | Optional        |                                   | It is the camera id                                                                           |
 | uv           | object        | Optional        |                                   | It's the ultraviolet object, see the specific session.                                        |
@@ -106,7 +106,7 @@ This objects list is applicable to all of them `tree` and `weed` and `grass`.
 |       **Name**        |  **Type**   | **Requirement** | **Default** | **Description**     |
 |-----------------------|-------------|-----------------|-------------|---------------------|
 | sun                   | string      | Optional        |             | It is the sensor id |
-| moon                  | string      | Optional        |             | It is the sensor id |
+| moon_phase            | string      | Optional        |             | It is the sensor id |
 | current_conditions    | string      | Optional        |             | It is the sensor id |
 | humidity              | string      | Optional        |             | It is the sensor id |
 | pressure              | string      | Optional        |             | It is the sensor id |

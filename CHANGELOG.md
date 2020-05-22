@@ -3,12 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.5.2] Unreleased
+## [1.6.1] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.6.0] 2020-05-22
+### Added
+- Add `fr` language
 
 ## [1.5.1] 2020-05-21
 ### Fixed
