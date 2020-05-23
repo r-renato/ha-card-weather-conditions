@@ -42,7 +42,7 @@ resources:
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
 | name         | string        | Optional        |                                   | Card name shown on summary layer                                                              |
-| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`/`de`/`fr`                                                 |
+| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`/`de`/`fr`/`sr-latn`                                                 |
 | animation    | boolean       | Optional        | `false`                           | Can take the values: `true`/`false`                                                           |
 | camera       | string        | Optional        |                                   | It is the camera id                                                                           |
 | uv           | object        | Optional        |                                   | It's the ultraviolet object, see the specific session.                                        |

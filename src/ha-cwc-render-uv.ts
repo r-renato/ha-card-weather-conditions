@@ -31,8 +31,8 @@ const _renderUvSingle = (entity: HassEntity, icon: string, round: boolean) => {
  * @private
  */
 const _renderUvDouble = (entity1: HassEntity, entity2: HassEntity, icon: string) => {
-  let value1 = Math.round(parseFloat(entity1.state) * 10) / 10 ;
-  let value2 = Math.round(parseFloat(entity2.state) * 10) / 10 ;
+  let value1 = undefined !== entity1 ? Math.round(parseFloat(entity1.state) * 10) / 10 : "--" ;
+  let value2 = undefined !== entity2 ? Math.round(parseFloat(entity2.state) * 10) / 10 : "--" ;
 
   return(entity1 || entity2 ? html`
     <li>
@@ -54,7 +54,8 @@ export const renderUv = (hass: HomeAssistant, uv: Uv, border: boolean) => {
   let uv_level = undefined !== uv.uv_level && hass.states[uv.uv_level]
     ? _renderUvSingle(hass.states[uv.uv_level], 'mdi:weather-sunny', false) : undefined ;
 
-  let uv_index = _renderUvDouble( hass.states[uv.uv_index], hass.states[uv.max_uv_index], 'mdi:weather-sunny') ;
+  let uv_index = undefined !== uv.uv_index && undefined !== uv.max_uv_index
+    ? _renderUvDouble( hass.states[uv.uv_index], hass.states[uv.max_uv_index], 'mdi:weather-sunny') : "";
   let ozone_level = undefined !== uv.ozone_level && hass.states[uv.ozone_level]
     ? _renderUvSingle(hass.states[uv.ozone_level], 'mdi:vector-triangle', true) : undefined ;
 
