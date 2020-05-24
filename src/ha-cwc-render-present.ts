@@ -114,9 +114,9 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
           </li>
         ` : ""}        
         ${undefined !== next_rising ? _renderPresentSingle(
-          next_rising.toLocaleTimeString(), '', 'mdi:weather-sunset-up') : ""}               
+          next_rising.toLocaleTimeString(language), '', 'mdi:weather-sunset-up') : ""}               
         ${undefined !== next_setting ? _renderPresentSingle(
-          next_setting.toLocaleTimeString(), '', 'mdi:weather-sunset-down') : ""}           
+          next_setting.toLocaleTimeString(language), '', 'mdi:weather-sunset-down') : ""}           
     </ul>
   `;
 } ;
