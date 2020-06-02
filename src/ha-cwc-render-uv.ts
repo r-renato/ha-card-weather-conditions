@@ -69,12 +69,12 @@ export const renderUv = (hass: HomeAssistant, uv: Uv, border: boolean) => {
     ${[1,2,3,4,5,6].map(stypen => {
       let stype = 'set_skin_type_' + stypen ;
       let sensorId = uv[stype] ;
-      let sstate = sensorId && hass.states[sensorId] ? hass.states[sensorId] : undefined ;
+      let sstate = undefined !== typeof sensorId && undefined !== typeof hass.states[sensorId] ? hass.states[sensorId] : undefined ;
       return sstate ? html`
         <div class="day ${stypen}">
             <div id="rectangle" style="color: black; background: ${colors[stypen-1]};width:32px;height:32px;display: table;margin: 0 auto;">${num[stypen-1]}</div>
             <div class="lowTemp">
-              ${Math.trunc(parseInt(sstate.state) / 60 )} h
+              ${sstate.state && "unknown" !== sstate.state ? Math.trunc(parseInt(sstate.state) / 60 ) + " h": "- -"}
             </div>  
         </div>
       ` :  "" ;      

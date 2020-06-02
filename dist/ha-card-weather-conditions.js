@@ -360,11 +360,11 @@ function e(e,t,i,s){var n,o=arguments.length,r=o<3?t:null===s?s=Object.getOwnPro
         ${o||""}${r||""}
     </ul>
     <div class="forecast clear" style="margin-top:  4px; margin-bottom: 4px;">
-    ${[1,2,3,4,5,6].map(i=>{let s=t["set_skin_type_"+i],n=s&&e.states[s]?e.states[s]:void 0;return n?j`
+    ${[1,2,3,4,5,6].map(i=>{let s=t["set_skin_type_"+i],n=void 0!==typeof s&&void 0!==typeof e.states[s]?e.states[s]:void 0;return n?j`
         <div class="day ${i}">
             <div id="rectangle" style="color: black; background: ${Ie[i-1]};width:32px;height:32px;display: table;margin: 0 auto;">${je[i-1]}</div>
             <div class="lowTemp">
-              ${Math.trunc(parseInt(n.state)/60)} h
+              ${n.state&&"unknown"!==n.state?Math.trunc(parseInt(n.state)/60)+" h":"- -"}
             </div>  
         </div>
       `:""})}
