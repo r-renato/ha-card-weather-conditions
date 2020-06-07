@@ -1,6 +1,6 @@
 {
   "name": "HA (Lovelace) Card Weather Conditions",
-  "domains": ["climate"],
+  "domains": ["weather"],
   "render_readme": false,
   "filename": "ha-card-weather-conditions.js"
 }
