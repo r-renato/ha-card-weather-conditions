@@ -13,6 +13,7 @@
 
 * Display summary weather information
 * Display current detailed weather data
+* Display Ultraviolet Radiation
 * Display Air Quality data
 * Display Pollen data
 * Display camera meteogram
