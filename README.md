@@ -111,7 +111,7 @@ The card has been tested with the sensors provided by `climacell`, `darksky` and
 #### **Display the *Current Layer*** 
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-current" width="40%" height="auto" alt="Home Assistant lovelace card">
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-current.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 <img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-current-ext.png" width="40%" height="auto" alt="Home Assistant lovelace card">
 </p>
 
