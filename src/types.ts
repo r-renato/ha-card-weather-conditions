@@ -9,6 +9,22 @@ export interface CardConfig {
   pollen?: Pollen ;
   weather: Weather ;
   camera?: string ;
+  alert: Alert ;
+}
+
+export interface Alert {
+  fire_risk?: AlertItem ;
+  thunderstorms_risk?: AlertItem ;
+  hydraulic_risk?: AlertItem ;
+  hydrogeological_risk?: AlertItem ;
+}
+export interface AlertItem {
+  entity: string
+  icon?: string ;
+  min?: number ;
+  max?: number ;
+  show_if_on?: boolean ;
+  show_if_ge?: number ;
 }
 
 export interface Pollen {
@@ -96,5 +112,9 @@ export interface IconsConfig {
   icons_model: string ;
   iconsDay: { [key: string]: string; } ;
   iconsNight: { [key: string]: string; } ;
+}
 
+export interface ITerms {
+   windDirections;
+   words;
 }

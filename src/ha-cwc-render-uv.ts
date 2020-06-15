@@ -2,7 +2,7 @@ import {HomeAssistant} from "custom-card-helpers/dist";
 import {AirQuality, Uv} from "./types";
 import {html} from "lit-html";
 import {HassEntity} from "home-assistant-js-websocket/dist"
-import {getUnit, getWeatherIcon} from "./ha-cwc-utils";
+import {getUnit, getWeatherIcon, numFormat} from "./ha-cwc-utils";
 
 const num = ['I', 'II', 'III', 'IV', 'V', 'VI'] ;
 const colors = [ '#F1D1B1', '#E4B590', '#CF9F7D', '#B67851', '#A15E2D', '#513938'] ;
@@ -14,7 +14,7 @@ const colors = [ '#F1D1B1', '#E4B590', '#CF9F7D', '#B67851', '#A15E2D', '#513938
  * @private
  */
 const _renderUvSingle = (entity: HassEntity, icon: string, round: boolean) => {
-  let value = round ? Math.round(parseFloat(entity.state)) : entity.state ;
+  let value = round ? numFormat(entity.state, 0) : entity.state ;
 
   return(entity ? html`
     <li>
@@ -31,8 +31,8 @@ const _renderUvSingle = (entity: HassEntity, icon: string, round: boolean) => {
  * @private
  */
 const _renderUvDouble = (entity1: HassEntity, entity2: HassEntity, icon: string) => {
-  let value1 = undefined !== entity1 ? Math.round(parseFloat(entity1.state) * 10) / 10 : "--" ;
-  let value2 = undefined !== entity2 ? Math.round(parseFloat(entity2.state) * 10) / 10 : "--" ;
+  let value1 = undefined !== entity1 ? numFormat(entity1.state) : "--" ;
+  let value2 = undefined !== entity2 ? numFormat(entity2.state) : "--" ;
 
   return(entity1 || entity2 ? html`
     <li>

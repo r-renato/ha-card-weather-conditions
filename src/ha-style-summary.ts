@@ -37,7 +37,7 @@ const styleSummary = css`
     position: absolute;
     // top: 0.65em;
     font-weight: 300;
-    font-size: calc(49px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
+    font-size: calc(35px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
     color: var(--primary-text-color);
     right: 1em;
     margin-top: 2px;
@@ -50,7 +50,7 @@ const styleSummary = css`
     // font-size: 1.5em;
     vertical-align: super;
     color: var(--primary-text-color);
-    right: 1em;
+    right: 0.7em;
     margin-top: -11px;
     margin-right: 7px;
   }      

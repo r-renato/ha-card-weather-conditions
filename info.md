@@ -13,9 +13,11 @@
 
 * Display summary weather information
 * Display current detailed weather data
+* Display forecast detailed weather data
 * Display Ultraviolet Radiation
 * Display Air Quality data
 * Display Pollen data
+* Display Alert
 * Display camera meteogram
 * Display preferred camera
 
@@ -50,12 +52,13 @@ resources:
 |--------------|---------------|-----------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
 | type         | string        | **Required**    |                                   | Card type must be `custom:ha-card-weather-conditions`                                         |                                                              |
 | name         | string        | Optional        |                                   | Card name shown on summary layer                                                              |
-| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`/`de`/`fr`/`sr-latn`                                                 |
+| language     | string        | Optional        | `en`                              | Can take the values: `en`/`it`/`nl`/`es`/`de`/`fr`/`sr-latn`/`pt`                                              |
 | animation    | boolean       | Optional        | `false`                           | Can take the values: `true`/`false`                                                           |
 | camera       | string        | Optional        |                                   | It is the camera id                                                                           |
 | uv           | object        | Optional        |                                   | It's the ultraviolet object, see the specific session.                                        |
 | pollen       | object        | Optional        |                                   | It's the pollen object, see the specific session.                                             |
 | air_quality  | object        | Optional        |                                   | It's the Air Quality object, see the specific session.                                        |
+| alert        | object        | Optional        |                                   | It's the Alert object, see the specific session.                                        |
 | weather      | object        | Optional        |                                   | It's the Weather object, see the specific session.                                            |
 
 ## **&#8212; Weather Card Parameters &#8212;**
@@ -386,6 +389,61 @@ The card has been tested with the sensors provided by `climacell` integrations.
     so2: sensor.cc_test_so2
     epa_aqi: sensor.cc_test_epa_aqi
     epa_health_concern: sensor.cc_test_epa_health_concern
+```
+
+## **&#8212; Alert Parameters &#8212;**
+
+#### **Parameters for the object: *alert*** 
+
+|       **Name**        |  **Type**   | **Requirement** | **Description**         |
+|-----------------------|-------------|-----------------|-------------------------|
+| fire_risk             | object list | Optional        | Fire object             |
+| thunderstorms_risk    | object list | Optional        | thunderstorms           |
+| hydraulic_risk        | object list | Optional        | hydraulic id            |
+| hydrogeological_risk  | object list | Optional        | hydrogeological         |
+
+#### **Parameters for the object list: *fire_risk*** 
+
+| **Name**   |  **Type**   | **Requirement** | **Description**                                        |
+|------------|-------------|-----------------|--------------------------------------------------------|
+| entity     | string      | **Required**    | It is the sensor id                                    |
+| icon       | number      | Optional        | Name of the icon to be used instead of the sensor icon |
+| min        | number      | **Required**    | Min sensor value                                       |
+| max        | number      | **Required**    | Max sensor value                                       |
+| show_if_ge | number      | Optional        | Show alert if the value is greater or equals to ...    |
+
+#### **Parameters for the object list: *thunderstorms_risk, hydraulic_risk, hydrogeological_risk*** 
+
+| **Name**   |  **Type**   | **Requirement** | **Description**                                        |
+|------------|-------------|-----------------|--------------------------------------------------------|
+| entity     | string      | **Required**    | It is the binary sensor id                             |
+| icon       | number      | Optional        | Name of the icon to be used instead of the sensor icon |
+| show_if_on | number      | Optional        | MShow alert if the value is `on`                       |
+
+#### **Display the *Alert Layer*** 
+
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-alert.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+
+##### *Alert Layer*, example of card setup
+
+```yaml
+  type: custom:ha-card-weather-conditions
+  name: "cc_test"
+  language: it
+  alert:
+    fire_risk:
+      entity: sensor.cc_test_fire_index
+      icon: mdi:campfire
+      min: 1
+      max: 100
+      show_if_ge: 15
+    thunderstorms_risk:
+      entity: binary_sensor.dpc_acquafredda_temporali_oggi
+      show_if_on: true
+    hydraulic_risk:
+      entity: binary_sensor.dpc_acquafredda_idraulico_oggi
+    hydrogeological_risk:
+      entity: binary_sensor.dpc_acquafredda_idrogeologico_oggi
 ```
 
 ## **&#8212; Other examples &#8212;**

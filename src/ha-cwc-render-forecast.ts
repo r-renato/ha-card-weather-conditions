@@ -3,7 +3,7 @@ import {
 } from "lit-element";
 import {Current, Forecast, IconsConfig} from "./types";
 import {HomeAssistant} from "custom-card-helpers/dist";
-import {getUnit, getWeatherIcon} from "./ha-cwc-utils" ;
+import {getUnit, getWeatherIcon, numFormat} from "./ha-cwc-utils" ;
 
 /**
  *
@@ -75,14 +75,14 @@ export const renderForecasts = (hass: HomeAssistant, currentCfg: Current, foreca
       icon = hass.states[icons[day][1]].state.toLowerCase() ;
 
     if( temperature_low && temperature_low[day] && hass.states[temperature_low[day][1]] )
-      day_temp_low = Math.round(parseFloat(hass.states[temperature_low[day][1]].state)) ;
+      day_temp_low = numFormat(hass.states[temperature_low[day][1]].state, 0) ;
     if( temperature_high && temperature_high[day] && hass.states[temperature_high[day][1]] )
-      day_temp_high = Math.round(parseFloat(hass.states[temperature_high[day][1]].state)) ;
+      day_temp_high = numFormat(hass.states[temperature_high[day][1]].state, 0) ;
     
     if( precipitation_probability && precipitation_probability[day] && hass.states[precipitation_probability[day][1]] )
-     day_prec_probab = Math.round(parseFloat(hass.states[precipitation_probability[day][1]].state)) ;
+     day_prec_probab = numFormat(hass.states[precipitation_probability[day][1]].state, 0) ;
     if( precipitation_intensity && precipitation_intensity[day] && hass.states[precipitation_intensity[day][1]] )
-      day_prec_intensity = Math.round(parseFloat(hass.states[precipitation_intensity[day][1]].state)) ;
+      day_prec_intensity = numFormat(hass.states[precipitation_intensity[day][1]].state, 0) ;
     
     return html`
           <div class="day ${day}">

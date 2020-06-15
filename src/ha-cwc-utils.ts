@@ -1,8 +1,8 @@
-import {cwcLocale, cwcLocWindDirections, cwcTerms, cwcMoonPhaseIcons} from "./ha-cwc-consts";
+import {cwcLocale, cwcMoonPhaseIcons} from "./ha-cwc-consts";
 import {HomeAssistant} from "custom-card-helpers/dist";
 import {IconsConfig} from "./types";
 
-import {hacsImagePathExist, manImagePathExist} from "./ha-card-weather-conditions" ;
+import {hacsImagePathExist, manImagePathExist, numberFormat_0dec, numberFormat_1dec} from "./ha-card-weather-conditions" ;
 
 /**
  *
@@ -22,11 +22,11 @@ export function imageExist(imageSrc: string) {
 /**
  *
  * @param term
- * @param lang
+ * @param terms
  */
-export const translate = (term:string, lang: string) => {
+export const translate = (term:string, terms) => {
   // console.info(">>>>loc:" + lang + "" + cwcLocale[lang] ) ;
-  return cwcTerms[term] ? cwcTerms[term][cwcLocale[lang]] : "ERR";
+  return terms[term] ? terms[term] : "ERR";
 } ;
 
 /**
@@ -95,68 +95,100 @@ export const getUnit = (hass: HomeAssistant, measure: string) => {
   }
 } ;
 
-export const getWindDirections = (wd: number, locale: string) => {
+export const getWindDirections = (wd: number, cwcLocWindDirections) => {
   if (wd < 0 || wd > 360) {
     console.log("Enter a degree between 0 and 360 degrees.");
     return null;
   }
 
   if (wd >= 0 && wd <= 11.25)
-    return cwcLocWindDirections['N'][cwcLocale[locale]];
+    return cwcLocWindDirections['N'];
 
   if (wd > 348.75 && wd <= 360)
-    return cwcLocWindDirections['N'][cwcLocale[locale]];
+    return cwcLocWindDirections['N'];
 
   if (wd > 11.25 && wd <= 33.75)
-    return cwcLocWindDirections['NNE'][cwcLocale[locale]];
+    return cwcLocWindDirections['NNE'];
 
   if (wd > 33.75 && wd <= 56.25)
-    return cwcLocWindDirections['NE'][cwcLocale[locale]];
+    return cwcLocWindDirections['NE'];
 
   if (wd > 56.25 && wd <= 78.75)
-    return cwcLocWindDirections['ENE'][cwcLocale[locale]];
+    return cwcLocWindDirections['ENE'];
 
   if (wd > 78.75 && wd <= 101.25)
-    return cwcLocWindDirections['E'][cwcLocale[locale]];
+    return cwcLocWindDirections['E'];
 
   if (wd > 101.25 && wd <= 123.75)
-    return cwcLocWindDirections['ESE'][cwcLocale[locale]];
+    return cwcLocWindDirections['ESE'];
 
   if (wd > 123.75 && wd <= 146.25)
-    return cwcLocWindDirections['SE'][cwcLocale[locale]];
+    return cwcLocWindDirections['SE'];
 
   if (wd > 146.25 && wd <= 168.75)
-    return cwcLocWindDirections['SSE'][cwcLocale[locale]];
+    return cwcLocWindDirections['SSE'];
 
   if (wd > 168.75 && wd <= 191.25)
-    return cwcLocWindDirections['S'][cwcLocale[locale]];
+    return cwcLocWindDirections['S'];
 
   if (wd > 191.25 && wd <= 213.75)
-    return cwcLocWindDirections['SSW'][cwcLocale[locale]];
+    return cwcLocWindDirections['SSW'];
 
   if (wd > 213.75 && wd <= 236.25)
-    return cwcLocWindDirections['SW'][cwcLocale[locale]];
+    return cwcLocWindDirections['SW'];
 
   if (wd > 236.25 && wd <= 258.75)
-    return cwcLocWindDirections['WSW'][cwcLocale[locale]];
+    return cwcLocWindDirections['WSW'];
 
   if (wd > 258.75 && wd <= 281.25)
-    return cwcLocWindDirections['W'][cwcLocale[locale]];
+    return cwcLocWindDirections['W'];
 
   if (wd > 281.25 && wd <= 303.75)
-    return cwcLocWindDirections['WNW'][cwcLocale[locale]];
+    return cwcLocWindDirections['WNW'];
 
   if (wd > 303.75 && wd <= 326.25)
-    return cwcLocWindDirections['NW'][cwcLocale[locale]];
+    return cwcLocWindDirections['NW'];
 
   if (wd > 326.25 && wd <= 348.75)
-    return cwcLocWindDirections['NNW'][cwcLocale[locale]];
+    return cwcLocWindDirections['NNW'];
 
   return null;
 } ;
 
 export function getMoonIcon(phase:string) {
   return( cwcMoonPhaseIcons[phase.toLowerCase()] ) ;
+}
+
+export function loadJSON(full_path_file: string) {
+  return new Promise<string>((resolve)  => {
+    setTimeout(() => {
+      let xobj = new XMLHttpRequest();
+      xobj.overrideMimeType("application/json");
+      xobj.open('GET', full_path_file, true);
+      // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = () => {
+        if (xobj.readyState === 4 && xobj.status === 200) {
+          // Required use of an anonymous callback
+          // as .open() will NOT return a value but simply returns undefined in asynchronous mode
+          resolve(xobj.responseText);
+        }
+      };
+      xobj.send(null);
+    }, 100);
+  });
+}
+
+export function numFormat(stringNumber: string, fractionDigits = 1) {
+  switch (fractionDigits) {
+    case 0:
+      return numberFormat_0dec.format( parseFloat(stringNumber) ) ;
+      break ;
+    case 1:
+      return numberFormat_1dec.format( parseFloat(stringNumber) ) ;
+      break ;
+  }
+
+  // return parseFloat(stringNumber).toFixed(fractionDigits) ;
 }
 
 // export function circadianRhythm( hass: HomeAssistant, sunId: string ) {

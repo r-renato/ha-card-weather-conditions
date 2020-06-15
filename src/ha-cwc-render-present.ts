@@ -2,8 +2,8 @@ import {
   html
 } from "lit-element";
 
-import {getUnit, getWindDirections} from "./ha-cwc-utils" ;
-import {Current, Forecast} from "./types";
+import {getUnit, getWindDirections, numFormat} from "./ha-cwc-utils" ;
+import {Current, Forecast, ITerms} from "./types";
 import {HomeAssistant} from "custom-card-helpers/dist";
 
 /**
@@ -38,9 +38,10 @@ const _renderPresentSingle = (entity, entity_unit, icon:string) => {
  * @param currentCfg
  * @param forecastCfg
  * @param language
+ * @param terms
  * @param border
  */
-export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast, language: string, border: boolean) => {
+export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecastCfg: Forecast, language: string, terms: ITerms, border: boolean) => {
   let temperature_high, temperature_low, precipitation_probability, precipitation_intensity ;
   let next_rising, next_setting;
 
@@ -63,26 +64,26 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
     let prec_intensity = forecastCfg.precipitation_intensity
       ? Object.entries(forecastCfg.precipitation_intensity) : undefined;
 
-    temperature_high = temp_high ? Math.round(parseFloat(hass.states[temp_high[0][1]].state)) : undefined;
-    temperature_low = temp_low ? Math.round(parseFloat(hass.states[temp_low[0][1]].state)) : undefined;
+    temperature_high = temp_high ? numFormat(hass.states[temp_high[0][1]].state, 0) : undefined;
+    temperature_low = temp_low ? numFormat(hass.states[temp_low[0][1]].state, 0) : undefined;
     precipitation_probability = prec_probability
-      ? Math.round(parseFloat(hass.states[prec_probability[0][1]].state)) : undefined;
+      ? numFormat(hass.states[prec_probability[0][1]].state, 0) : undefined;
     precipitation_intensity = prec_intensity
-      ? Math.round(parseFloat(hass.states[prec_intensity[0][1]].state)) : undefined;
+      ? numFormat(hass.states[prec_intensity[0][1]].state, 0) : undefined;
   }
 
   let precipitation: number = currentCfg.precipitation
-    ? Math.round(parseFloat(hass.states[currentCfg.precipitation].state)) : undefined ;
+    ? numFormat(hass.states[currentCfg.precipitation].state, 0) : undefined ;
   let humidity: number = currentCfg.humidity
-    ? parseFloat(hass.states[currentCfg.humidity].state) : undefined ;
+    ? numFormat(hass.states[currentCfg.humidity].state, 0) : undefined ;
   let wind_bearing: number = currentCfg.wind_bearing
-    ? parseFloat(hass.states[currentCfg.wind_bearing].state) : undefined ;
+    ? numFormat(hass.states[currentCfg.wind_bearing].state) : undefined ;
   let wind_speed: number = currentCfg.wind_speed
-    ? Math.round(parseFloat(hass.states[currentCfg.wind_speed].state) * 10) / 10 : undefined ;
+    ? numFormat(hass.states[currentCfg.wind_speed].state) : undefined ;
   let pressure: number = currentCfg.pressure
-    ? Math.round(parseFloat(hass.states[currentCfg.pressure].state)) : undefined ;
+    ? numFormat(hass.states[currentCfg.pressure].state, 0) : undefined ;
   let visibility: number = currentCfg.visibility
-    ? Math.round(parseFloat(hass.states[currentCfg.visibility].state)) : undefined ;
+    ? numFormat(hass.states[currentCfg.visibility].state, 0) : undefined ;
 
   return html`
     <ul class="variations ${border ? "spacer" : ""}">
@@ -109,7 +110,7 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
           visibility, getUnit(hass,"length"), 'mdi:weather-fog') : ""}
         ${(!!wind_speed) || (!!wind_bearing) ? html`
           <li>
-            <ha-icon icon="mdi:weather-windy"></ha-icon> ${getWindDirections(wind_bearing, lang)} ${wind_speed}
+            <ha-icon icon="mdi:weather-windy"></ha-icon> ${getWindDirections(wind_bearing, terms.windDirections)} ${wind_speed}
             <span class="unit">${getUnit(hass,"length")}/h</span>
           </li>
         ` : ""}        
