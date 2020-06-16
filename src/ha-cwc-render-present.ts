@@ -64,25 +64,37 @@ export const renderPresent = (hass: HomeAssistant, currentCfg: Current, forecast
     let prec_intensity = forecastCfg.precipitation_intensity
       ? Object.entries(forecastCfg.precipitation_intensity) : undefined;
 
-    temperature_high = temp_high ? numFormat(hass.states[temp_high[0][1]].state, 0) : undefined;
-    temperature_low = temp_low ? numFormat(hass.states[temp_low[0][1]].state, 0) : undefined;
-    precipitation_probability = prec_probability
+    // @ts-ignore
+    temperature_high = Object.isSet(temp_high) && Object.isSet(hass.states[temp_high[0][1]])
+      ? numFormat(hass.states[temp_high[0][1]].state, 0) : undefined;
+    // @ts-ignore
+    temperature_low = Object.isSet(temp_low) && Object.isSet(hass.states[temp_low[0][1]])
+      ? numFormat(hass.states[temp_low[0][1]].state, 0) : undefined;
+    // @ts-ignore
+    precipitation_probability = Object.isSet(prec_probability) && Object.isSet(hass.states[prec_probability[0][1]])
       ? numFormat(hass.states[prec_probability[0][1]].state, 0) : undefined;
-    precipitation_intensity = prec_intensity
+    // @ts-ignore
+    precipitation_intensity = Object.isSet(prec_intensity) && Object.isSet(hass.states[prec_intensity[0][1]])
       ? numFormat(hass.states[prec_intensity[0][1]].state, 0) : undefined;
   }
 
-  let precipitation: number = currentCfg.precipitation
+  // @ts-ignore
+  let precipitation: number = Object.isSet(currentCfg.precipitation) && Object.isSet(hass.states[currentCfg.precipitation])
     ? numFormat(hass.states[currentCfg.precipitation].state, 0) : undefined ;
-  let humidity: number = currentCfg.humidity
+  // @ts-ignore
+  let humidity: number = Object.isSet(currentCfg.humidity) && Object.isSet(hass.states[currentCfg.humidity])
     ? numFormat(hass.states[currentCfg.humidity].state, 0) : undefined ;
-  let wind_bearing: number = currentCfg.wind_bearing
+  // @ts-ignore
+  let wind_bearing: number = Object.isSet(currentCfg.wind_bearing) && Object.isSet(hass.states[currentCfg.wind_bearing])
     ? numFormat(hass.states[currentCfg.wind_bearing].state) : undefined ;
-  let wind_speed: number = currentCfg.wind_speed
+  // @ts-ignore
+  let wind_speed: number = Object.isSet(currentCfg.wind_speed) && Object.isSet(hass.states[currentCfg.wind_speed])
     ? numFormat(hass.states[currentCfg.wind_speed].state) : undefined ;
-  let pressure: number = currentCfg.pressure
+  // @ts-ignore
+  let pressure: number = Object.isSet(currentCfg.pressure) && Object.isSet(hass.states[currentCfg.pressure])
     ? numFormat(hass.states[currentCfg.pressure].state, 0) : undefined ;
-  let visibility: number = currentCfg.visibility
+  // @ts-ignore
+  let visibility: number = Object.isSet(currentCfg.visibility) && Object.isSet(hass.states[currentCfg.visibility])
     ? numFormat(hass.states[currentCfg.visibility].state, 0) : undefined ;
 
   return html`

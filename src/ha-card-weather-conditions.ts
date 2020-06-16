@@ -38,13 +38,24 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.8.0" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.8.1" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
 
 export let numberFormat_0dec = null ;
 export let numberFormat_1dec = null ;
+
+const UNDEFINED = "undefined" ;
+Object.defineProperty(Object.prototype, 'isSet',{
+  value: function(object, testIsBlank) {
+    let t1 = !(typeof object === UNDEFINED || null === object) ;
+    return( testIsBlank ? t1 && object.length > 0 : t1 ) ;
+  },
+  writable: true,
+  configurable: true,
+  enumerable: false
+});
 
 console.info(logo, optConsoleParam1, optConsoleParam2);
 
