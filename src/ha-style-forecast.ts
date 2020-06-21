@@ -9,7 +9,7 @@ const styleForecast = css`
     border-right: 0.1em solid #d9d9d9;
     line-height: 2;
     box-sizing: border-box;
-        z-index: 200;
+    z-index: 200;
   }
   
   .dayname {

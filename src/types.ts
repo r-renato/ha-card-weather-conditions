@@ -10,6 +10,17 @@ export interface CardConfig {
   weather: Weather ;
   camera?: string ;
   alert: Alert ;
+  sea: Sea ;
+}
+
+export interface Sea {
+  swell_direction?: Hours ;
+  swell_height?: Hours ;
+  swell_period?: Hours ;
+  wind_direction: Hours ;
+  wind_speed: Hours ;
+  air_temperature: Hours ;
+  water_temperature: Hours ;
 }
 
 export interface Alert {
@@ -104,6 +115,15 @@ export interface Days {
   day_4: string ;
   day_5: string ;
   day_6: string ;
+}
+
+export interface Hours {
+  hour_1: string ;
+  hour_2: string ;
+  hour_3: string ;
+  hour_4: string ;
+  hour_5: string ;
+  hour_6: string ;
 }
 
 export interface IconsConfig {

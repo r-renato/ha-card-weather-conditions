@@ -6,7 +6,7 @@ import {
   CSSResult,
   TemplateResult, css,
 } from "lit-element";
-
+import { unsafeCSS } from 'lit-element/lib/css-tag.js';
 import {HomeAssistant} from "custom-card-helpers";
 
 import style from './style' ;
@@ -15,6 +15,7 @@ import styleMeter from './ha-style-meter' ;
 import styleForecast from './ha-style-forecast' ;
 import styleCamera from './ha-style-camera' ;
 import styleNightAndDay from './ha-style-day-night';
+import {getSeaStyle} from "./ha-style-sea"
 
 import {cwcClimacellDayIcons, cwcClimacellNightIcons, cwcClimacellDayBg} from "./ha-cwc-climacell" ;
 import {cwcDarkskyDayIcons, cwcDarkskyNightIcons} from "./ha-cwc-darksky" ;
@@ -29,8 +30,9 @@ import {renderPresent} from "./ha-cwc-render-present" ;
 import {renderForecasts} from "./ha-cwc-render-forecast" ;
 import {renderPollens} from "./ha-cwc-render-pollen";
 import {renderAirQualities} from "./ha-cwc-render-airquality";
-import {renderUv} from "./ha-cwc-render-uv"
-import {renderAlert} from "./ha-cwc-render-alert"
+import {renderUv} from "./ha-cwc-render-uv" ;
+import {renderAlert} from "./ha-cwc-render-alert" ;
+import {renderSeaForecast} from "./ha-cwc-render-sea" ;
 
 const hacsImagePath: string = "/local/community/ha-card-weather-conditions/icons" ;
 const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
@@ -38,13 +40,15 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.8.1" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.0" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
 
 export let numberFormat_0dec = null ;
 export let numberFormat_1dec = null ;
+
+let globalImagePath: string ;
 
 const UNDEFINED = "undefined" ;
 Object.defineProperty(Object.prototype, 'isSet',{
@@ -68,7 +72,8 @@ Promise.all(findImagePath).then((testResults) => {
   hacsImages = hacsImagePathExist = testResults[0] ;
   manImages = manImagePathExist = testResults[1] ;
 
-  let translPath = (hacsImages ? hacsImagePath : manImages ? manImagePath : null) + '/../transl/' ;
+  globalImagePath = (hacsImages ? hacsImagePath : manImages ? manImagePath : null) ;
+  let translPath = globalImagePath + '/../transl/' ;
   let findTranslation = [
     loadJSON(translPath + 'en.json'),
     loadJSON(translPath + 'it.json'),
@@ -117,6 +122,7 @@ Promise.all(findImagePath).then((testResults) => {
       private _hasPollen: boolean = false ;
       private _hasUv: boolean = false ;
       private _hasAlert: boolean = false ;
+      private _hasSea: boolean = false ;
 
       private _displayTop: boolean = true ;
       private _displayCurrent: boolean = true ;
@@ -131,6 +137,7 @@ Promise.all(findImagePath).then((testResults) => {
       private _showPollen: boolean = true ;
       private _showForecast: boolean = true ;
       private _showAlert: boolean = true ;
+      private _showSea: boolean = true ;
 
       /**
        *
@@ -172,6 +179,7 @@ Promise.all(findImagePath).then((testResults) => {
         this._hasPollen = !!config.pollen && (!!config.pollen.tree || !!config.pollen.weed || !!config.pollen.grass);
         this._hasUv = !!config.uv;
         this._hasAlert = !!config.alert;
+        this._hasSea = !!config.sea;
 
         this._iconsConfig.path = hacsImages ? hacsImagePath : manImages ? manImagePath : null;
         // this._iconsConfig.iconType = config.animation ? "animated" : "static";
@@ -209,7 +217,7 @@ Promise.all(findImagePath).then((testResults) => {
        * @returns {CSSResult}
        */
       static get styles(): CSSResult {
-        return css`${style}${styleSummary}${styleForecast}${styleMeter}${styleCamera}${styleNightAndDay}`;
+        return css`${style}${styleSummary}${styleForecast}${styleMeter}${styleCamera}${styleNightAndDay}${unsafeCSS(getSeaStyle(globalImagePath))}`;
       }
 
       /**
@@ -241,7 +249,8 @@ Promise.all(findImagePath).then((testResults) => {
         let sunrise, sunriseEnd, sunsetStart, sunset, now ;
         let dynStyle, condition, habgImage ;
 
-        let _renderedSummary, _renderedPresent, _renderedUv, _renderedAirQuality, _renderedPollen, _renderedForecast, _renderedAlert ;
+        let _renderedSummary, _renderedPresent, _renderedUv, _renderedAirQuality, _renderedPollen, _renderedForecast,
+          _renderedAlert, _renderedSea ;
         // let _renderSummury: boolean = false ;
 
         let posix:number = 0 ;
@@ -350,6 +359,14 @@ Promise.all(findImagePath).then((testResults) => {
           posix++ ;
         } else _renderedAlert = "" ;
 
+        // Test Sea
+        if( this._showSea && this._hasSea ) {
+          let sea = this._config.sea ;
+          console.info("--------");
+          _renderedSea = renderSeaForecast(this.hass, sea, this._iconsConfig, this._language, posix > 0) ;
+          posix++ ;
+        } else _renderedSea = "" ;
+
         return html`
       ${dynStyle ? html`
       <style>${dynStyle}</style>` : "" }
@@ -364,6 +381,7 @@ Promise.all(findImagePath).then((testResults) => {
             ${_renderedAirQuality}
             ${_renderedPollen}
             ${_renderedForecast}
+            ${_renderedSea}
             ${this._hasMeteogram ? this.renderCamera(this.hass, this._config.weather.forecast.meteogram) : ""}
             ${this._config.camera ? this.renderCamera(this.hass, this._config.camera) : ""}
         ` : html``}

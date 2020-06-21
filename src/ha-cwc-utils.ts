@@ -4,6 +4,12 @@ import {IconsConfig} from "./types";
 
 import {hacsImagePathExist, manImagePathExist, numberFormat_0dec, numberFormat_1dec} from "./ha-card-weather-conditions" ;
 
+export function pad(n, width, z=undefined) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 /**
  *
  * @param imageSrc

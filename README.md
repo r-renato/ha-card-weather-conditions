@@ -12,8 +12,9 @@
 ## Features
 
 * Display summary weather information
-* Display current detailed weather data
-* Display forecast detailed weather data
+* Display detailed current weather data
+* Display detailed forecast weather data
+* Display detailed forecast sea weather data
 * Display Ultraviolet Radiation
 * Display Air Quality data
 * Display Pollen data
@@ -263,6 +264,99 @@ To capitalize the name of the days of the week use `style` directive:
     .dayname {
       text-transform: capitalize;
   }
+```
+### **&#187; Sea Forecast Weather Data**
+
+#### **Parameters for the object list: *sea*** 
+|       **Name**    |  **Type**   | **Requirement** | **Description**     |
+|-------------------|-------------|-----------------|---------------------|
+| swell_direction   | object list | Optional        | It is the camera id |
+| swell_height      | object list | Optional        | It is the sensor id |
+| swell_period      | object list | Optional        | It is the sensor id |
+| wind_direction    | object list | Optional        | It is the sensor id |
+| wind_speed        | object list | Optional        | It is the sensor id |
+| air_temperature   | object list | Optional        | It is the sensor id |
+| water_temperature | object list | Optional        | It is the sensor id |
+
+#### **Parameters for the object list: *swell_direction, swell_height, swell_period, wind_direction, wind_speed, air_temperature, water_temperature*** 
+
+| **Name** |  **Type**   | **Requirement** | **Description**                                                         |
+|----------|-------------|-----------------|-------------------------------------------------------------------------|
+| hour_1   | string      | Optional        | It is the sensor id                                                     |
+| hour_2   | string      | Optional        | It is the sensor id                                                     |
+| hour_3   | string      | Optional        | It is the sensor id                                                     |
+| hour_4   | string      | Optional        | It is the sensor id                                                     |
+| hour_5   | string      | Optional        | It is the sensor id                                                     |
+| hour_6   | string      | Optional        | It is the sensor id                                                     |
+| hour_7   | string      | Optional        | It is the sensor id                                                     |
+
+#### **Display the *Sea Forecast Layer*** 
+
+<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-sea.png" width="40%" height="auto" alt="Home Assistant lovelace card">
+
+##### *Sea Forecast Layer*, example of card setup
+
+```yaml
+  type: custom:ha-card-weather-conditions
+  name: "cc_test"
+  language: it
+  sea:
+    swell_direction:
+      hour_1: sensor.sg_piscinas_swell_direction_1h
+      hour_2: sensor.sg_piscinas_swell_direction_2h
+      hour_3: sensor.sg_piscinas_swell_direction_3h
+      hour_4: sensor.sg_piscinas_swell_direction_4h
+      hour_5: sensor.sg_piscinas_swell_direction_5h
+      hour_6: sensor.sg_piscinas_swell_direction_6h
+      hour_7: sensor.sg_piscinas_swell_direction_7h
+    swell_height:
+      hour_1: sensor.sg_piscinas_swell_height_1h
+      hour_2: sensor.sg_piscinas_swell_height_2h
+      hour_3: sensor.sg_piscinas_swell_height_3h
+      hour_4: sensor.sg_piscinas_swell_height_4h
+      hour_5: sensor.sg_piscinas_swell_height_5h
+      hour_6: sensor.sg_piscinas_swell_height_6h
+      hour_7: sensor.sg_piscinas_swell_height_7h
+    swell_period:
+      hour_1: sensor.sg_piscinas_swell_period_1h
+      hour_2: sensor.sg_piscinas_swell_period_2h
+      hour_3: sensor.sg_piscinas_swell_period_3h
+      hour_4: sensor.sg_piscinas_swell_period_4h
+      hour_5: sensor.sg_piscinas_swell_period_5h
+      hour_6: sensor.sg_piscinas_swell_period_6h
+      hour_7: sensor.sg_piscinas_swell_period_7h
+    wind_direction:
+      hour_1: sensor.sg_piscinas_wind_direction_1h
+      hour_2: sensor.sg_piscinas_wind_direction_2h
+      hour_3: sensor.sg_piscinas_wind_direction_3h
+      hour_4: sensor.sg_piscinas_wind_direction_4h
+      hour_5: sensor.sg_piscinas_wind_direction_5h
+      hour_6: sensor.sg_piscinas_wind_direction_6h
+      hour_7: sensor.sg_piscinas_wind_direction_7h
+    wind_speed:
+      hour_1: sensor.sg_piscinas_wind_speed_1h
+      hour_2: sensor.sg_piscinas_wind_speed_2h
+      hour_3: sensor.sg_piscinas_wind_speed_3h
+      hour_4: sensor.sg_piscinas_wind_speed_4h
+      hour_5: sensor.sg_piscinas_wind_speed_5h
+      hour_6: sensor.sg_piscinas_wind_speed_6h
+      hour_7: sensor.sg_piscinas_wind_speed_7h
+    air_temperature:
+      hour_1: sensor.sg_piscinas_air_temperature_1h
+      hour_2: sensor.sg_piscinas_air_temperature_2h
+      hour_3: sensor.sg_piscinas_air_temperature_3h
+      hour_4: sensor.sg_piscinas_air_temperature_4h
+      hour_5: sensor.sg_piscinas_air_temperature_5h
+      hour_6: sensor.sg_piscinas_air_temperature_6h
+      hour_7: sensor.sg_piscinas_air_temperature_7h
+    water_temperature:
+      hour_1: sensor.sg_piscinas_water_temperature_1h
+      hour_2: sensor.sg_piscinas_water_temperature_2h
+      hour_3: sensor.sg_piscinas_water_temperature_3h
+      hour_4: sensor.sg_piscinas_water_temperature_4h
+      hour_5: sensor.sg_piscinas_water_temperature_5h
+      hour_6: sensor.sg_piscinas_water_temperature_6h
+      hour_7: sensor.sg_piscinas_water_temperature_7h
 ```
 
 ## **&#8212; Ultraviolet Radiation Parameters &#8212;**
