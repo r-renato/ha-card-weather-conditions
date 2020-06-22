@@ -417,6 +417,7 @@ The card has been tested with the sensors provided by `climacell` integrations.
 | **Name** |  **Type**   | **Requirement** | **Description**                            |
 |----------|-------------|-----------------|--------------------------------------------|
 | entity   | string      | **Required**    | It is the sensor id                        |
+| icon     | string      | Optional        | Icon override for the sensor               |
 | min      | number      | **Required**    | Min sensor value                           |
 | max      | number      | **Required**    | Max sensor value                           |
 | low      | number      | Optional        | Low Pollen value (min < low < high < max)  |

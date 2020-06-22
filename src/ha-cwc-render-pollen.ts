@@ -7,6 +7,7 @@ import {HomeAssistant} from "custom-card-helpers/dist";
 
 const _renderPollen = (hass: HomeAssistant, item: PollenItem) => {
   let entity = hass.states[item.entity] ;
+  let icon = item.icon || entity.attributes.icon ;
   let min = undefined !== item.min ? item.min : 0 ;
   let max = undefined !== item.max ? item.max : 5 ;
   let low = undefined !== item.low ? item.low : min ;
@@ -15,7 +16,7 @@ const _renderPollen = (hass: HomeAssistant, item: PollenItem) => {
 
   return(entity ? html`
      <li>
-       <ha-icon icon="${entity.attributes.icon}"></ha-icon>
+       <ha-icon icon="${icon}"></ha-icon>
        <meter class="meter" value="${parseInt(entity.state) + d}" optimum="${(high-low)/2}"
             min="${min}" max="${max + d}" low="${low + d}" high="${high + d}">${entity.state}/${max}</meter>
      </li>

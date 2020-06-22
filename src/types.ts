@@ -46,6 +46,7 @@ export interface Pollen {
 
 export interface PollenItem {
   entity: string ;
+  icon?: string ;
   min: number ;
   max: number ;
   low?: number ;

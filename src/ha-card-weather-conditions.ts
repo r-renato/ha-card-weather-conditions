@@ -40,7 +40,7 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.0" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.1" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
@@ -362,7 +362,6 @@ Promise.all(findImagePath).then((testResults) => {
         // Test Sea
         if( this._showSea && this._hasSea ) {
           let sea = this._config.sea ;
-          console.info("--------");
           _renderedSea = renderSeaForecast(this.hass, sea, this._iconsConfig, this._language, posix > 0) ;
           posix++ ;
         } else _renderedSea = "" ;

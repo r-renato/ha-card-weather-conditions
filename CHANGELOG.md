@@ -3,10 +3,14 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.1] Unreleased
+## [1.9.2] Unreleased
 ### Fixed
 
 ### Added
+
+## [1.9.1] 2020-06-22
+### Added
+- Added icon override mode for the pollen layer
 
 ## [1.9.0] 2020-06-21
 ### Fixed
