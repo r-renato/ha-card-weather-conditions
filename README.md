@@ -3,7 +3,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 
-[![License][license-shield]](LICENSE.md)
+[![License][license-shield]](LICENSE)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/r-renato/ha-card-weather-conditions.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/r-renato/ha-card-weather-conditions/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/r-renato/ha-card-weather-conditions.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/r-renato/ha-card-weather-conditions/context:javascript)
 
@@ -140,13 +140,13 @@ The card has been tested with the sensors provided by `climacell`, `darksky` and
       forecast: true
     forecast:
       temperature_high:
-        day_1: sensor.cc_test_max_temperature_0d
+        day_1: sensor.cc_test_temperature_max_0d
       temperature_low:
-        day_1: sensor.cc_test_min_temperature_0d
+        day_1: sensor.cc_test_temperature_min_0d
       precipitation_probability:
         day_1: sensor.cc_test_precipitation_probability_0d
       precipitation_intensity:
-        day_1: sensor.cc_test_max_precipitation_0d
+        day_1: sensor.cc_test_precipitation_max_0d
 ```
 
 #### **Display the *Summary & Current Layer*** 
@@ -178,13 +178,13 @@ The card has been tested with the sensors provided by `climacell`, `darksky` and
       forecast: true
     forecast:
       temperature_high:
-        day_1: sensor.cc_test_max_temperature_0d
+        day_1: sensor.cc_test_temperature_max_0d
       temperature_low:
-        day_1: sensor.cc_test_min_temperature_0d
+        day_1: sensor.cc_test_temperature_min_0d
       precipitation_probability:
         day_1: sensor.cc_test_precipitation_probability_0d
       precipitation_intensity:
-        day_1: sensor.cc_test_max_precipitation_0d
+        day_1: sensor.cc_test_precipitation_max_0d
 ```
 ### **&#187; Forecast Weather Data**
 
@@ -230,17 +230,17 @@ The card has been tested with the sensors provided by `climacell`, `darksky` and
         day_4: sensor.cc_test_weather_condition_3d
         day_5: sensor.cc_test_weather_condition_4d
       temperature_high:
-        day_1: sensor.cc_test_max_temperature_0d
-        day_2: sensor.cc_test_max_temperature_1d
-        day_3: sensor.cc_test_max_temperature_2d
-        day_4: sensor.cc_test_max_temperature_3d
-        day_5: sensor.cc_test_max_temperature_4d
+        day_1: sensor.cc_test_temperature_max_0d
+        day_2: sensor.cc_test_temperature_max_1d
+        day_3: sensor.cc_test_temperature_max_2d
+        day_4: sensor.cc_test_temperature_max_3d
+        day_5: sensor.cc_test_temperature_max_4d
       temperature_low:
-        day_1: sensor.cc_test_min_temperature_0d
-        day_2: sensor.cc_test_min_temperature_1d
-        day_3: sensor.cc_test_min_temperature_2d
-        day_4: sensor.cc_test_min_temperature_3d
-        day_5: sensor.cc_test_min_temperature_4d
+        day_1: sensor.cc_test_temperature_min_0d
+        day_2: sensor.cc_test_temperature_min_1d
+        day_3: sensor.cc_test_temperature_min_2d
+        day_4: sensor.cc_test_temperature_min_3d
+        day_5: sensor.cc_test_temperature_min_4d
       precipitation_probability:
         day_1: sensor.cc_test_precipitation_probability_0d
         day_2: sensor.cc_test_precipitation_probability_1d
@@ -248,11 +248,11 @@ The card has been tested with the sensors provided by `climacell`, `darksky` and
         day_4: sensor.cc_test_precipitation_probability_3d
         day_5: sensor.cc_test_precipitation_probability_4d
       precipitation_intensity:
-        day_1: sensor.cc_test_max_precipitation_0d
-        day_2: sensor.cc_test_max_precipitation_1d
-        day_3: sensor.cc_test_max_precipitation_2d
-        day_4: sensor.cc_test_max_precipitation_3d
-        day_5: sensor.cc_test_max_precipitation_4d
+        day_1: sensor.cc_test_precipitation_max_0d
+        day_2: sensor.cc_test_precipitation_max_1d
+        day_3: sensor.cc_test_precipitation_max_2d
+        day_4: sensor.cc_test_precipitation_max_3d
+        day_5: sensor.cc_test_precipitation_max_4d
 ```
 
 ##### *Forecast Layer*, advanced examples of card setup
@@ -302,61 +302,61 @@ To capitalize the name of the days of the week use `style` directive:
   language: it
   sea:
     swell_direction:
-      hour_1: sensor.sg_piscinas_swell_direction_1h
-      hour_2: sensor.sg_piscinas_swell_direction_2h
-      hour_3: sensor.sg_piscinas_swell_direction_3h
-      hour_4: sensor.sg_piscinas_swell_direction_4h
-      hour_5: sensor.sg_piscinas_swell_direction_5h
-      hour_6: sensor.sg_piscinas_swell_direction_6h
-      hour_7: sensor.sg_piscinas_swell_direction_7h
+      hour_1: sensor.sg_piscinas_swell_direction_0h
+      hour_2: sensor.sg_piscinas_swell_direction_0h
+      hour_3: sensor.sg_piscinas_swell_direction_0h
+      hour_4: sensor.sg_piscinas_swell_direction_0h
+      hour_5: sensor.sg_piscinas_swell_direction_0h
+      hour_6: sensor.sg_piscinas_swell_direction_0h
+      hour_7: sensor.sg_piscinas_swell_direction_0h
     swell_height:
-      hour_1: sensor.sg_piscinas_swell_height_1h
-      hour_2: sensor.sg_piscinas_swell_height_2h
-      hour_3: sensor.sg_piscinas_swell_height_3h
-      hour_4: sensor.sg_piscinas_swell_height_4h
-      hour_5: sensor.sg_piscinas_swell_height_5h
-      hour_6: sensor.sg_piscinas_swell_height_6h
-      hour_7: sensor.sg_piscinas_swell_height_7h
+      hour_1: sensor.sg_piscinas_swell_height_0h
+      hour_2: sensor.sg_piscinas_swell_height_0h
+      hour_3: sensor.sg_piscinas_swell_height_0h
+      hour_4: sensor.sg_piscinas_swell_height_0h
+      hour_5: sensor.sg_piscinas_swell_height_0h
+      hour_6: sensor.sg_piscinas_swell_height_0h
+      hour_7: sensor.sg_piscinas_swell_height_0h
     swell_period:
-      hour_1: sensor.sg_piscinas_swell_period_1h
-      hour_2: sensor.sg_piscinas_swell_period_2h
-      hour_3: sensor.sg_piscinas_swell_period_3h
-      hour_4: sensor.sg_piscinas_swell_period_4h
-      hour_5: sensor.sg_piscinas_swell_period_5h
-      hour_6: sensor.sg_piscinas_swell_period_6h
-      hour_7: sensor.sg_piscinas_swell_period_7h
+      hour_1: sensor.sg_piscinas_swell_period_0h
+      hour_2: sensor.sg_piscinas_swell_period_0h
+      hour_3: sensor.sg_piscinas_swell_period_0h
+      hour_4: sensor.sg_piscinas_swell_period_0h
+      hour_5: sensor.sg_piscinas_swell_period_0h
+      hour_6: sensor.sg_piscinas_swell_period_0h
+      hour_7: sensor.sg_piscinas_swell_period_0h
     wind_direction:
-      hour_1: sensor.sg_piscinas_wind_direction_1h
-      hour_2: sensor.sg_piscinas_wind_direction_2h
-      hour_3: sensor.sg_piscinas_wind_direction_3h
-      hour_4: sensor.sg_piscinas_wind_direction_4h
-      hour_5: sensor.sg_piscinas_wind_direction_5h
-      hour_6: sensor.sg_piscinas_wind_direction_6h
-      hour_7: sensor.sg_piscinas_wind_direction_7h
+      hour_1: sensor.sg_piscinas_wind_direction_0h
+      hour_2: sensor.sg_piscinas_wind_direction_0h
+      hour_3: sensor.sg_piscinas_wind_direction_0h
+      hour_4: sensor.sg_piscinas_wind_direction_0h
+      hour_5: sensor.sg_piscinas_wind_direction_0h
+      hour_6: sensor.sg_piscinas_wind_direction_0h
+      hour_7: sensor.sg_piscinas_wind_direction_0h
     wind_speed:
-      hour_1: sensor.sg_piscinas_wind_speed_1h
-      hour_2: sensor.sg_piscinas_wind_speed_2h
-      hour_3: sensor.sg_piscinas_wind_speed_3h
-      hour_4: sensor.sg_piscinas_wind_speed_4h
-      hour_5: sensor.sg_piscinas_wind_speed_5h
-      hour_6: sensor.sg_piscinas_wind_speed_6h
-      hour_7: sensor.sg_piscinas_wind_speed_7h
+      hour_1: sensor.sg_piscinas_wind_speed_0h
+      hour_2: sensor.sg_piscinas_wind_speed_0h
+      hour_3: sensor.sg_piscinas_wind_speed_0h
+      hour_4: sensor.sg_piscinas_wind_speed_0h
+      hour_5: sensor.sg_piscinas_wind_speed_0h
+      hour_6: sensor.sg_piscinas_wind_speed_0h
+      hour_7: sensor.sg_piscinas_wind_speed_0h
     air_temperature:
-      hour_1: sensor.sg_piscinas_air_temperature_1h
-      hour_2: sensor.sg_piscinas_air_temperature_2h
-      hour_3: sensor.sg_piscinas_air_temperature_3h
-      hour_4: sensor.sg_piscinas_air_temperature_4h
-      hour_5: sensor.sg_piscinas_air_temperature_5h
-      hour_6: sensor.sg_piscinas_air_temperature_6h
-      hour_7: sensor.sg_piscinas_air_temperature_7h
+      hour_1: sensor.sg_piscinas_air_temperature_0h
+      hour_2: sensor.sg_piscinas_air_temperature_0h
+      hour_3: sensor.sg_piscinas_air_temperature_0h
+      hour_4: sensor.sg_piscinas_air_temperature_0h
+      hour_5: sensor.sg_piscinas_air_temperature_0h
+      hour_6: sensor.sg_piscinas_air_temperature_0h
+      hour_7: sensor.sg_piscinas_air_temperature_0h
     water_temperature:
-      hour_1: sensor.sg_piscinas_water_temperature_1h
-      hour_2: sensor.sg_piscinas_water_temperature_2h
-      hour_3: sensor.sg_piscinas_water_temperature_3h
-      hour_4: sensor.sg_piscinas_water_temperature_4h
-      hour_5: sensor.sg_piscinas_water_temperature_5h
-      hour_6: sensor.sg_piscinas_water_temperature_6h
-      hour_7: sensor.sg_piscinas_water_temperature_7h
+      hour_1: sensor.sg_piscinas_water_temperature_0h
+      hour_2: sensor.sg_piscinas_water_temperature_0h
+      hour_3: sensor.sg_piscinas_water_temperature_0h
+      hour_4: sensor.sg_piscinas_water_temperature_0h
+      hour_5: sensor.sg_piscinas_water_temperature_0h
+      hour_6: sensor.sg_piscinas_water_temperature_0h
+      hour_7: sensor.sg_piscinas_water_temperature_0h
 ```
 
 ## **&#8212; Ultraviolet Radiation Parameters &#8212;**
@@ -601,17 +601,17 @@ The card has been tested with the sensors provided by `climacell` integrations.
         day_4: sensor.cc_test_weather_condition_3d
         day_5: sensor.cc_test_weather_condition_4d
       temperature_high:
-        day_1: sensor.cc_test_max_temperature_0d
-        day_2: sensor.cc_test_max_temperature_1d
-        day_3: sensor.cc_test_max_temperature_2d
-        day_4: sensor.cc_test_max_temperature_3d
-        day_5: sensor.cc_test_max_temperature_4d
+        day_1: sensor.cc_test_temperature_max_0d
+        day_2: sensor.cc_test_temperature_max_1d
+        day_3: sensor.cc_test_temperature_max_2d
+        day_4: sensor.cc_test_temperature_max_3d
+        day_5: sensor.cc_test_temperature_max_4d
       temperature_low:
-        day_1: sensor.cc_test_min_temperature_0d
-        day_2: sensor.cc_test_min_temperature_1d
-        day_3: sensor.cc_test_min_temperature_2d
-        day_4: sensor.cc_test_min_temperature_3d
-        day_5: sensor.cc_test_min_temperature_4d
+        day_1: sensor.cc_test_temperature_min_0d
+        day_2: sensor.cc_test_temperature_min_1d
+        day_3: sensor.cc_test_temperature_min_2d
+        day_4: sensor.cc_test_temperature_min_3d
+        day_5: sensor.cc_test_temperature_min_4d
       precipitation_probability:
         day_1: sensor.cc_test_precipitation_probability_0d
         day_2: sensor.cc_test_precipitation_probability_1d
@@ -619,11 +619,11 @@ The card has been tested with the sensors provided by `climacell` integrations.
         day_4: sensor.cc_test_precipitation_probability_3d
         day_5: sensor.cc_test_precipitation_probability_4d
       precipitation_intensity:
-        day_1: sensor.cc_test_max_precipitation_0d
-        day_2: sensor.cc_test_max_precipitation_1d
-        day_3: sensor.cc_test_max_precipitation_2d
-        day_4: sensor.cc_test_max_precipitation_3d
-        day_5: sensor.cc_test_max_precipitation_4d
+        day_1: sensor.cc_test_precipitation_max_0d
+        day_2: sensor.cc_test_precipitation_max_1d
+        day_3: sensor.cc_test_precipitation_max_2d
+        day_4: sensor.cc_test_precipitation_max_3d
+        day_5: sensor.cc_test_precipitation_max_4d
 ```
 
 [license-shield]:https://img.shields.io/github/license/r-renato/ha-card-weather-conditions
