@@ -44,6 +44,27 @@ const _renderUvDouble = (entity1: HassEntity, entity2: HassEntity, icon: string)
 
 /**
  *
+ * @param state
+ * @private
+ */
+const _getTime = (state) => {
+  let result = "- -" ;
+
+  if( state && "unknown" !== state ) {
+    let hours: number = Math.floor(parseInt(state) / 60 ) ;
+    let minutes: number = state - (hours * 60) ;
+
+    if( hours > 0 )
+      result = "" + hours + ":" + minutes + " h" ;
+    else
+      result = "" + minutes + " m" ;
+  }
+
+  return result ;
+} ;
+
+/**
+ *
  * @param hass
  * @param uv
  * @param border
@@ -74,7 +95,7 @@ export const renderUv = (hass: HomeAssistant, uv: Uv, border: boolean) => {
         <div class="day ${stypen}">
             <div id="rectangle" style="color: black; background: ${colors[stypen-1]};width:32px;height:32px;display: table;margin: 0 auto;">${num[stypen-1]}</div>
             <div class="lowTemp">
-              ${sstate.state && "unknown" !== sstate.state ? Math.trunc(parseInt(sstate.state) / 60 ) + " h": "- -"}
+              ${_getTime(sstate.state)}
             </div>  
         </div>
       ` :  "" ;      

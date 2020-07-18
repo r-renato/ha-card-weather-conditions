@@ -3,10 +3,14 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.3] Unreleased
+## [1.9.4] Unreleased
 ### Fixed
 
 ### Added
+
+## [1.9.3] 2020-07-18
+### Changed
+- Exposition time change from hours to minutes
 
 ## [1.9.2] 2020-07-10
 ### Fixed
