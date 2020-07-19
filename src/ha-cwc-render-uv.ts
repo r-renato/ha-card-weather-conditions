@@ -2,7 +2,7 @@ import {HomeAssistant} from "custom-card-helpers/dist";
 import {AirQuality, Uv} from "./types";
 import {html} from "lit-html";
 import {HassEntity} from "home-assistant-js-websocket/dist"
-import {getUnit, getWeatherIcon, numFormat} from "./ha-cwc-utils";
+import {getUnit, getWeatherIcon, numFormat, pad} from "./ha-cwc-utils";
 
 const num = ['I', 'II', 'III', 'IV', 'V', 'VI'] ;
 const colors = [ '#F1D1B1', '#E4B590', '#CF9F7D', '#B67851', '#A15E2D', '#513938'] ;
@@ -55,7 +55,7 @@ const _getTime = (state) => {
     let minutes: number = state - (hours * 60) ;
 
     if( hours > 0 )
-      result = "" + hours + ":" + minutes + " h" ;
+      result = "" + hours + ":" + pad(minutes, 2) + " h" ;
     else
       result = "" + minutes + " m" ;
   }
