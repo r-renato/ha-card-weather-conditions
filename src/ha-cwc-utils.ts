@@ -170,7 +170,7 @@ export function loadJSON(full_path_file: string) {
     setTimeout(() => {
       let xobj:XMLHttpRequest  = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
-      xobj.open('GET', full_path_file + "1", true);
+      xobj.open('GET', full_path_file, true);
       // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = () => {
         if (xobj.readyState === 4 && xobj.status === 200) {
