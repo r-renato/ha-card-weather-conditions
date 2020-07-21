@@ -168,15 +168,22 @@ export function getMoonIcon(phase:string) {
 export function loadJSON(full_path_file: string) {
   return new Promise<string>((resolve)  => {
     setTimeout(() => {
-      let xobj = new XMLHttpRequest();
+      let xobj:XMLHttpRequest  = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
-      xobj.open('GET', full_path_file, true);
+      xobj.open('GET', full_path_file + "1", true);
       // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = () => {
         if (xobj.readyState === 4 && xobj.status === 200) {
           // Required use of an anonymous callback
           // as .open() will NOT return a value but simply returns undefined in asynchronous mode
           resolve(xobj.responseText);
+        } else if(xobj.status !== 200) {
+          let err = "ERROR during json file retrieve: '" + full_path_file
+            + "', readyState: " + xobj.readyState
+            + ", status: " + xobj.status
+            + ", statusText: " + xobj.statusText
+            + ", responseText: " + xobj.responseText;
+          console.info( err ) ;
         }
       };
       xobj.send(null);
