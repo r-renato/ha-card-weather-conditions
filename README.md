@@ -32,7 +32,7 @@
 
 ## **&#8212; Card Configuration &#8212;**
 
-To use the ```ha-card-weather-conditionse``` card add the following to your ```lovelace``` configuration:
+To use the ```ha-card-weather-conditions``` card add the following to your ```lovelace``` configuration:
 
 ```yaml
 resources:

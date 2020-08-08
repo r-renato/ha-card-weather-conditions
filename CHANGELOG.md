@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+## [1.9.5] 2020-08-08
+### Fixed
+- Documentation
+
 ## [1.9.5] 2020-07-21
 ### Added
 - Errors catch and display while loading translations files
