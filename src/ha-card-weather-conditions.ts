@@ -20,6 +20,8 @@ import {getSeaStyle} from "./ha-style-sea"
 import {cwcClimacellDayIcons, cwcClimacellNightIcons, cwcClimacellDayBg} from "./ha-cwc-climacell" ;
 import {cwcDarkskyDayIcons, cwcDarkskyNightIcons} from "./ha-cwc-darksky" ;
 import {cwcOpenWeatherMapDayIcons, cwcOpenWeatherMapNightIcons} from "./ha-cwc-openweathermap" ;
+import {cwcBuienradarDayIcons, cwcBuienradarNightIcons} from "./ha-cwc-buienradar" ;
+import {cwcDefaultHassDayIcons, cwcDefaultHassNightIcons} from "./ha-cwc-hass" ;
 
 import {IconsConfig, ITerms, CardConfig} from "./types" ;
 
@@ -40,7 +42,7 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.5" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.6" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
@@ -198,6 +200,16 @@ Promise.all(findImagePath).then((testResults) => {
               this._iconsConfig.iconsDay = cwcOpenWeatherMapDayIcons;
               this._iconsConfig.iconsNight = cwcOpenWeatherMapNightIcons;
               this._iconsConfig.icons_model = "openweathermap";
+              break;
+            case 'buienradar':
+              this._iconsConfig.iconsDay = cwcBuienradarDayIcons;
+              this._iconsConfig.iconsNight = cwcBuienradarNightIcons;
+              this._iconsConfig.icons_model = "buienradar";
+              break;
+            case 'defaulthass':
+              this._iconsConfig.iconsDay = cwcDefaultHassDayIcons;
+              this._iconsConfig.iconsNight = cwcDefaultHassNightIcons;
+              this._iconsConfig.icons_model = "defaulthass";
               break;
           }
 

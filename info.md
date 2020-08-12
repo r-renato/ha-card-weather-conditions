@@ -70,7 +70,7 @@ The card has been tested with the sensors provided by `climacell`, `darksky` and
 #### **Parameters for the object: *weather*** 
 |       **Name**        |  **Type**   | **Requirement** | **Default** | **Description**                                                                                          |
 |-----------------------|-------------|-----------------|-------------|----------------------------------------------------------------------------------------------------------|
-| icons_model           | string      | Optional        | `climacell` | Icons template you want to use. Valid values are: `climacell`, `darksky`, `openweathermap` |
+| icons_model           | string      | Optional        | `climacell` | Icons template you want to use. Valid values are: `climacell`, `darksky`, `openweathermap`, `buienradar`, `defaulthass` |
 | current               | object list | Optional        |             | It is for the current weather data                                                                       |
 | forecast              | object list | Optional        |             | It is for the forecast weather data                                                                      |
 

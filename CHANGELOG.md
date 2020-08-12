@@ -3,12 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.6] Unreleased
+## [1.9.7] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.9.6] 2020-08-08
+### Added
+- Icon model for: buienradar, defaulthass
 
 ## [1.9.5] 2020-08-08
 ### Fixed
