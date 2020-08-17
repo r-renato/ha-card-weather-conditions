@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+## [1.9.6] 2020-08-17
+### Fixed
+- German locale, fix for "Feels Like" word
+
 ## [1.9.6] 2020-08-08
 ### Added
 - Icon model for: buienradar, defaulthass
