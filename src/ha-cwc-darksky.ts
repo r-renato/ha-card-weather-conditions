@@ -2,7 +2,7 @@ export const cwcDarkskyDayIcons: { [key: string]: string; } = {
   "clear" :  "day",
   "clear-day": "day",
   "rain": "rainy-2",
-  "snow": "nowy-2",
+  "snow": "snowy-2",
   "sleet": "rain-and-sleet-mix",
   "wind": "cloudy-day-1",
   "fog": "fog",

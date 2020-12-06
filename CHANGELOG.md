@@ -3,12 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.7] Unreleased
+## [1.9.8] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.9.7] 2020-12-06
+### Fixed
+- Fixed the snow icon name for the night time (climacell, darksky, openweathermap)
 
 ## [1.9.6] 2020-08-17
 ### Fixed

@@ -7,7 +7,7 @@ export const cwcOpenWeatherMapDayIcons: { [key: string]: string; } = {
   "shower rain": "rainy-3",
   "rain": "rainy-2",
   "thunderstorm": "tropical-storm",
-  "snow": "nowy-2",
+  "snow": "snowy-2",
   "mist": "fog",
 };
 
