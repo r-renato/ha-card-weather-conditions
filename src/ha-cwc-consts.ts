@@ -1,5 +1,5 @@
 
-export let cwcLocale = {en: 0, it: 1, nl: 2, es: 3, de: 4, fr: 5, "sr-latn": 6, pt: 7};
+export let cwcLocale = {en: 0, it: 1, nl: 2, es: 3, de: 4, fr: 5, "sr-latn": 6, pt: 7, da: 8};
 
 // export let cwcLocWindDirections = {
 //   'N': ['N', 'N', 'N', 'N', 'N', 'N', 'S'],

@@ -84,7 +84,8 @@ Promise.all(findImagePath).then((testResults) => {
     loadJSON(translPath + 'de.json'),
     loadJSON(translPath + 'fr.json'),
     loadJSON(translPath + 'sr-latn.json'),
-    loadJSON(translPath + 'pt.json')
+    loadJSON(translPath + 'pt.json'),
+    loadJSON(translPath + 'da.json')
   ] ;
 
   if( hacsImages ) console.info(logo + "%c use HACS path to retrieve icons.", optConsoleParam1, optConsoleParam2, optConsoleParam3);
