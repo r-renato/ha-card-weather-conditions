@@ -161,10 +161,20 @@ Promise.all(findImagePath).then((testResults) => {
           this._language = config.language.toLowerCase();
         } else this._language = 'en';
 
-        let transls = JSON.parse(translations[cwcLocale[this._language]]);
-
-        this._terms.windDirections = transls.cwcLocWindDirections ;
-        this._terms.words = transls.cwcTerms ;
+        let transls ;
+        try {
+          transls = JSON.parse(translations[cwcLocale[this._language]]);
+          this._terms.windDirections = transls.cwcLocWindDirections ;
+          this._terms.words = transls.cwcTerms ;
+          console.info(logo + "%c card \"" + this._name + "\", locale is '" + this._language + "'.",
+            optConsoleParam1, optConsoleParam2, optConsoleParam3);
+        } catch(e) {
+          transls = JSON.parse(translations[cwcLocale['en']]);
+          this._terms.windDirections = transls.cwcLocWindDirections ;
+          this._terms.words = transls.cwcTerms ;
+          console.info(logo + "%c card \"" + this._name + "\" unable to use '" + this._language + "' locale, set as default 'en'.",
+            optConsoleParam1, optConsoleParam2, optConsoleParam3);
+        }
 
         numberFormat_0dec = new Intl.NumberFormat(this._language, { maximumFractionDigits: 0 }) ;
         numberFormat_1dec = new Intl.NumberFormat(this._language, { maximumFractionDigits: 1 }) ;
