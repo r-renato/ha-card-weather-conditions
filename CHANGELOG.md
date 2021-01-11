@@ -3,12 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.9] Unreleased
+## [1.9.10] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.9.9] 2021-01-11
+### Added
+- Norwegian locale
 
 ## [1.9.8] 2021-01-07
 ### Added

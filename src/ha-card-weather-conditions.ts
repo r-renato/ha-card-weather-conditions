@@ -42,7 +42,7 @@ const manImagePath: string = "/local/ha-card-weather-conditions/icons" ;
 export let hacsImagePathExist: boolean = false ;
 export let manImagePathExist: boolean = false ;
 
-let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.8" ;
+let logo: string = "%c WEATHER-CONDITION-CARD %c 1.9.9" ;
 let optConsoleParam1: string = "color: white; background: green; font-weight: 700;" ;
 let optConsoleParam2: string = "color: green; background: white; font-weight: 700;" ;
 let optConsoleParam3: string = "color: black; background: white; font-weight: 700;" ;
@@ -85,7 +85,8 @@ Promise.all(findImagePath).then((testResults) => {
     loadJSON(translPath + 'fr.json'),
     loadJSON(translPath + 'sr-latn.json'),
     loadJSON(translPath + 'pt.json'),
-    loadJSON(translPath + 'da.json')
+    loadJSON(translPath + 'da.json'),
+    loadJSON(translPath + 'no-NO.json')
   ] ;
 
   if( hacsImages ) console.info(logo + "%c use HACS path to retrieve icons.", optConsoleParam1, optConsoleParam2, optConsoleParam3);
