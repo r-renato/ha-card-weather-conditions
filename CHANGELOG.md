@@ -3,12 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.10] Unreleased
+## [1.9.11] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.9.10] 2021-01-24
+### Changed
+Update ClimaCel icons map
 
 ## [1.9.9] 2021-01-11
 ### Added
