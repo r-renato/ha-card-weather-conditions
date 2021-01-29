@@ -53,6 +53,7 @@ export let cwcMoonPhaseIcons = {
   first_quarter: "🌓",
   waxing_gibbous: "🌔",
   full: "🌕",
+  full_moon: "🌕",
   waning_gibbous: "🌖",
   third_quarter: "🌗",
   last_quarter: "🌗",
