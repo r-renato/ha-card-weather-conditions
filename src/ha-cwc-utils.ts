@@ -32,7 +32,9 @@ export function imageExist(imageSrc: string) {
  */
 export const translate = (term:string, terms) => {
   // console.info(">>>>loc:" + lang + "" + cwcLocale[lang] ) ;
-  return terms[term] ? terms[term] : "ERR";
+  return terms[Object.keys(terms).find(key => key.toLowerCase() === term.toLowerCase())]
+    ? terms[Object.keys(terms).find(key => key.toLowerCase() === term.toLowerCase())]
+      : term;
 } ;
 
 /**

@@ -3,12 +3,16 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.12] Unreleased
+## [1.9.13] Unreleased
 ### Fixed
 
 ### Added
 
 ### Changed
+
+## [1.9.12] 2021-01-29
+### Fixed
+- Minor bug fixing
 
 ## [1.9.11] 2021-01-29
 ### Fixed
