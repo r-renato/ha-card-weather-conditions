@@ -23,13 +23,13 @@
     "new_moon": "Nieuwe maan",
     "new": "Nieuwe maan",
     "waxing_crescent": "Wassende sikkel",
-    "first_quarter": "Eerste kwartaal",
-    "waxing_gibbous": "Wassen Gibbous",
-    "full": "Volledig",
-    "full_moon": "Volledig",
-    "waning_gibbous": "Zwemmende Gibbous",
-    "third_quarter": "Derde Kwartier",
-    "last_quarter": "Laatste Kwartier",
-    "waning_crescent": "Zwemmende sikkel"
+    "first_quarter": "Eerste kwartier",
+    "waxing_gibbous": "Wassende maan",
+    "full": "Volle maan",
+    "full_moon": "Volle maan",
+    "waning_gibbous": "Afnemende maan",
+    "third_quarter": "Derde kwartier",
+    "last_quarter": "Laatste kwartier",
+    "waning_crescent": "Afnemende sikkel"
   }
 }
