@@ -38,7 +38,6 @@ const style = css`
       .variations li {
         flex-basis: auto;
         width: 50%;
-        z-index: 200 ;
       }
 
       .variations li:nth-child(2n) {
