@@ -9,7 +9,6 @@ const styleForecast = css`
     border-right: 0.1em solid #d9d9d9;
     line-height: 2;
     box-sizing: border-box;
-    z-index: 200;
   }
   
   .dayname {
@@ -32,18 +31,15 @@ const styleForecast = css`
     width: 100%;
     margin: 0 auto;
     display: flex;
-    z-index: 200;
   }
   
   .forecast .day:first-child {
     margin-left: 0;
-        z-index: 200;
   }
   
   .forecast .day:nth-last-child(1) {
     border-right: none;
     margin-right: 0;
-        z-index: 200;
   }  
 `;
 
