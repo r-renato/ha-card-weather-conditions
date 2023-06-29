@@ -19,17 +19,17 @@
   },
 
   "cwcTerms": {
-    "Feels Like" : "Parece que",
+    "Feels Like" : "Sensación",
     "new_moon": "Luna nueva",
     "new": "Luna nueva",
-    "waxing_crescent": "Media luna de cera",
-    "first_quarter": "Primer trimestre",
-    "waxing_gibbous": "Encerado Gibbous",
-    "full": "Completo",
-    "full_moon": "Completo",
-    "waning_gibbous": "Waning Gibbous",
-    "third_quarter": "Tercer cuarto",
-    "last_quarter": "Último cuarto",
-    "waning_crescent": "Waning Crescent"
+    "waxing_crescent": "Cresciente",
+    "first_quarter": "Cuarto Cresciente",
+    "waxing_gibbous": "Creciente Gibosa",
+    "full": "LLena",
+    "full_moon": "LLena",
+    "waning_gibbous": "Menguante gibosa",
+    "third_quarter": "Cuarto Menguante",
+    "last_quarter": "Cuarto Menguante",
+    "waning_crescent": "Menguante"
   }
 }
