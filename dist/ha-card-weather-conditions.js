@@ -36,7 +36,6 @@ function t(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPro
       .variations li {
         flex-basis: auto;
         width: 50%;
-        z-index: 200 ;
       }
 
       .variations li:nth-child(2n) {
@@ -175,7 +174,6 @@ function t(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPro
     border-right: 0.1em solid #d9d9d9;
     line-height: 2;
     box-sizing: border-box;
-    z-index: 200;
   }
   
   .dayname {
@@ -198,18 +196,15 @@ function t(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPro
     width: 100%;
     margin: 0 auto;
     display: flex;
-    z-index: 200;
   }
   
   .forecast .day:first-child {
     margin-left: 0;
-        z-index: 200;
   }
   
   .forecast .day:nth-last-child(1) {
     border-right: none;
     margin-right: 0;
-        z-index: 200;
   }  
 `,ut=rt`
       .camera-container {
