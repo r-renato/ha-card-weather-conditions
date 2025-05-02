@@ -1,0 +1,35 @@
+{
+  "cwcLocWindDirections": {
+    "N": "S",
+    "NNE": "SSV",
+    "NE": "SV",
+    "ENE": "VSV",
+    "E": "V",
+    "ESE": "VJV",
+    "SE": "JV",
+    "SSE": "JJV",
+    "S": "J",
+    "SSW": "JJZ",
+    "SW": "JZ",
+    "WSW": "ZJZ",
+    "W": "Z",
+    "WNW": "ZSZ",
+    "NW": "SZ",
+    "NNW": "SSZ"
+  },
+
+  "cwcTerms": {
+    "Feels Like" : "Pocitová teplota",
+    "new_moon": "Nov",
+    "new": "Nov",
+    "waxing_crescent": "Dorůstající srpek",
+    "first_quarter": "První čtvrť",
+    "waxing_gibbous": "Dorůstající měsíc",
+    "full": "Úplněk",
+    "full_moon": "Úplněk",
+    "waning_gibbous": "Couvající měsíc",
+    "third_quarter": "Třetí čtvrť",
+    "last_quarter": "Poslední čtvrť",
+    "waning_crescent": "Ubývající srpek"
+  }
+}
