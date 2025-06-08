@@ -1,0 +1,15 @@
+{
+    "eslint.enable": true,
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "editor.tabSize": 2,
+
+    "ha_module_path": "/home/drp/homeassistant/www/community/ha-card-weather-conditions",
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 120,
+  }
+  

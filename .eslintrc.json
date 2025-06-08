@@ -1,0 +1,45 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-base"
+  ],
+  "rules": {
+    "operator-linebreak": "warn",
+    "no-trailing-spaces": "warn",
+    "one-var": "warn",
+    "one-var-declaration-per-line": "warn",
+    "dot-notation": "warn",
+    "max-len": ["error", { "code": 150 }],
+    "eol-last": ["error", "always"],
+    "no-console": "off",
+    "no-unused-vars": ["warn", { "args": "none", "ignoreRestSiblings": true }],
+    "nonblock-statement-body-position": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "max-classes-per-file": ["warn", 3],
+    "import/extensions": ["warn", "ignorePackages", {
+      "ts": "never",
+      "js": "never"
+    }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts", ".jsx", ".tsx"]
+      }
+    }
+  },
+  "env": {
+    "browser": true,
+    "es2022": true
+  }
+}

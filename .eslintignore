@@ -1,0 +1,6 @@
+backup/
+dist/
+node_modules/
+rollup.config.mjs
+rollup.config copy.js
+rollup.new.config.mjs

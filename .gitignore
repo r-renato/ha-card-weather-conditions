@@ -6,6 +6,7 @@ __pycache__
 /node_modules/
 /.rpt2_cache/
 /trash/
+/backup/
 
 # ####### ####### #######
 # Files

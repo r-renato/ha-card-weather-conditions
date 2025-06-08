@@ -20,27 +20,35 @@
   "author": "Renato Rossi",
   "license": "MIT",
   "dependencies": {
+    "@material/mwc-select": "^0.27.0",
+    "@material/mwc-textfield": "^0.27.0",
+    "color": "^4.2.3",
     "custom-card-helpers": "^1.0.8",
-    "lit-element": "^2.1.0"
+    "hammerjs": "^2.0.8",
+    "home-assistant-js-websocket": "^9.4.0",
+    "lit": "^3.2.1",
+    "memoize-one": "^6.0.0",
+    "object-hash": "^3.0.0",
+    "sortablejs": "^1.15.6",
+    "superstruct": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/plugin-proposal-decorators": "^7.4.0",
-    "@typescript-eslint/eslint-plugin": "^1.4.2",
-    "@typescript-eslint/parser": "^1.4.1",
-    "eslint": "^5.14.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "prettier": "^1.16.4",
-    "rollup": "^1.2.3",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "rollup-plugin-terser": "^4.0.4",
-    "rollup-plugin-typescript2": "^0.19.2",
-    "rollup-plugin-uglify": "^6.0.2",
+    "@babel/core": "^7.24.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.2.5",
+    "rollup": "^4.12.0",
     "rollup-plugin-execute": "^1.1.1",
-    "typescript": "^3.3.3333"
+    "typescript": "5.3.3"
   },
   "bugs": {
     "url": "https://github.com/r-renato/ha-card-weather-conditions/issues"
@@ -48,8 +56,9 @@
   "main": "index.js",
   "scripts": {
     "watch": "rollup -c --watch",
-    "build": "npm run lint && npm run rollup",
+    "build": "npm run lint && npm run rollup -- --config rollup.config.mjs",
+    "build:new": "npm run lint && npm run rollup -- --config rollup.new.config.mjs",
     "lint": "eslint src/*.ts",
-    "rollup": "rollup -c --no-compact "
+    "rollup": "rollup --no-compact "
   }
 }
