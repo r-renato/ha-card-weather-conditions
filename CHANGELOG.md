@@ -3,18 +3,19 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.0.0] 2025-06-08
+## [2.0.1] 2025-06-08
 ### Fixed
 
 ### Added
+- ru locale
 
+### Changed
+- nl locale
+
+## [2.0.0] 2025-06-08
 ### Changed
 - Readme and PNG image
 - Fully reengineered the card
-## [1.9.13] ???
-### Fixed
-
-### Added
 - Czech locale
 
 ### Changed

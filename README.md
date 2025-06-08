@@ -53,7 +53,7 @@ resources:
 | **Parameter** | **Type**  | **Required** | **Default** | **Description**                                                                                            |
 | ------------- | --------- | ------------ | ----------- | ---------------------------------------------------------------------------------------------------------- |
 | `type`        | `string`  | Yes          | —           | Must be set to `custom:ha-card-weather-conditions`.                                                        |
-| `language`    | `string`  | No           | `en`        | Language for labels. Supported values: `en`, `it`, `nl`, `es`, `de`, `fr`, `sr-latn`, `pt`, `da`, `no-NO`, `cs`. |
+| `language`    | `string`  | No           | `en`        | Language for labels. Supported values: `en`, `it`, `nl`, `es`, `de`, `fr`, `sr-latn`, `pt`, `da`, `no-NO`, `cs`, `ru`. |
 | `weather`     | `object`  | No           | —           | Configuration for main weather source. See dedicated section.                                              |
 | `ultraviolet` | `object`  | No           | —           | Configuration for UV index display. See dedicated section for details.                                     |
 | `pollen`      | `object`  | No           | —           | Configuration for pollen levels. See dedicated section.                                                    |
