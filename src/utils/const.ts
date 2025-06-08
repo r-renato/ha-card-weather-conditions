@@ -22,6 +22,7 @@ export const cwcLocale = {
   da: 8,
   'no-no': 9,
   cs: 10,
+  ru: 11,
 };
 
 // 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌑

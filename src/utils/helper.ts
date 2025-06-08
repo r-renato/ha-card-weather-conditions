@@ -40,6 +40,7 @@ export const getLocaleInfo = (lang: string): LocaleInfo => {
     da: 'da-DK',
     'no-no': 'nb-NO',
     cs: 'cs-CZ',
+    ru: 'ru-RU',
   };
 
   const timezoneMap: Record<string, string> = {
@@ -55,6 +56,7 @@ export const getLocaleInfo = (lang: string): LocaleInfo => {
     da: 'Europe/Copenhagen',
     'no-no': 'Europe/Oslo',
     cs: 'Europe/Prague',
+    ru: 'Europe/Moscow',
   };
 
   const cwcLocale: Record<string, number> = {
@@ -69,6 +71,7 @@ export const getLocaleInfo = (lang: string): LocaleInfo => {
     da: 8,
     'no-no': 9,
     cs: 10,
+    ru: 11,
   };
 
   return {

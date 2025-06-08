@@ -22,14 +22,14 @@
     "Feels Like": "Voelt Als",
     "new_moon": "Nieuwe maan",
     "new": "Nieuwe maan",
-    "waxing_crescent": "Wassende sikkel",
+    "waxing_crescent": "Wassende halve maan",
     "first_quarter": "Eerste kwartier",
     "waxing_gibbous": "Wassende maan",
     "full": "Volle maan",
     "full_moon": "Volle maan",
     "waning_gibbous": "Afnemende maan",
-    "third_quarter": "Derde kwartier",
-    "last_quarter": "Laatste kwartier",
-    "waning_crescent": "Afnemende sikkel"
+    "third_quarter": "Derde Kwartier",
+    "last_quarter": "Laatste Kwartier",
+    "waning_crescent": "Afnemende halve maan"
   }
 }

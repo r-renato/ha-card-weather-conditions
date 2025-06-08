@@ -98,10 +98,10 @@ const prepareWeatherPresent = (data: WeatherData, language: string) => {
   // Sun times
   ['nextRising', 'nextSetting'].forEach((k) => {
     const item = data[k as keyof WeatherData];
-    if (item?.value instanceof Date) {
+    if (item?.value) {
       allItems.push({
         icon: item.icon,
-        value: item.value.toLocaleTimeString(),
+        value: item.value,
         unit: '',
       });
     }

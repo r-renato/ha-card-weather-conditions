@@ -4,6 +4,7 @@ import {
   getEntityNumericValue,
   getEntityRawValue,
   getEntityUnit,
+  getLocaleInfo,
   getWindDirections,
 } from '../utils/helper';
 // import { getSensorUnit } from '../utils/helper-render';
@@ -12,12 +13,29 @@ import { iPresentData } from '../utils/config-schema';
 import { iTerms } from '../base/lovelace-base';
 
 const present = (hass: HomeAssistant, language: string, cwcLocWindDirections, presentData: iPresentData, sunId: string) => {
+  const localeInfo = getLocaleInfo(language);
   const sunEntity = sunId ? hass.states[sunId] : undefined;
   const { next_rising, next_setting } = sunEntity?.attributes ?? {};
 
+  const next_rising_formatted = next_rising ? new Date(next_rising).toLocaleTimeString(localeInfo.locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: localeInfo.timezone,
+  }) : undefined;
+
+  const next_setting_formatted = next_rising ? new Date(next_setting).toLocaleTimeString(localeInfo.locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: localeInfo.timezone,
+  }) : undefined;
+
   return {
-    nextRising: { value: next_rising ? new Date(next_rising) : undefined, icon: 'mdi:weather-sunset-up' },
-    nextSetting: { value: next_setting ? new Date(next_setting) : undefined, icon: 'mdi:weather-sunset-down' },
+    nextRising: { value: next_rising_formatted, icon: 'mdi:weather-sunset-up' },
+    nextSetting: { value: next_setting_formatted, icon: 'mdi:weather-sunset-down' },
 
     precipitationIntensity: {
       // eslint-disable-next-line object-curly-newline

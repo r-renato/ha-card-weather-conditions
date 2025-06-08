@@ -1,35 +1,35 @@
 {
-  "cwcLocWindDirections": {
-  "N": "N",
-  "NNE": "NNE",
-  "NE": "NE",
-  "ENE": "ENE",
-  "E": "E",
-  "ESE": "ESE",
-  "SE": "SE",
-  "SSE": "SSE",
-  "S": "S",
-  "SSW": "SSO",
-  "SW": "SO",
-  "WSW": "OSO",
-  "W": "O",
-  "WNW": "ONO",
-  "NW": "NO",
-  "NNW": "NNO"
-  },
-  
-  "cwcTerms": {
-  "Feels Like" : "Sensación térmica",
-  "new_moon": "Luna nueva",
-  "new": "Luna nueva",
-  "waxing_crescent": "Luna creciente",
-  "first_quarter": "Cuarto creciente",
-  "waxing_gibbous": "Luna menguante gibosa",
-  "full": "Luna llena",
-  "full_moon": "Luna llena",
-  "waning_gibbous": "Luna menguante gibosa",
-  "third_quarter": "Media luna",
-  "last_quarter": "Cuarto menguante",
-  "waning_crescent": "Luna menguante"
-  }
-  }
+"cwcLocWindDirections": {
+"N": "N",
+"NNE": "NNE",
+"NE": "NE",
+"ENE": "ENE",
+"E": "E",
+"ESE": "ESE",
+"SE": "SE",
+"SSE": "SSE",
+"S": "S",
+"SSW": "SSO",
+"SW": "SO",
+"WSW": "OSO",
+"W": "O",
+"WNW": "ONO",
+"NW": "NO",
+"NNW": "NNO"
+},
+
+"cwcTerms": {
+"Feels Like" : "Sensación térmica",
+"new_moon": "Luna nueva",
+"new": "Luna nueva",
+"waxing_crescent": "Luna creciente",
+"first_quarter": "Cuarto creciente",
+"waxing_gibbous": "Luna menguante gibosa",
+"full": "Luna llena",
+"full_moon": "Luna llena",
+"waning_gibbous": "Luna menguante gibosa",
+"third_quarter": "Media luna",
+"last_quarter": "Cuarto menguante",
+"waning_crescent": "Luna menguante"
+}
+}

@@ -1,0 +1,35 @@
+{
+  "cwcLocWindDirections": {
+    "N": "С",
+    "NNE": "ССВ",
+    "NE": "СВ",
+    "ENE": "ВСВ",
+    "E": "В",
+    "ESE": "ВЮВ",
+    "SE": "ЮВ",
+    "SSE": "ЮЮВ",
+    "S": "Ю",
+    "SSW": "ЮЮЗ",
+    "SW": "ЮЗ",
+    "WSW": "ЗЮЗ",
+    "W": "З",
+    "WNW": "ЗСЗ",
+    "NW": "СЗ",
+    "NNW": "ССЗ"
+  },
+
+  "cwcTerms": {
+    "Feels Like" : "Ощущается как",
+    "new_moon": "Новолуние",
+    "new": "Новолуние",
+    "waxing_crescent": "Растущий серп",
+    "first_quarter": "Первая четверть",
+    "waxing_gibbous": "Растущая луна",
+    "full": "Полнолуние",
+    "full_moon": "Полнолуние",
+    "waning_gibbous": "Убывающая луна",
+    "third_quarter": "Третья четверть",
+    "last_quarter": "Последняя четверть",
+    "waning_crescent": "Убывающая луна"
+  }
+}
