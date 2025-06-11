@@ -96,7 +96,15 @@ The present object defines the entities used to display the current weather cond
 | `precipitation_probability` | `string`   | No           | —           | Entity ID providing the probability of precipitation (%).                     |
 
 ### **1.2 `daily_forecasts` Object Schema**
-This object defines the structure for multi-day forecast data, where each property can include multiple time slots (e.g. day_1, day_2, day_3…).
+This object defines the structure for multi-day forecast data, where each property can include multiple time slots (e.g. `day_1`, `day_2`, `day_3`…).
+Each forecast element (such as `temperature`, `condition`, `precipitation probability`, etc.) must be represented as a Home Assistant entity (e.g., sensor) that includes the following attributes:
+
+- `datetime`: the timestamp indicating the forecast reference time, in ISO 8601 format, for example: <code>2025-06-12T22:00:00+00:00</code>
+
+- `unit_of_measurement`: the unit of measure for the forecasted value (e.g., "`°C`", "`mm`", "`%`"), which must be exposed as an attribute of the sensor.
+
+These attributes are essential to ensure accurate time alignment and proper rendering of the forecast data.
+
 | **Name**                    | **Type**     | **Required** | **Default** | **Description**                                                            |
 | --------------------------- | ------------ | ------------ | ----------- | -------------------------------------------------------------------------- |
 | `condition`                 | `iTimeSlots` | No           | —           | Object containing the weather condition icons or states for each day slot. |
@@ -107,6 +115,14 @@ This object defines the structure for multi-day forecast data, where each proper
 
 ### **1.3 `hourly_forecasts` Object Schema**
 This object defines the structure for hourly weather forecast data. All fields are optional and do not have default values.
+Each forecast element (such as `temperature`, `condition`, `precipitation probability`, etc.) must be represented as a Home Assistant entity (e.g., sensor) that includes the following attributes:
+
+- `datetime`: the timestamp indicating the forecast reference time, in ISO 8601 format, for example: <code>2025-06-12T22:00:00+00:00</code>
+
+- `unit_of_measurement`: the unit of measure for the forecasted value (e.g., "`°C`", "`mm`", "`%`"), which must be exposed as an attribute of the sensor.
+
+These attributes are essential to ensure accurate time alignment and proper rendering of the forecast data.
+
 | **Name**                    | **Type**     | **Required** | **Default** | **Description**                                                               |
 | --------------------------- | ------------ | ------------ | ----------- | ----------------------------------------------------------------------------- |
 | `condition`                 | `iTimeSlots` | No           | —           | Object containing the weather condition icons or states for each hourly slot. |
