@@ -3,9 +3,21 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.0.1] 2025-06-08
+## [2.1.0] 2026-05-15
 ### Fixed
+- Minor bug fixing
+- Weather icon animations not rendering correctly on weather card
 
+### Added
+- Lightning strike visualization with animated SVG zigzag bolts on weather card
+- Lightning strike data parsing and display (strike count, distance, azimuth)
+- Precipitation accumulation data reading and display on weather card
+- Locale detection for automatic date/unit formatting (`is` locale support)
+
+### Changed
+- README: documented required sensor attributes for lightning and precipitation accumulation data
+
+## [2.0.1] 2025-06-08
 ### Added
 - ru locale
 

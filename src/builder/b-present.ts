@@ -25,7 +25,7 @@ const present = (hass: HomeAssistant, language: string, cwcLocWindDirections, pr
     timeZone: localeInfo.timezone,
   }) : undefined;
 
-  const next_setting_formatted = next_rising ? new Date(next_setting).toLocaleTimeString(localeInfo.locale, {
+  const next_setting_formatted = next_setting ? new Date(next_setting).toLocaleTimeString(localeInfo.locale, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -37,6 +37,19 @@ const present = (hass: HomeAssistant, language: string, cwcLocWindDirections, pr
     nextRising: { value: next_rising_formatted, icon: 'mdi:weather-sunset-up' },
     nextSetting: { value: next_setting_formatted, icon: 'mdi:weather-sunset-down' },
 
+    lightningStrikes: {
+      // eslint-disable-next-line object-curly-newline
+      value: getEntityNumericValue({ entityId: presentData.lightning_strikes, hass, lang: language, decimals: 0 }),
+      // value: 45,
+      unit: null,
+      icon: 'mdi:lightning-bolt',
+    },
+    lightningDistance: {
+      // eslint-disable-next-line object-curly-newline
+      value: getEntityNumericValue({ entityId: presentData.lightning_distance, hass, lang: language, decimals: 1 }),
+      unit: getEntityUnit(hass, presentData.lightning_distance),
+      icon: 'mdi:lightning-bolt',
+    },
     precipitationIntensity: {
       // eslint-disable-next-line object-curly-newline
       value: getEntityNumericValue({ entityId: presentData.precipitation_intensity, hass, lang: language, decimals: 2 }),
@@ -47,6 +60,12 @@ const present = (hass: HomeAssistant, language: string, cwcLocWindDirections, pr
       // eslint-disable-next-line object-curly-newline
       value: getEntityNumericValue({ entityId: presentData.precipitation_probability, hass, lang: language, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.precipitation_probability),
+      icon: 'mdi:weather-rainy',
+    },
+    precipitationAccumulation: {
+      // eslint-disable-next-line object-curly-newline
+      value: getEntityNumericValue({ entityId: presentData.precipitation_accumulation, hass, lang: language, decimals: 1 }),
+      unit: getEntityUnit(hass, presentData.precipitation_accumulation),
       icon: 'mdi:weather-rainy',
     },
     humidity: {

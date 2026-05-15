@@ -1,7 +1,7 @@
 import { css } from 'lit';
 // import { HomeAssistant } from 'custom-card-helpers/dist';
 
-import { cwcMoonPhaseIcons } from '../../backup/ha-cwc-consts';
+import { cwcMoonPhaseIcons } from './const';
 
 import cardStyle from '../css/css-base-card';
 import summaryStyles from '../css/css-summary';

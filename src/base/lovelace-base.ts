@@ -28,7 +28,7 @@ import {
   loadJSON,
   logInfo,
 } from '../utils/helper';
-import { cwcClimacellDayIcons, cwcClimacellNightIcons } from '../iconmodels/im-climacell';
+// import { cwcClimacellDayIcons, cwcClimacellNightIcons } from '../iconmodels/im-climacell';
 import { getCardStyles } from '../utils/helper-render';
 import { cwcDaytimePirateWeatherIcons, cwcNightlyPirateWeaterIcons } from '../iconmodels/im-pirateweather';
 
@@ -85,7 +85,7 @@ export async function preloadResources(): Promise<{ translations: any[]; imagePa
     return { translations: [], imagePath: null };
   }
 
-  const langs = ['en', 'it', 'nl', 'es', 'de', 'fr', 'sr-latn', 'pt', 'da', 'no-NO', 'cs'];
+  const langs = ['en', 'it', 'nl', 'es', 'de', 'fr', 'sr-latn', 'pt', 'da', 'no-NO', 'cs', 'ru', 'is'];
   const translPath = `${imagePath}/../transl/`;
   const translations = await Promise.all(langs.map((lang) => loadJSON(`${translPath}${lang}.json`)));
 
@@ -192,8 +192,8 @@ export abstract class LovelaceBaseElement extends LitElement {
     // this._setupDisplaySections(config.display ?? []);
     this._detectDataSections(config);
 
-    this._setupIcons(config.weather?.icons_model);
     this._config = config;
+    this._setupIcons(config.weather?.icons_model);
 
     logInfo(`${logo} - Config loaded.`);
   }

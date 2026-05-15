@@ -13,6 +13,7 @@ export interface WeatherData {
   temperatureLow?: iRenderDataItem;
   precipitationProbability?: iRenderDataItem;
   precipitationIntensity?: iRenderDataItem;
+  precipitationAccumulation?: iRenderDataItem;
   nextRising?: iRenderDataItem;
   nextSetting?: iRenderDataItem;
 
@@ -22,6 +23,9 @@ export interface WeatherData {
   windSpeed?: iRenderDataItem;
   pressure?: iRenderDataItem;
   visibility?: iRenderDataItem;
+
+  lightningStrikes?: iRenderDataItem;
+  lightningDistance?: iRenderDataItem;
 }
 
 export interface iAirQualityData {
@@ -48,20 +52,48 @@ const prepareWeatherPresent = (data: WeatherData, language: string) => {
 
   const pi = data.precipitationIntensity?.value;
   const pp = data.precipitationProbability?.value;
+  const pa = data.precipitationAccumulation?.value;
 
   if (isValidInput(pi) && isValidInput(pp)) {
     const locale = getLocale(language);
     const parsedPI = parseLocalizedNumber(pi, locale);
     const parsedPP = parseLocalizedNumber(pp, locale);
+    const parsedPA = isValidInput(pa) ? parseLocalizedNumber(pa, locale) : 0;
 
-    if (!Number.isNaN(Number(parsedPI)) && !Number.isNaN(Number(parsedPP)) && parsedPI > 0 && parsedPP > 0) {
+    if ((!Number.isNaN(Number(parsedPI)) && !Number.isNaN(Number(parsedPP)) && parsedPI > 0 && parsedPP > 0)
+      || (!Number.isNaN(Number(parsedPA)) && parsedPA > 0)) {
+      const pit = `${parsedPI} ${data.precipitationIntensity.unit}`;
+      const ppt = `${parsedPP} ${data.precipitationProbability.unit}`;
+      const pat = `${parsedPA} ${data.precipitationAccumulation.unit || data.precipitationIntensity.unit}`;
+
       allItems.push({
         icon:
           data.precipitationIntensity.icon ||
           data.precipitationProbability.icon ||
+          data.precipitationAccumulation.icon ||
           'mdi:weather-rainy',
         // eslint-disable-next-line max-len
-        value: `${data.precipitationIntensity.value} ${data.precipitationIntensity.unit} / ${data.precipitationProbability.value} ${data.precipitationProbability.unit}`,
+        value: isValidInput(pa) ? `${pit} / ${ppt} / ${pat}` : `${pit} / ${ppt}`,
+      });
+    }
+  }
+
+  const ld = data.lightningDistance?.value;
+  const ls = data.lightningStrikes?.value;
+
+  if (isValidInput(ld) && isValidInput(ls)) {
+    const locale = getLocale(language);
+    const parsedLD = parseLocalizedNumber(ld, locale);
+    const parsedLS = parseLocalizedNumber(ls, locale);
+
+    if (!Number.isNaN(Number(parsedLD)) && !Number.isNaN(Number(parsedLS)) && parsedLD > 0 && parsedLS > 0) {
+      allItems.push({
+        icon:
+          data.lightningDistance.icon ||
+          data.lightningStrikes.icon ||
+          'mdi:weather-rainy',
+        // eslint-disable-next-line max-len
+        value: `${data.lightningDistance.value} ${data.lightningDistance.unit} / ${data.lightningStrikes.value} stks`,
       });
     }
   }

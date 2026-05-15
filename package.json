@@ -1,6 +1,6 @@
 {
   "name": "ha-card-weather-conditions",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Home Assistant lovelace card for display weather data.",
   "keywords": [
     "home-assistant",
@@ -19,6 +19,9 @@
   },
   "author": "Renato Rossi",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@material/mwc-select": "^0.27.0",
     "@material/mwc-textfield": "^0.27.0",
@@ -58,7 +61,7 @@
     "watch": "rollup -c --watch",
     "build": "npm run lint && npm run rollup -- --config rollup.config.mjs",
     "build:new": "npm run lint && npm run rollup -- --config rollup.new.config.mjs",
-    "lint": "eslint src/*.ts",
+    "lint": "eslint \"src/**/*.ts\"",
     "rollup": "rollup --no-compact "
   }
 }

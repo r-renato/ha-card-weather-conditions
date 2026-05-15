@@ -23,6 +23,11 @@ export interface iPresentData {
   wind_speed?: string;
   precipitation_intensity?: string;
   precipitation_probability?: string;
+  precipitation_accumulation?: string;
+
+  lightning_azimuth?: string;
+  lightning_distance?: string;
+  lightning_strikes?: string; 
 }
 
 export interface iTimeSlots {

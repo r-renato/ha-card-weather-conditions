@@ -2,6 +2,7 @@ import { HomeAssistant } from 'custom-card-helpers/dist';
 
 import renderWeatherSummary from '../templates/t-summary';
 import {
+  string2Number,
   getEntityNumericValue,
   getEntityRawValue,
   getEntityUnit,
@@ -32,6 +33,13 @@ const buildWeatherSummary = (
   const temperatureFeelsLike = presentData.temperature_feelslike ? getEntityNumericValue({ entityId: presentData.temperature_feelslike, hass, lang: language }) ?? undefined : undefined;
   const temperatureFeelsLikeIcon = hass.states[presentData.temperature_feelslike]?.attributes.icon ?? '';
 
+  const lightningAzimuth = presentData.lightning_azimuth 
+    ? getEntityNumericValue({ entityId: presentData.lightning_azimuth, hass, lang: language }) ?? '0' : '0';
+  const lightningDistance = presentData.lightning_distance
+    ? getEntityNumericValue({ entityId: presentData.lightning_distance, hass, lang: language }) ?? '0' : '0';
+  const lightningStrikes = presentData.lightning_strikes
+    ? getEntityNumericValue({ entityId: presentData.lightning_strikes, hass, lang: language }) ?? '0' : '0';
+
   return renderWeatherSummary({
     title: name ?? undefined, // 'Verkhnenovokutlumbetyevo',
     moonText: (moonphase ? translate(moonPhase, terms.words) : undefined),
@@ -43,6 +51,10 @@ const buildWeatherSummary = (
     feelsLikeTerm: translate('Feels Like', terms.words),
     temperatureFeelsLike,
     temperatureFeelsLikeIcon,
+    lightningAzimuth: string2Number(lightningAzimuth, language),
+    lightningDistance: string2Number(lightningDistance, language),
+    lightningStrikes: string2Number(lightningStrikes, language),
+    // lightningStrikes: 45,
   });
 };
 
