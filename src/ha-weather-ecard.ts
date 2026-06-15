@@ -2,7 +2,7 @@
 import { html, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { LovelaceBaseElement, preloadResources } from './base/lovelace-base';
+import { LovelaceBaseElement } from './base/lovelace-base';
 
 import buildWeatherSummary from './builder/b-summary';
 import buildWeatherPresent from './builder/b-present';
@@ -13,17 +13,23 @@ import buildCamera from './builder/b-camera';
 import buildAirQuality from './builder/b-airquality';
 import buildMeteoDPCalarm from './builder/b-meteoalarm';
 
-const { translations, imagePath } = await preloadResources(); // esecuzione immediata
+declare global {
+  interface Window {
+    customCards?: {
+      type: string;
+      name: string;
+      description: string;
+      preview: boolean;
+      documentationURL: string;
+    }[];
+  }
+}
 
 /* -------------------- DEFINIZIONE COMPONENTE -------------------- */
 
 @customElement('ha-card-weather-conditions')
 // eslint-disable-next-line import/prefer-default-export
 export class HaCardWeatherConditions extends LovelaceBaseElement {
-  _translations = translations;
-
-  _imagesPath = imagePath;
-
   // eslint-disable-next-line class-methods-use-this
   protected _render(): TemplateResult {
     return html`
@@ -50,7 +56,7 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
 
     const getWeatherForecast = (mode: 0 | 1 | 2 | 3) => buildWeatherForecast(
       this.hass,
-      this._language,
+      this._resolvedLocale,
       this._terms,
       this._config.weather.daily_forecasts,
       this._config.weather.hourly_forecasts,
@@ -64,7 +70,7 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     if (this._hasPresent) {
       summary = buildWeatherSummary(
         this.hass,
-        this._language,
+        this._resolvedLocale,
         this._terms,
         this._iconsConfig,
         this._config.weather?.name,
@@ -77,7 +83,7 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     if (this._hasPresent) {
       present = buildWeatherPresent(
         this.hass,
-        this._language,
+        this._resolvedLocale,
         this._terms,
         this._config?.weather?.present || {},
         this._config?.weather?.sun,
@@ -87,7 +93,7 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     if (this._hasMetealarm || this._hasDPCalarm) {
       meteoDPCalarm = buildMeteoDPCalarm(
         this.hass,
-        this._language,
+        this._resolvedLocale,
         this._terms,
         this._config?.weather?.meteoalarm,
         this._config?.weather?.dpcalarm,
@@ -108,19 +114,19 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     }
 
     if (this._hasUltraviolet) {
-      ultraviolet = buildUltraviolet(this.hass, this._language, this._config.ultraviolet);
+      ultraviolet = buildUltraviolet(this.hass, this._resolvedLocale, this._config.ultraviolet);
     }
 
     if (this._hasPollen) {
-      pollen = buildPollen(this.hass, this._language, this._config.pollen);
+      pollen = buildPollen(this.hass, this._config.pollen);
     }
 
     if (this._hasAirQuality) {
-      airQuality = buildAirQuality(this.hass, this._language, this._config.airquality);
+      airQuality = buildAirQuality(this.hass, this._resolvedLocale, this._config.airquality);
     }
 
     if (this._hasCamera) {
-      camera = buildCamera(this.hass, this._language, this._terms, this._handlePopup.bind(this), this._config.camera);
+      camera = buildCamera(this.hass, this._terms, this._handlePopup.bind(this), this._config.camera);
     }
 
     return html`
@@ -151,3 +157,14 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     this.dispatchEvent(moreInfoEvent);
   }
 }
+
+/* -------------------- REGISTRAZIONE CARD -------------------- */
+
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: 'ha-card-weather-conditions',
+  name: 'Weather Conditions Card',
+  description: 'Displays weather data with animated icons, forecasts, UV, pollen, air quality and more.',
+  preview: true,
+  documentationURL: 'https://github.com/r-renato/ha-card-weather-conditions',
+});

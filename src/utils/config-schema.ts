@@ -134,9 +134,20 @@ export interface iAirQuality {
   epa_health_concern?: string ;
 }
 
+export type NumberFormat = 'language' | 'comma_decimal' | 'decimal_comma' | 'space_comma' | 'none';
+
+export interface iLocaleOverride {
+  language?: string;
+  timezone?: string;
+  number_format?: NumberFormat;
+}
+
 export interface iCardConfig {
   type: string; // ha-card-weather-conditions
-  language?: string ; // Card language
+  language?: string ; // Card language (language code ISO 639 'en' or language tag BCP 47 'en-GB')
+  timezone?: string;
+  number_format?: NumberFormat;
+  // locale?: iLocaleOverride ;
 
   weather: iWeather;
   ultraviolet?: iUltraviolet;

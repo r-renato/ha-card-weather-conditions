@@ -26,6 +26,12 @@
     "nonblock-statement-body-position": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
     "max-classes-per-file": ["warn", 3],
+    "no-void": ["error", { "allowAsStatement": true }],
+    "object-curly-newline": ["warn", { "consistent": true }],
+    "arrow-body-style": "off",
+    "function-paren-newline": "off",
+    "implicit-arrow-linebreak": "off",
+    "no-confusing-arrow": "off",
     "import/extensions": ["warn", "ignorePackages", {
       "ts": "never",
       "js": "never"

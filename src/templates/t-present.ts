@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { getLocale, parseLocalizedNumber } from '../utils/helper';
+import { parseLocalizedNumber } from '../utils/locale';
 
 export interface iRenderDataItem {
   value?: number | string | Date;
@@ -41,7 +41,7 @@ export interface iAirQualityData {
 
 const isValidInput = (val: unknown): val is string | number => typeof val === 'string' || typeof val === 'number';
 
-const prepareWeatherPresent = (data: WeatherData, language: string) => {
+const prepareWeatherPresent = (data: WeatherData, formatterLocale: string) => {
   const allItems: iRenderDataItem[] = [];
 
   const addIfValid = (key: keyof WeatherData, item?: iRenderDataItem) => {
@@ -55,10 +55,9 @@ const prepareWeatherPresent = (data: WeatherData, language: string) => {
   const pa = data.precipitationAccumulation?.value;
 
   if (isValidInput(pi) && isValidInput(pp)) {
-    const locale = getLocale(language);
-    const parsedPI = parseLocalizedNumber(pi, locale);
-    const parsedPP = parseLocalizedNumber(pp, locale);
-    const parsedPA = isValidInput(pa) ? parseLocalizedNumber(pa, locale) : 0;
+    const parsedPI = parseLocalizedNumber(pi, formatterLocale);
+    const parsedPP = parseLocalizedNumber(pp, formatterLocale);
+    const parsedPA = isValidInput(pa) ? parseLocalizedNumber(pa, formatterLocale) : 0;
 
     if ((!Number.isNaN(Number(parsedPI)) && !Number.isNaN(Number(parsedPP)) && parsedPI > 0 && parsedPP > 0)
       || (!Number.isNaN(Number(parsedPA)) && parsedPA > 0)) {
@@ -82,9 +81,8 @@ const prepareWeatherPresent = (data: WeatherData, language: string) => {
   const ls = data.lightningStrikes?.value;
 
   if (isValidInput(ld) && isValidInput(ls)) {
-    const locale = getLocale(language);
-    const parsedLD = parseLocalizedNumber(ld, locale);
-    const parsedLS = parseLocalizedNumber(ls, locale);
+    const parsedLD = parseLocalizedNumber(ld, formatterLocale);
+    const parsedLS = parseLocalizedNumber(ls, formatterLocale);
 
     if (!Number.isNaN(Number(parsedLD)) && !Number.isNaN(Number(parsedLS)) && parsedLD > 0 && parsedLS > 0) {
       allItems.push({
@@ -142,7 +140,7 @@ const prepareWeatherPresent = (data: WeatherData, language: string) => {
   return allItems;
 };
 
-const prepareAirQuality = (data: iAirQualityData, language: string) => {
+const prepareAirQuality = (data: iAirQualityData) => {
   const allItems: iRenderDataItem[] = [];
 
   const addIfValid = (key: keyof iAirQualityData, item?: iRenderDataItem) => {
@@ -166,7 +164,7 @@ const prepareAirQuality = (data: iAirQualityData, language: string) => {
   return allItems;
 };
 
-export const renderWeatherPresent = (data, language: string) => {
+export const renderWeatherPresent = (data: WeatherData | Record<string, iRenderDataItem>, formatterLocale: string) => {
   const allItems: iRenderDataItem[] = [];
 
   const buildBlockLeft = (item: iRenderDataItem) => html`
@@ -183,7 +181,7 @@ export const renderWeatherPresent = (data, language: string) => {
     </span>
   `;
 
-  allItems.push(...prepareWeatherPresent(data, language), ...prepareAirQuality(data, language));
+  allItems.push(...prepareWeatherPresent(data as WeatherData, formatterLocale), ...prepareAirQuality(data as iAirQualityData));
 
   const rows = [];
   for (let i = 0; i < allItems.length; i += 2) {

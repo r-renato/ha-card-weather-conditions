@@ -172,9 +172,10 @@ const renderLightningFlashes = (azimuth: number, distance: number, strikes: numb
   const cappedStrikes = Math.min(strikes, 12);
 
   return Array.from({ length: cappedStrikes }, (_, i) => {
-    const x = Math.max(5, Math.min(95, centerX + (Math.random() * spread * 2 - spread)));
-    const y = 5 + Math.random() * 60; // distribuito su più altezza, non solo 20%
-    return renderLightningFlashZigzag(x, y, i * 137.5 + azimuth); // seed deterministico
+    const seed = i * 137.5 + azimuth;
+    const x = Math.max(5, Math.min(95, centerX + (seededRandom(seed + 100) * spread * 2 - spread)));
+    const y = 5 + seededRandom(seed + 101) * 60;
+    return renderLightningFlashZigzag(x, y, seed);
   });
 };
 
