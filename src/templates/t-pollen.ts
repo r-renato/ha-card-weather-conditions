@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { renderSectionHeader } from '../utils/render-section';
 
 export interface iPollenData {
   name: string;
@@ -23,23 +24,26 @@ export const renderPollen = (data: iPollenData[], levelMin: number, levelMax: nu
   }
 
   return html`
-    <div class="pollen-grid-container">
-      ${data.map((item) => {
-    const activeIndex = getLevelIndex(item.value, levelMin, levelMax);
-    return html`
-          <div class="pollen-stack">
-            <div class="levels">
-              ${levels.map((levelName, index) => html`
-                <div
-                  class="level ${levelName} ${index === activeIndex ? 'active' : ''}"
-                  title="${levelName}"
-                ></div>
-              `)}
+    <div class="cwc-section">
+      ${renderSectionHeader('Pollini')}
+      <div class="pollen-grid-container">
+        ${data.map((item) => {
+          const activeIndex = getLevelIndex(item.value, levelMin, levelMax);
+          return html`
+            <div class="pollen-stack">
+              <div class="levels">
+                ${levels.map((levelName, index) => html`
+                  <div
+                    class="level ${levelName} ${index === activeIndex ? 'active' : ''}"
+                    title="${levelName}"
+                  ></div>
+                `)}
+              </div>
+              <div class="pollen-name">${item.name}</div>
             </div>
-            <div class="pollen-name">${item.name}</div>
-          </div>
-        `;
-  })}
+          `;
+        })}
+      </div>
     </div>
   `;
 };

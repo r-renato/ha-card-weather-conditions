@@ -74,6 +74,8 @@ export interface iMarineDailyForecast {
   wave_direction?: iTimeSlots ;
   swell_wave_height_max?: iTimeSlots ;
   wind_wave_height_max?: iTimeSlots ;
+  swell_wave_period_max?: iTimeSlots ;
+  wind_wave_period_max?: iTimeSlots ;
 }
 
 export interface iDPCAlert {

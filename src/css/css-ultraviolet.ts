@@ -1,108 +1,101 @@
 import { css } from 'lit';
 
 const ultravioletStyle = css`
-.ultraviolet-grid-container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
 
-.ultraviolet-row {
+/* ── Riga summary: indice + livello a sinistra, ozono a destra ── */
+
+.uv-summary-row {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--cwc-space-sm);
 }
 
-.ultraviolet-left,
-.present-right {
-  flex: 1;
-}
-
-.ultraviolet-left {
+.uv-summary-left {
   display: flex;
-  justify-content: flex-start;
+  align-items: baseline;
+  gap: var(--cwc-space-xs);
+  flex-wrap: wrap;
 }
 
-.ultraviolet-right {
+.uv-index {
+  font-size: var(--cwc-font-xl);
+  font-weight: 300;
+  color: var(--cwc-text-primary);
+  line-height: 1;
+}
+
+.uv-index-max {
+  font-size: var(--cwc-font-md);
+  color: var(--cwc-text-muted);
+}
+
+.uv-level {
+  font-size: var(--cwc-font-md);
+  font-weight: 500;
+  color: #e8a234;
+}
+
+.uv-summary-right {
   display: flex;
-  justify-content: flex-end;
+  align-items: baseline;
+  gap: 1px;
+  white-space: nowrap;
 }
 
-.ultraviolet-value-block {
+.uv-ozone {
+  font-size: var(--cwc-font-md);
+  color: var(--cwc-text-secondary);
+}
+
+.uv-ozone-unit {
+  font-size: var(--cwc-font-xs);
+  color: var(--cwc-text-muted);
+}
+
+/* ── Indicatore protezione (solo quando attiva) ─────────────── */
+
+.uv-protection-on {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--cwc-space-xs);
+  font-size: var(--cwc-font-sm);
+  color: #e05555;
 }
 
-.ultraviolet-unit {
-  font-size: 0.9em;
-  opacity: 0.8;
+.uv-protection-on ha-icon {
+  --mdc-icon-size: 16px;
+  color: #e05555;
 }
 
-------------------------------------------------------------------
-
-// .ultraviolet-grid-container {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 12px;
-// }
-
-// .ultraviolet-row {
-//   display: flex;
-//   justify-content: space-between;
-//   padding: 4px 0;
-// }
-
-// .ultraviolet-value-block {
-//   display: flex;
-//   align-items: center;
-//   gap: 4px;
-// }
-
-// .ultraviolet-unit {
-//   font-size: 0.9em;
-//   opacity: 0.7;
-// }
+/* ── Griglia fototipi cutanei ────────────────────────────────── */
 
 .ultraviolet-skin-type-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
-  gap: 8px;
-  margin-top: 8px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--cwc-space-xs);
 }
 
 .ultraviolet-skin-type-cell {
-  flex: 1;
-  min-width: 48px;
-  height: 48px;
+  height: 44px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 6px;
-  font-family: 'Segoe UI', sans-serif;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  color: black;
+  border-radius: var(--cwc-radius-sm);
+  gap: 2px;
 }
 
 .ultraviolet-skin-type-label {
-  font-weight: bold;
-  font-size: 0.95em;
-  line-height: 1em;
+  font-weight: 600;
+  font-size: var(--cwc-font-sm);
+  line-height: 1;
 }
 
 .ultraviolet-exposure-time {
-  font-size: 0.75em;
-  margin-top: 2px;
-  color: #222;
+  font-size: var(--cwc-font-xs);
   opacity: 0.85;
 }
-
-
-
-
-
-
 `;
 
 export default ultravioletStyle;

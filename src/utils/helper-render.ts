@@ -12,6 +12,7 @@ import cameraStyle from '../css/css-camera';
 import { iIconsConfig } from '../base/lovelace-base';
 import weatherForecastStyle from '../css/css-weather-forecast';
 import meteodcpalarmStyle from '../css/css-meteoalarm';
+import airqualityStyle from '../css/css-airquality';
 
 export const getMoonIcon = (phase: string): string => cwcMoonPhaseIcons[phase.toLowerCase()];
 
@@ -70,4 +71,5 @@ ${ultravioletStyle}
 ${pollenStyle}
 ${cameraStyle}
 ${meteodcpalarmStyle}
+${airqualityStyle}
 `;

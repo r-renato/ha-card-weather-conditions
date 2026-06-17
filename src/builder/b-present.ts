@@ -34,15 +34,23 @@ const present = (
     nextRising: {
       value: next_rising ? fmtTime(next_rising) : undefined,
       icon: 'mdi:weather-sunset-up',
+      icon_color: '#fb923c',
+      label: 'Alba',
     },
     nextSetting: {
       value: next_setting ? fmtTime(next_setting) : undefined,
       icon: 'mdi:weather-sunset-down',
+      icon_color: '#f97316',
+      label: 'Tramonto',
     },
+    nextRisingISO: next_rising || undefined,
+    nextSettingISO: next_setting || undefined,
     lightningStrikes: {
       value: getEntityNumericValue({ entityId: presentData.lightning_strikes, hass, formatterLocale, decimals: 0 }),
       unit: null,
       icon: 'mdi:lightning-bolt',
+      icon_color: '#fbbf24',
+      label: 'Fulm. / Dist.',
     },
     lightningDistance: {
       value: getEntityNumericValue({ entityId: presentData.lightning_distance, hass, formatterLocale, decimals: 1 }),
@@ -53,6 +61,8 @@ const present = (
       value: getEntityNumericValue({ entityId: presentData.precipitation_intensity, hass, formatterLocale, decimals: 2 }),
       unit: getEntityUnit(hass, presentData.precipitation_intensity),
       icon: 'mdi:weather-rainy',
+      icon_color: '#38bdf8',
+      label: 'Precipitazioni',
     },
     precipitationProbability: {
       value: getEntityNumericValue({ entityId: presentData.precipitation_probability, hass, formatterLocale, decimals: 0 }),
@@ -68,6 +78,8 @@ const present = (
       value: getEntityNumericValue({ entityId: presentData.humidity, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.humidity),
       icon: 'mdi:water-percent',
+      icon_color: '#60a5fa',
+      label: 'Umidità',
     },
     windBearing: {
       value: getWindDirections(getEntityRawValue(hass, presentData.wind_bearing), cwcLocWindDirections),
@@ -76,16 +88,22 @@ const present = (
       value: getEntityNumericValue({ entityId: presentData.wind_speed, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.wind_speed),
       icon: 'mdi:weather-windy',
+      icon_color: '#7dd3fc',
+      label: 'Vento',
     },
     pressure: {
       value: getEntityNumericValue({ entityId: presentData.pressure, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.pressure),
       icon: 'mdi:gauge',
+      icon_color: '#a78bfa',
+      label: 'Pressione',
     },
     visibility: {
       value: getEntityNumericValue({ entityId: presentData.visibility, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.visibility),
       icon: 'mdi:weather-fog',
+      icon_color: '#94a3b8',
+      label: 'Visibilità',
     },
     temperatureHigh: {
       value: getEntityNumericValue({ entityId: presentData.temperature_max, hass, formatterLocale, decimals: 0 }),
@@ -96,6 +114,8 @@ const present = (
       value: getEntityNumericValue({ entityId: presentData.temperature_min, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.temperature_min),
       icon: 'mdi:thermometer',
+      icon_color: '#f87171',
+      label: 'Min / Max',
     },
   };
 };

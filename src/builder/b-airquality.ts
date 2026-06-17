@@ -1,20 +1,41 @@
 /* eslint-disable camelcase */
-/* eslint-disable no-else-return */
-/* eslint-disable object-curly-newline */
 import { HomeAssistant } from 'custom-card-helpers/dist';
 import { ResolvedLocale } from '../utils/locale';
 import { iAirQuality } from '../utils/config-schema';
 import { getEntityNumericValue, getEntityRawValue, getEntityUnit } from '../utils/entity';
-import { renderWeatherPresent } from '../templates/t-present';
+import { renderAirQuality, iAirQualityPollutant } from '../templates/t-airquality';
 
-function getAQIColor(aqi: number): string {
+const getAQIColor = (aqi: number): string => {
   if (aqi <= 50) return '#009966';
   if (aqi <= 100) return '#ffde33';
   if (aqi <= 150) return '#ff9933';
   if (aqi <= 200) return '#cc0033';
   if (aqi <= 300) return '#660099';
   return '#7e0023';
-}
+};
+
+const getAQILabel = (aqi: number): string => {
+  if (aqi <= 50) return 'Buona';
+  if (aqi <= 100) return 'Moderata';
+  if (aqi <= 150) return 'Non salutare (sensibili)';
+  if (aqi <= 200) return 'Non salutare';
+  if (aqi <= 300) return 'Molto non salutare';
+  return 'Pericolosa';
+};
+
+const formatPollutantName = (raw: string): string => {
+  const map: Record<string, string> = {
+    o3: 'O₃',
+    pm2_5: 'PM2.5',
+    pm25: 'PM2.5',
+    'pm2.5': 'PM2.5',
+    pm10: 'PM10',
+    no2: 'NO₂',
+    co: 'CO',
+    so2: 'SO₂',
+  };
+  return map[raw?.toLowerCase()] ?? raw?.toUpperCase() ?? raw;
+};
 
 const buildAirQuality = (
   hass: HomeAssistant,
@@ -23,56 +44,53 @@ const buildAirQuality = (
 ) => {
   const { formatterLocale } = resolvedLocale;
 
-  const pm25 = getEntityNumericValue({ entityId: airquality.pm25, hass, formatterLocale, decimals: 0 });
-  const pm10 = getEntityNumericValue({ entityId: airquality.pm10, hass, formatterLocale, decimals: 0 });
-  const o3 = getEntityNumericValue({ entityId: airquality.o3, hass, formatterLocale, decimals: 1 });
-  const no2 = getEntityNumericValue({ entityId: airquality.no2, hass, formatterLocale, decimals: 0 });
-  const co = getEntityNumericValue({ entityId: airquality.co, hass, formatterLocale, decimals: 1 });
-  const so2 = getEntityNumericValue({ entityId: airquality.so2, hass, formatterLocale, decimals: 0 });
-  const epa_aqi = getEntityNumericValue({ entityId: airquality.epa_aqi, hass, formatterLocale, decimals: 0 });
-  const epa_primary_pollutant = getEntityRawValue(hass, airquality.epa_primary_pollutant);
+  const aqiRaw = getEntityRawValue(hass, airquality.epa_aqi);
+  const aqiNum = aqiRaw !== undefined ? Number(aqiRaw) : undefined;
+  const aqiDisplay = getEntityNumericValue({
+    entityId: airquality.epa_aqi,
+    hass,
+    formatterLocale,
+    decimals: 0,
+  });
 
-  return renderWeatherPresent({
-    pm25: {
-      value: pm25 ? `pm2.5 ${pm25}` : pm25,
-      unit: getEntityUnit(hass, airquality.pm25) || 'µg/m³',
-      icon: 'mdi:weather-hazy',
+  const primaryRaw = getEntityRawValue(hass, airquality.epa_primary_pollutant);
+
+  const candidatePollutants: { key: keyof iAirQuality; display: string; decimals: number }[] = [
+    { key: 'pm25', display: 'PM2.5', decimals: 0 },
+    { key: 'pm10', display: 'PM10', decimals: 0 },
+    { key: 'o3', display: 'O₃', decimals: 1 },
+    { key: 'no2', display: 'NO₂', decimals: 0 },
+    { key: 'co', display: 'CO', decimals: 1 },
+    { key: 'so2', display: 'SO₂', decimals: 0 },
+  ];
+
+  const pollutants: iAirQualityPollutant[] = candidatePollutants.reduce<iAirQualityPollutant[]>(
+    (acc, { key, display, decimals }) => {
+      const val = getEntityNumericValue({
+        entityId: airquality[key],
+        hass,
+        formatterLocale,
+        decimals,
+      });
+      if (val !== undefined && val !== null) {
+        acc.push({
+          name: display,
+          value: val,
+          unit: getEntityUnit(hass, airquality[key]) || 'µg/m³',
+        });
+      }
+      return acc;
     },
-    pm10: {
-      value: pm10 ? `pm10 ${pm10}` : pm10,
-      unit: getEntityUnit(hass, airquality.pm10) || 'µg/m³',
-      icon: 'mdi:weather-hazy',
-    },
-    o3: {
-      value: o3 ? `o3 ${o3}` : o3,
-      unit: getEntityUnit(hass, airquality.o3) || 'µg/m³',
-      icon: 'mdi:molecule',
-    },
-    no2: {
-      value: no2 ? `no2 ${no2}` : no2,
-      unit: getEntityUnit(hass, airquality.no2) || 'µg/m³',
-      icon: 'mdi:molecule',
-    },
-    co: {
-      value: co ? `co ${co}` : co,
-      unit: getEntityUnit(hass, airquality.co) || 'µg/m³',
-      icon: 'mdi:molecule',
-    },
-    so2: {
-      value: so2 ? `so2 ${so2}` : so2,
-      unit: getEntityUnit(hass, airquality.so2) || 'µg/m³',
-      icon: 'mdi:molecule',
-    },
-    epa_aqi: {
-      value: epa_aqi ? `Air Quality Index ${epa_aqi}` : epa_aqi,
-      icon: 'mdi:weather-hazy',
-      icon_color: getAQIColor(Number(getEntityRawValue(hass, airquality.epa_aqi))),
-    },
-    epa_primary_pollutant: {
-      value: epa_primary_pollutant ? `Primary ${epa_primary_pollutant}` : epa_primary_pollutant,
-      icon: 'mdi:weather-hazy',
-    },
-  }, formatterLocale);
+    [],
+  );
+
+  return renderAirQuality({
+    aqiValue: aqiDisplay,
+    aqiColor: aqiNum !== undefined && !Number.isNaN(aqiNum) ? getAQIColor(aqiNum) : undefined,
+    aqiLabel: aqiNum !== undefined && !Number.isNaN(aqiNum) ? getAQILabel(aqiNum) : undefined,
+    primaryPollutant: primaryRaw ? formatPollutantName(primaryRaw) : undefined,
+    pollutants,
+  });
 };
 
 export default buildAirQuality;

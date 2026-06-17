@@ -1,4 +1,5 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
+import { renderSectionHeader } from '../utils/render-section';
 
 export interface RenderDataItem {
   value?: number | string | Date;
@@ -35,62 +36,8 @@ const getTextColor = (hex: string): string => {
 };
 
 const renderUltraviolet = (data: RenderData, skinData: RenderSkinData) => {
-  const allItems: RenderDataItem[] = [];
-
-  const buildBlockLeft = (item: RenderDataItem) => html`
-    <span class="ultraviolet-value-block">
-      <ha-icon icon="${item.icon}" style="${item.value === 'on' ? 'color: red;' : ''}"></ha-icon>
-      ${item.value}${item.unit ? html`<span class="ultraviolet-unit">${item.unit}</span>` : ''}
-    </span>
-  `;
-
-  const buildBlockRight = (item: RenderDataItem) => html`
-    <span class="ultraviolet-value-block">
-      ${item.value}${item.unit ? html`<span class="ultraviolet-unit">${item.unit}</span>` : ''}
-      <ha-icon icon="${item.icon}" style="${item.value === 'on' ? 'color: red;' : ''}"></ha-icon>
-    </span>
-  `;
-  
-  const addIfValid = (key: keyof RenderData, item?: RenderDataItem) => {
-    if (item?.value === undefined) return;
-
-    allItems.push(item);
-  };
-
-  let keys: (keyof RenderData)[] = [
-    'protectionWindow',
-    'currentUVLevel',
-  ];
-  keys.forEach((k) => addIfValid(k, data[k]));
-
-  // UV Level current/max combinata
-  if (
-    data.currentUVIndex?.value !== undefined &&
-    data.maxUVIndex?.value !== undefined
-  ) {
-    allItems.push({
-      icon: data.currentUVIndex.icon || data.maxUVIndex.icon || 'mdi:weather-sunny',
-      value: `${data.currentUVIndex.value} / ${data.maxUVIndex.value}`,
-      unit: data.currentUVIndex.unit || data.maxUVIndex.unit,
-    });
-  }
-
-  keys = [
-    'currentOzoneLevel',
-  ];
-  keys.forEach((k) => addIfValid(k, data[k]));
-
-  const summaryRows = [];
-  for (let i = 0; i < allItems.length; i += 2) {
-    const left = allItems[i];
-    const right = allItems[i + 1];
-    summaryRows.push(html`
-      <div class="ultraviolet-row">
-        <div class="ultraviolet-left">${left ? buildBlockLeft(left) : html``}</div>
-        <div class="ultraviolet-right">${right ? buildBlockRight(right) : html``}</div>
-      </div>
-    `);
-  }
+  const hasIndex = data.currentUVIndex?.value !== undefined
+    && data.maxUVIndex?.value !== undefined;
 
   const skinTypes = [
     skinData.skinType1,
@@ -101,29 +48,56 @@ const renderUltraviolet = (data: RenderData, skinData: RenderSkinData) => {
     skinData.skinType6,
   ];
 
-  const renderSkinGrid = html`
-  <div class="ultraviolet-skin-type-grid">
-  ${skinTypes.map((item, i) => {
-    const bgColor = colors[i];
-    const textColor = getTextColor(bgColor);
-    return html`
-      <div
-        class="ultraviolet-skin-type-cell"
-        style="background: ${bgColor};"
-        title="Fototipo ${num[i]}"
-      >
-        <div class="ultraviolet-skin-type-label">${num[i]}</div>
-        <div class="ultraviolet-exposure-time" style="color: ${textColor};">${item.value || '--'}</div>
-      </div>
-    `;
-  })}
-  </div>
-  `;
+  const protectionOn = String(data.protectionWindow?.value).toLowerCase() === 'on';
 
   return html`
-    <div class="ultraviolet-grid-container">
-      ${summaryRows}
-      ${renderSkinGrid}
+    <div class="cwc-section">
+      ${renderSectionHeader('Radiazione UV')}
+
+      <!-- Riga summary: indice/livello a sinistra, ozono a destra -->
+      <div class="uv-summary-row">
+        <div class="uv-summary-left">
+          ${hasIndex ? html`
+            <span class="uv-index">${data.currentUVIndex!.value}</span>
+            <span class="uv-index-max"> / ${data.maxUVIndex!.value}</span>
+          ` : nothing}
+          ${data.currentUVLevel?.value ? html`
+            <span class="uv-level">${data.currentUVLevel.value}</span>
+          ` : nothing}
+        </div>
+        <div class="uv-summary-right">
+          ${data.currentOzoneLevel?.value ? html`
+            <span class="uv-ozone">${data.currentOzoneLevel.value}</span>
+            <span class="uv-ozone-unit"> DU</span>
+          ` : nothing}
+        </div>
+      </div>
+
+      <!-- Protezione: visibile solo quando attiva -->
+      ${protectionOn ? html`
+        <div class="uv-protection-on">
+          <ha-icon icon="mdi:sunglasses"></ha-icon>
+          <span>Protezione consigliata</span>
+        </div>
+      ` : nothing}
+
+      <!-- Griglia fototipi cutanei -->
+      <div class="ultraviolet-skin-type-grid">
+        ${skinTypes.map((item, i) => {
+          const bgColor = colors[i];
+          const textColor = getTextColor(bgColor);
+          return html`
+            <div
+              class="ultraviolet-skin-type-cell"
+              style="background: ${bgColor};"
+              title="Fototipo ${num[i]}"
+            >
+              <div class="ultraviolet-skin-type-label" style="color: ${textColor};">${num[i]}</div>
+              <div class="ultraviolet-exposure-time" style="color: ${textColor};">${item.value || '--'}</div>
+            </div>
+          `;
+        })}
+      </div>
     </div>
   `;
 };

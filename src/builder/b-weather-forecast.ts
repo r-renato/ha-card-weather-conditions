@@ -11,7 +11,13 @@ import {
 } from '../utils/entity';
 import { ResolvedLocale } from '../utils/locale';
 import { iconPrecipitation, iconTemperature } from '../utils/const';
-import { iForecastDataItem, renderWeatherForecast } from '../templates/t-weather-forecast';
+import {
+  iForecastDataItem,
+  renderDailyForecast,
+  renderHourlyForecast,
+  renderMarineDailyForecast,
+  renderWeatherForecast,
+} from '../templates/t-weather-forecast';
 import {
   iDailyForecast,
   iHourlyForecast,
@@ -84,6 +90,8 @@ const buildHourlyForecastSlot = (
       timeZone: timezone,
     });
     record['reference'] = { value: hourTime };
+    // Raw ISO string used by the template to identify the current slot.
+    record['datetime'] = { value: datetime.toISOString() };
   }
 
   return record;
@@ -201,7 +209,13 @@ const buildMarineDailyForecastSlot = (
     };
   }
 
-  const metrics = ['wave_height_max', 'swell_wave_height_max', 'wind_wave_height_max'];
+  const metrics = [
+    'wave_height_max',
+    'swell_wave_height_max',
+    'wind_wave_height_max',
+    'swell_wave_period_max',
+    'wind_wave_period_max',
+  ];
 
   metrics.forEach((metricKey) => {
     const metricSlots = forecast[metricKey];
@@ -349,9 +363,9 @@ const buildWeatherForecast = (
   }
 
   switch (forecastType) {
-    case 0: return renderWeatherForecast(forecastType, dailyForecastData);
-    case 1: return renderWeatherForecast(forecastType, hourlyforecastData);
-    case 2: return renderWeatherForecast(forecastType, marineDailyForecastData);
+    case 0: return renderDailyForecast(dailyForecastData);
+    case 1: return renderHourlyForecast(hourlyforecastData);
+    case 2: return renderMarineDailyForecast(marineDailyForecastData);
     case 3: return renderWeatherForecast(forecastType, marineHourlyForecastData);
     default: return renderWeatherForecast(forecastType, voidRecord);
   }

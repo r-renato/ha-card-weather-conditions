@@ -25,6 +25,8 @@
     "no-unused-vars": ["warn", { "args": "none", "ignoreRestSiblings": true }],
     "nonblock-statement-body-position": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
+    "key-spacing": "off",
+    "indent": "off",
     "max-classes-per-file": ["warn", 3],
     "no-void": ["error", { "allowAsStatement": true }],
     "object-curly-newline": ["warn", { "consistent": true }],

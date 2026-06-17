@@ -1,4 +1,5 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
+import { renderSectionHeader } from '../utils/render-section';
 import { parseLocalizedNumber } from '../utils/locale';
 
 export interface iRenderDataItem {
@@ -6,6 +7,10 @@ export interface iRenderDataItem {
   unit?: string;
   icon?: string;
   icon_color?: string;
+  /** Etichetta descrittiva opzionale mostrata sotto il valore nel chip.
+   *  I builder esistenti non la popolano ancora: quando presente viene
+   *  resa, quando assente il chip mostra solo icona + valore + unità. */
+  label?: string;
 }
 
 export interface WeatherData {
@@ -16,6 +21,9 @@ export interface WeatherData {
   precipitationAccumulation?: iRenderDataItem;
   nextRising?: iRenderDataItem;
   nextSetting?: iRenderDataItem;
+  /** Stringhe ISO grezze da sun.sun, usate nel template per calcolare il progresso solare */
+  nextRisingISO?: string;
+  nextSettingISO?: string;
 
   // precipitation?: iRenderDataItem;
   humidity?: iRenderDataItem;
@@ -71,8 +79,10 @@ const prepareWeatherPresent = (data: WeatherData, formatterLocale: string) => {
           data.precipitationProbability.icon ||
           data.precipitationAccumulation.icon ||
           'mdi:weather-rainy',
+        icon_color: data.precipitationIntensity?.icon_color || data.precipitationProbability?.icon_color,
         // eslint-disable-next-line max-len
         value: isValidInput(pa) ? `${pit} / ${ppt} / ${pat}` : `${pit} / ${ppt}`,
+        label: data.precipitationIntensity?.label || data.precipitationProbability?.label,
       });
     }
   }
@@ -89,9 +99,11 @@ const prepareWeatherPresent = (data: WeatherData, formatterLocale: string) => {
         icon:
           data.lightningDistance.icon ||
           data.lightningStrikes.icon ||
-          'mdi:weather-rainy',
+          'mdi:lightning-bolt',
+        icon_color: data.lightningStrikes?.icon_color || data.lightningDistance?.icon_color,
         // eslint-disable-next-line max-len
         value: `${data.lightningDistance.value} ${data.lightningDistance.unit} / ${data.lightningStrikes.value} stks`,
+        label: data.lightningStrikes?.label || data.lightningDistance?.label,
       });
     }
   }
@@ -103,12 +115,14 @@ const prepareWeatherPresent = (data: WeatherData, formatterLocale: string) => {
   ) {
     allItems.push({
       icon: data.temperatureLow.icon || data.temperatureHigh.icon || 'mdi:thermometer',
+      icon_color: data.temperatureLow?.icon_color || data.temperatureHigh?.icon_color,
       value: `${data.temperatureLow.value} / ${data.temperatureHigh.value}`,
       unit: data.temperatureLow.unit || data.temperatureHigh.unit,
+      label: data.temperatureLow?.label || 'Min / Max',
     });
   }
 
-  const keys: (keyof WeatherData)[] = [
+  const keys: ('humidity' | 'pressure' | 'visibility')[] = [
     'humidity',
     'pressure',
     'visibility',
@@ -120,22 +134,14 @@ const prepareWeatherPresent = (data: WeatherData, formatterLocale: string) => {
   if (data.windSpeed?.value !== undefined || data.windBearing?.value !== undefined) {
     allItems.push({
       icon: data.windSpeed?.icon || 'mdi:weather-windy',
+      icon_color: data.windSpeed?.icon_color,
       value: `${data.windBearing?.value ? `${data.windBearing.value} ` : ''}${data.windSpeed?.value ?? ''}`,
       unit: data.windSpeed?.unit ? `${data.windSpeed.unit}` : '',
+      label: data.windSpeed?.label,
     });
   }
 
-  // Sun times
-  ['nextRising', 'nextSetting'].forEach((k) => {
-    const item = data[k as keyof WeatherData];
-    if (item?.value) {
-      allItems.push({
-        icon: item.icon,
-        value: item.value,
-        unit: '',
-      });
-    }
-  });
+  // Sun times are rendered as a dedicated bar, not as chips
 
   return allItems;
 };
@@ -164,43 +170,96 @@ const prepareAirQuality = (data: iAirQualityData) => {
   return allItems;
 };
 
-export const renderWeatherPresent = (data: WeatherData | Record<string, iRenderDataItem>, formatterLocale: string) => {
-  const allItems: iRenderDataItem[] = [];
+/* Chip singolo */
 
-  const buildBlockLeft = (item: iRenderDataItem) => html`
-    <span class="present-value-block">
-      <ha-icon icon="${item.icon}" style=${item.icon_color ? `color: ${item.icon_color}` : ''}></ha-icon>
-      ${item.value}${item.unit ? html`<span class="present-unit">${item.unit}</span>` : ''}
-    </span>
-  `;
+const buildChip = (item: iRenderDataItem) => html`
+  <div class="present-chip">
+    <ha-icon
+      class="present-chip__icon"
+      icon="${item.icon}"
+      style=${item.icon_color ? `color: ${item.icon_color}` : ''}
+    ></ha-icon>
+    <div class="present-chip__content">
+      <span class="present-chip__value">
+        ${item.value}${item.unit ? html`<span class="present-chip__unit"> ${item.unit}</span>` : nothing}
+      </span>
+      ${item.label ? html`<span class="present-chip__label">${item.label}</span>` : nothing}
+    </div>
+  </div>
+`;
 
-  const buildBlockRight = (item: iRenderDataItem) => html`
-    <span class="present-value-block">
-      ${item.value}${item.unit ? html`<span class="present-unit">${item.unit}</span>` : ''}
-      <ha-icon icon="${item.icon}" style=${item.icon_color ? `color: ${item.icon_color}` : ''}></ha-icon>
-    </span>
-  `;
+/* Render pubblico */
 
-  allItems.push(...prepareWeatherPresent(data as WeatherData, formatterLocale), ...prepareAirQuality(data as iAirQualityData));
+export const renderWeatherPresent = (
+  data: WeatherData | Record<string, iRenderDataItem>,
+  formatterLocale: string,
+  sectionLabel?: string,
+) => {
+  const allItems: iRenderDataItem[] = [
+    ...prepareWeatherPresent(data as WeatherData, formatterLocale),
+    ...prepareAirQuality(data as iAirQualityData),
+  ].filter((i) => i.value !== undefined);
 
-  const rows = [];
-  for (let i = 0; i < allItems.length; i += 2) {
-    const left = allItems[i];
-    const right = allItems[i + 1];
+  const sunData = data as WeatherData;
 
-    if ((left && left.value) || (right && right.value)) {
-      rows.push(html`
-        <div class="present-row">
-          <div class="present-left">${left ? buildBlockLeft(left) : html``}</div>
-          <div class="present-right">${right ? buildBlockRight(right) : html``}</div>
-        </div>
-      `);
+  const computeSunProgress = (riseISO?: string, setISO?: string): number | undefined => {
+    if (!riseISO || !setISO) return undefined;
+    const now = Date.now();
+    const riseTs = new Date(riseISO).getTime();
+    const setTs = new Date(setISO).getTime();
+    if (Number.isNaN(riseTs) || Number.isNaN(setTs)) return undefined;
+
+    if (setTs < riseTs) {
+      const todayRise = riseTs - 24 * 60 * 60 * 1000;
+      const range = setTs - todayRise;
+      if (range <= 0) return undefined;
+      return Math.min(1, Math.max(0, (now - todayRise) / range));
     }
+
+    return 1;
+  };
+
+  const sunProgress = computeSunProgress(sunData.nextRisingISO, sunData.nextSettingISO);
+  const hasSunBar = sunData.nextRising?.value !== undefined
+    && sunData.nextSetting?.value !== undefined;
+
+  const sunBar = hasSunBar ? html`
+    <div class="sun-bar-row">
+      <ha-icon
+        class="sun-bar-icon sun-bar-icon--rise"
+        icon="${sunData.nextRising!.icon || 'mdi:weather-sunset-up'}"
+      ></ha-icon>
+      <span class="sun-bar-time">${sunData.nextRising!.value}</span>
+      <div class="sun-bar-track">
+        ${sunProgress !== undefined ? html`
+          <div class="sun-bar-fill" style="width: ${(sunProgress * 100).toFixed(1)}%"></div>
+        ` : nothing}
+      </div>
+      <span class="sun-bar-time">${sunData.nextSetting!.value}</span>
+      <ha-icon
+        class="sun-bar-icon sun-bar-icon--set"
+        icon="${sunData.nextSetting!.icon || 'mdi:weather-sunset-down'}"
+      ></ha-icon>
+    </div>
+  ` : nothing;
+
+  if (allItems.length === 0 && !hasSunBar) return html``;
+
+  const grid = html`
+    ${sunBar}
+    <div class="present-chip-grid">
+      ${allItems.map(buildChip)}
+    </div>
+  `;
+
+  if (sectionLabel) {
+    return html`
+      <div class="cwc-section">
+        ${renderSectionHeader(sectionLabel)}
+        ${grid}
+      </div>
+    `;
   }
 
-  return rows.length > 0 ? html`
-    <div class="present-grid-container">
-      ${rows}
-    </div>
-  ` : html``;
+  return grid;
 };

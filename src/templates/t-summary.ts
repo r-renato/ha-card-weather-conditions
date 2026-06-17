@@ -16,53 +16,8 @@ export interface WeatherSummaryInterface {
   lightningStrikes?: number;
 }
 
-// const renderLightningFlashZigzag = (xPercent: number, yPercent: number, segments: number = 7) => {
-//   const width = 10; // larghezza in pixel della viewport SVG
-//   const height = 20 + Math.random() * 50;
+/* ── Lightning (invariato) ──────────────────────────────────── */
 
-//   const points = [];
-//   let x = width / 2;
-//   let y = 0;
-
-//   for (let i = 0; i < segments; i += 1) {
-//     // x += (Math.random() * width - width / 2);
-//     // y += height / segments;
-//     x += (Math.random() * width * 1.5 - width * 0.75); // maggiore zigzag
-//     y += (height / segments) * (0.7 + Math.random() * 0.6); // lunghezza variabile
-//     points.push(`${x},${y}`);
-//   }
-
-//   const pathD = `M${width / 2},0 ${points.map((p) => `L${p}`).join(' ')}`;
-
-//   const delay = Math.random() * 15.5;
-//   const duration = 0.2 + Math.random() * 0.3 * 33;
-
-//   return html`
-//     <svg
-//       class="lightning-svg"
-//       style="
-//         top: ${yPercent}%;
-//         left: ${xPercent}%;
-//         animation-delay: ${delay}s;
-//         animation-duration: ${duration}s;
-//       "
-//       width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-//       <path d="${pathD}" stroke="white" stroke-width="1.5" fill="none" />
-//     </svg>
-//   `;
-// };
-
-// const renderLightningFlashes = (azimuth: number, distance: number, strikes: number) => {
-//   const flashes = [];
-//   for (let i = 0; i < strikes; i += 1) {
-//     const x = Math.random() * 100;
-//     const y = Math.random() * 20;
-//     flashes.push(renderLightningFlashZigzag(x, y));
-//   }
-//   return flashes;
-// };
-
-// Genera punti deterministici da un seed per evitare re-render instabili
 const seededRandom = (seed: number) => {
   const x = Math.sin(seed + 1) * 10000;
   return x - Math.floor(x);
@@ -80,7 +35,6 @@ const renderLightningFlashZigzag = (
   const svgHeight = 40 + r(0) * 60;
   const cx = svgWidth / 2;
 
-  // Percorso principale
   const points: string[] = [];
   let x = cx;
   let y = 0;
@@ -91,7 +45,6 @@ const renderLightningFlashZigzag = (
   }
   const mainPath = `M${cx},0 ${points.map((p) => `L${p}`).join(' ')}`;
 
-  // Ramificazione secondaria (parte a metà del percorso)
   const branchStart = points[Math.floor(segments / 2)];
   const [bx, by] = branchStart.split(',').map(Number);
   const branchPoints: string[] = [];
@@ -105,8 +58,7 @@ const renderLightningFlashZigzag = (
   const branchPath = `M${bx},${by} ${branchPoints.map((p) => `L${p}`).join(' ')}`;
 
   const delay = r(30) * 12;
-  const duration = 0.15 + r(31) * 0.35; // 0.15s–0.5s, bug precedenza risolto
-
+  const duration = 0.15 + r(31) * 0.35;
   const filterId = `glow-${seed}`;
 
   return html`
@@ -126,13 +78,10 @@ const renderLightningFlashZigzag = (
     >
       <defs>
         <filter id="${filterId}" x="-100%" y="-10%" width="300%" height="120%">
-          <!-- alone esterno morbido -->
           <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
-
-      <!-- Alone (stroke largo, bassa opacità) -->
       <path
         d="${mainPath}"
         stroke="#7090ff"
@@ -141,7 +90,6 @@ const renderLightningFlashZigzag = (
         opacity="0.35"
         filter="url(#${filterId})"
       />
-      <!-- Nucleo principale -->
       <path
         d="${mainPath}"
         stroke="#dce8ff"
@@ -150,7 +98,6 @@ const renderLightningFlashZigzag = (
         stroke-linecap="round"
         stroke-linejoin="round"
       />
-      <!-- Ramificazione secondaria, più sottile e semitrasparente -->
       <path
         d="${branchPath}"
         stroke="#a0b8ff"
@@ -164,11 +111,9 @@ const renderLightningFlashZigzag = (
 };
 
 const renderLightningFlashes = (azimuth: number, distance: number, strikes: number) => {
-  // Usa azimuth per concentrare i lampi in una direzione (0°=N, 90°=E, ecc.)
   const azRad = (azimuth * Math.PI) / 180;
-  const centerX = 50 + Math.cos(azRad) * 30; // sposta il centro nella direzione
-  const spread = Math.max(15, 50 - distance * 2); // più vicino = più concentrato
-
+  const centerX = 50 + Math.cos(azRad) * 30;
+  const spread = Math.max(15, 50 - distance * 2);
   const cappedStrikes = Math.min(strikes, 12);
 
   return Array.from({ length: cappedStrikes }, (_, i) => {
@@ -178,6 +123,8 @@ const renderLightningFlashes = (azimuth: number, distance: number, strikes: numb
     return renderLightningFlashZigzag(x, y, seed);
   });
 };
+
+/* Hero summary */
 
 const renderWeatherSummary = ({
   title,
@@ -189,64 +136,65 @@ const renderWeatherSummary = ({
   temperatureUnit,
   feelsLikeTerm,
   temperatureFeelsLike,
-  temperatureFeelsLikeIcon,
   lightningAzimuth,
   lightningDistance,
   lightningStrikes,
 }: WeatherSummaryInterface) => {
-  // const lightningAzimuth = 0; // Replace with actual data
-  // const lightningDistanceKm = 0; // Replace with actual data
-  // const lightningStrikes = 0; // Replace with actual data
+  if (!conditionIcon && !temperature && !moonText) return html``;
 
-  const showLightning =
-  lightningStrikes > 0 &&
-  typeof lightningAzimuth === 'number' &&
-  typeof lightningDistance === 'number';
+  const showLightning = lightningStrikes > 0
+    && typeof lightningAzimuth === 'number'
+    && typeof lightningDistance === 'number';
 
-  if (conditionIcon || moonText || temperature) {
-    return html`
+  return html`
     <div class="summary-wrapper">
       ${showLightning ? html`
         <div class="lightning-background">
           ${renderLightningFlashes(lightningAzimuth!, lightningDistance!, lightningStrikes)}
         </div>
       ` : nothing}
-      <div class="summary-grid-container">
+
+      <div class="summary-hero">
+
+        <!-- Colonna icona meteo -->
         ${conditionIcon ? html`
-          <div class="summary-col-left">
-            <img class="weather-condition-icon" src="${conditionIcon}" alt="${conditionText}" />
+          <div class="summary-icon-col">
+            <img
+              class="weather-condition-icon"
+              src="${conditionIcon}"
+              alt="${conditionText}"
+            />
           </div>
-        ` : nothing}
-        ${title ? html`
-          <div class="summary-top-right">
-            <span class="weather-city-name">${title}</span>
-          </div>    
-        ` : nothing}
-        ${moonText ? html`
-          <div class="summary-bottom-right-left">
-            <div class="moon-row">
+        ` : html`<div></div>`}
+
+        <!-- Colonna meta: localita + luna -->
+        <div class="summary-meta-col">
+          ${title ? html`
+            <div class="summary-location">${title}</div>
+          ` : nothing}
+          ${moonText ? html`
+            <div class="summary-moon">
               <span class="summary-moon-icon">${moonIcon}</span>
               <span class="summary-moon-text">${moonText}</span>
-            </div>  
-          </div>   
-        ` : nothing}
-        ${temperature ? html`
-          <div class="summary-bottom-right-right">
-            <div class="temperature-block">
-              <div>
-                <span class="temperature">${temperature}</span>
-                <span class="temp-unit">${temperatureUnit}</span>
-              </div>
-              ${temperatureFeelsLike && html`<div class="feels-like">${feelsLikeTerm} <div>${temperatureFeelsLike} ${temperatureUnit}</div></div>`}
-            </div>  
-          </div>
+            </div>
           ` : nothing}
+        </div>
+
+        <!-- Colonna temperatura -->
+        ${temperature ? html`
+          <div class="summary-temp-col">
+            <div class="summary-temp-value">
+              <span class="temperature">${temperature}</span><span class="temp-unit">${temperatureUnit}</span>
+            </div>
+            ${temperatureFeelsLike ? html`
+              <div class="summary-feels-like">${feelsLikeTerm} ${temperatureFeelsLike} ${temperatureUnit}</div>
+            ` : nothing}
+          </div>
+        ` : nothing}
+
       </div>
     </div>
-    `;
-  }
-
-  return html``;
+  `;
 };
 
 export default renderWeatherSummary;
