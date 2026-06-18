@@ -97,6 +97,8 @@ export abstract class LovelaceBaseElement extends LitElement implements iLovelac
 
   protected _hasCamera: boolean = false;
 
+  protected _hasWindMap: boolean = false;
+
   public override connectedCallback(): void {
     super.connectedCallback();
     if (this._pendingConfig && !this._config) {
@@ -197,6 +199,7 @@ export abstract class LovelaceBaseElement extends LitElement implements iLovelac
     if (this._hasPollen) size += 2;
     if (this._hasAirQuality) size += 2;
     if (this._hasCamera) size += 3;
+    if (this._hasWindMap) size += 3;
     if (this._hasMetealarm || this._hasDPCalarm) size += 1;
     return Math.max(size, 1);
   }
@@ -244,6 +247,7 @@ export abstract class LovelaceBaseElement extends LitElement implements iLovelac
     this._hasPollen = config.pollen && Array.isArray(config.pollen.entities) && config.pollen.entities.length > 0;
     this._hasUltraviolet = !!config.ultraviolet;
     this._hasCamera = !!config.camera;
+    this._hasWindMap = !!config.wind_map?.enabled;
   }
 
   private _setupIcons(iconsModel?: string): void {

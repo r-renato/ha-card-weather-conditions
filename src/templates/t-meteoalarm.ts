@@ -45,7 +45,10 @@ const renderMeteoDPCalarm = (
           ` : nothing}
         </div>
         ${hasSeverity ? html`
-          <span class="alarm-banner__badge ${modifier}__badge">${data.severity}</span>
+          <span
+            class="alarm-banner__badge ${modifier}__badge"
+            title="Livello di criticità"
+          >${data.severity}</span>
         ` : nothing}
       </div>
     `;

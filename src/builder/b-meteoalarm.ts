@@ -96,7 +96,7 @@ const buildDPCAlarmData = (
       const { level, info, icon } = entity.attributes;
       fpcData[key] = {
         event: info,
-        severity: level,
+        severity: level !== undefined && level !== null ? `Liv. ${level}` : undefined,
         icon,
         icon_color: eventIconColor[level],
         datetime: new Date().toLocaleDateString(resolvedLocale.locale, {

@@ -373,13 +373,25 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
   const legend = html`
     <div class="fc-marine-legend">
       <span class="fc-marine-legend-item">
-        <span class="fc-marine-legend-dot" style="background: #10b981"></span>Calmo
+        <span
+          class="fc-marine-legend-dot"
+          style="background: #10b981"
+          title="Onda max inferiore a 1,0 m"
+        ></span>Calmo
       </span>
       <span class="fc-marine-legend-item">
-        <span class="fc-marine-legend-dot" style="background: #f59e0b"></span>Mosso
+        <span
+          class="fc-marine-legend-dot"
+          style="background: #f59e0b"
+          title="Onda max 1,0–1,8 m, oppure swell ≥ 0,8 m o mare vento ≥ 0,6 m"
+        ></span>Mosso
       </span>
       <span class="fc-marine-legend-item">
-        <span class="fc-marine-legend-dot" style="background: #ef4444"></span>Agitato
+        <span
+          class="fc-marine-legend-dot"
+          style="background: #ef4444"
+          title="Onda max 1,8 m o superiore, oppure swell ≥ 1,5 m con mare vento ≥ 0,8 m"
+        ></span>Agitato
       </span>
       <span class="fc-marine-legend-item">
         <span class="fc-marine-legend-line fc-marine-legend-line--wave"></span>Onda max
@@ -392,6 +404,9 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
         <span class="fc-marine-legend-line fc-marine-legend-line--windwave"></span>
         <ha-icon class="fc-marine-legend-icon" icon="mdi:weather-windy"></ha-icon>Mare vento
       </span>
+      <div class="fc-marine-legend-note">
+        Calmo &lt;1,0 m · Mosso 1,0–1,8 m · Agitato ≥1,8 m (combinato con swell e mare vento)
+      </div>
     </div>
   `;
 

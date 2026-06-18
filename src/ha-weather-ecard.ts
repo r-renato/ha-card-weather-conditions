@@ -12,6 +12,7 @@ import buildWeatherForecast from './builder/b-weather-forecast';
 import buildCamera from './builder/b-camera';
 import buildAirQuality from './builder/b-airquality';
 import buildMeteoDPCalarm from './builder/b-meteoalarm';
+import buildWindMap from './builder/b-wind-map';
 
 declare global {
   interface Window {
@@ -53,6 +54,7 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     let pollen = html``;
     let airQuality = html``;
     let camera = html``;
+    let windMap = html``;
 
     const getWeatherForecast = (mode: 0 | 1 | 2 | 3) => buildWeatherForecast(
       this.hass,
@@ -129,6 +131,15 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
       camera = buildCamera(this.hass, this._terms, this._handlePopup.bind(this), this._config.camera);
     }
 
+    if (this._hasWindMap) {
+      windMap = buildWindMap(
+        this.hass,
+        this._terms.windDirections,
+        this._config.wind_map,
+        this._config?.weather?.present,
+      );
+    }
+
     return html`
     ${summary}
     ${present}
@@ -140,7 +151,8 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     ${pollen}
     ${ultraviolet}
     ${airQuality}
-    ${camera}`;
+    ${camera}
+    ${windMap}`;
   }
 
   /**

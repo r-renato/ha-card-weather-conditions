@@ -1,5 +1,5 @@
-import { HomeAssistant } from 'custom-card-helpers';
-import { iLocaleOverride, NumberFormat } from './config-schema';
+import { HomeAssistant, NumberFormat } from 'custom-card-helpers';
+import { iLocaleOverride } from './config-schema';
 
 export const cwcLocale: Record<string, number> = {
   en: 0,
@@ -65,7 +65,9 @@ export function resolveLocale(
   hass: HomeAssistant | undefined,
   cardConfig: { language?: string; timezone?: string; number_format?: NumberFormat } = {},
 ): ResolvedLocale {
-  const hassLocale = (hass as unknown as { locale?: HassLocale } | undefined)?.locale;
+  // const hassLocale = (hass as unknown as { locale?: HassLocale } | undefined)?.locale;
+  const hassLocale = hass?.locale;
+  const hassConfig = hass?.config;
 
   const language = (
     cardConfig.language?.toLowerCase()
@@ -77,22 +79,29 @@ export function resolveLocale(
   let timezone: string;
   if (cardConfig.timezone) {
     timezone = cardConfig.timezone;
-  } else if (hassLocale?.time_zone === 'local') {
-    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } else if (hassConfig?.time_zone) {
+    timezone = hassConfig.time_zone;
   } else {
-    timezone = (hass?.config as unknown as { time_zone?: string } | undefined)?.time_zone ?? 'UTC';
+    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
+
+  console.info(`[hassLocale] language: ${hassLocale?.language}, timezone: ${hassConfig?.time_zone}, number_format: ${hassLocale?.number_format}`);
+   console.info(`[cardLocale] language: ${cardConfig?.language}, timezone: ${cardConfig?.timezone}, number_format: ${cardConfig?.number_format}`);
 
   const numberFormat = cardConfig.number_format ?? hassLocale?.number_format;
   const locale = localeMap[language] ?? language;
   const formatterLocale = formatterLocaleFor(numberFormat, locale);
 
-  return {
+  const resolved: ResolvedLocale = {
     language,
     locale,
     timezone,
     formatterLocale,
   };
+
+  console.info(`[resolveLocale] language: ${language}, locale: ${locale}, timezone: ${timezone}, formatterLocale: ${formatterLocale}`);
+  
+  return resolved;
 }
 
 export type LocaleInfo = {

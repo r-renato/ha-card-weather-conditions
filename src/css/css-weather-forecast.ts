@@ -79,6 +79,7 @@ const weatherForecastStyle = css`
 .fc-marine-component {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 3px;
   font-size: 9px;
   color: var(--cwc-text-secondary);
@@ -210,6 +211,14 @@ const weatherForecastStyle = css`
 .fc-marine-legend-icon {
   --mdc-icon-size: 10px;
   color: var(--cwc-text-muted);
+}
+
+.fc-marine-legend-note {
+  width: 100%;
+  font-size: 8px;
+  color: var(--cwc-text-muted);
+  opacity: 0.8;
+  margin-top: 2px;
 }
 
 .fc-daily-grid {

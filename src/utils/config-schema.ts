@@ -84,6 +84,24 @@ export interface iDPCAlert {
   hydrogeological?: string;
 }
 
+export type WindMapTileStyle = 'standard' | 'cyclosm' | 'humanitarian' | 'cycle' | 'transport' | 'topo';
+
+export interface iWindMap {
+  enabled?: boolean; // Opt-in esplicito: la sezione divulga le coordinate al tile provider, di default è disattivata.
+  latitude?: number; // Se omessa, fallback a hass.config.latitude (posizione "Home" di HA).
+  longitude?: number; // Se omessa, fallback a hass.config.longitude.
+  zoom?: number; // Default 12.
+  tile_style?: WindMapTileStyle; // Default 'standard'. 'cycle'/'transport'/'topo' richiedono tile_api_key.
+  tile_api_key?: string; // API key personale del provider, necessaria solo per 'cycle' | 'transport' | 'topo'.
+  tile_url?: string; // Override completo del template tile (ha priorità su tile_style), es. 'https://{s}.example.com/{z}/{x}/{y}.png'.
+  tile_attribution?: string; // Testo di attribuzione da mostrare quando si usa tile_url personalizzato.
+  brightness?: number; // Componente brightness() del filtro CSS (0-2). Default: 0.65 (tema scuro) / 1 (tema chiaro o dark_invert attivo).
+  dark_invert?: boolean; // Applica invert(90%) hue-rotate(180deg) per un tema scuro su tile chiare, combinato con brightness.
+  tile_filter?: string; // Override completo del filtro CSS (ha priorità su brightness/dark_invert), es. 'grayscale(0.3) contrast(1.1)'.
+  wind_bearing?: string; // Entity id dei gradi vento; se omesso riusa weather.present.wind_bearing.
+  wind_speed?: string; // Entity id della velocità vento; se omesso riusa weather.present.wind_speed.
+}
+
 export interface iWeather {
   name?: string; // location name, in summary
   sun?: string;
@@ -158,6 +176,8 @@ export interface iCardConfig {
   airquality?: iAirQuality ;
 
   camera?: string;
+
+  wind_map?: iWindMap;
 
   // display: string[]
 
