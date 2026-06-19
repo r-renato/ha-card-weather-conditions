@@ -63,6 +63,7 @@ export abstract class LovelaceBaseElement extends LitElement implements iLovelac
     locale: 'en-US',
     timezone: 'UTC',
     formatterLocale: 'en-US',
+    timeFormat: '24h',
   };
 
   protected _iconsConfig!: iIconsConfig;
@@ -131,7 +132,8 @@ export abstract class LovelaceBaseElement extends LitElement implements iLovelac
       const localeChanged = (
         langChanged ||
         previous.timezone !== next.timezone ||
-        previous.formatterLocale !== next.formatterLocale
+        previous.formatterLocale !== next.formatterLocale ||
+        previous.timeFormat !== next.timeFormat
       );
       if (localeChanged) {
         this._resolvedLocale = next;

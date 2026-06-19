@@ -2,6 +2,7 @@ import { cwcBuienradarDayIcons, cwcBuienradarNightIcons } from '../iconmodels/im
 import { cwcClimacellDayIcons, cwcClimacellNightIcons } from '../iconmodels/im-climacell';
 import { cwcDarkskyDayIcons, cwcDarkskyNightIcons } from '../iconmodels/im-darksky';
 import { cwcDefaultHassDayIcons, cwcDefaultHassNightIcons } from '../iconmodels/im-hass';
+import { cwcMetnoDayIcons, cwcMetnoNightIcons } from '../iconmodels/im-metno';
 import { cwcOpenWeatherMapDayIcons, cwcOpenWeatherMapNightIcons } from '../iconmodels/im-openweathermap';
 import { cwcDaytimePirateWeatherIcons, cwcNightlyPirateWeaterIcons } from '../iconmodels/im-pirateweather';
 
@@ -41,6 +42,11 @@ export const iconsModels: Record<string, IconsConfigResult> = {
     iconsModel: 'defaulthass',
     iconsDay: cwcDefaultHassDayIcons,
     iconsNight: cwcDefaultHassNightIcons,
+  },
+  metno: {
+    iconsModel: 'metno',
+    iconsDay: cwcMetnoDayIcons,
+    iconsNight: cwcMetnoNightIcons,
   },
 };
 

@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0] 2026-06-19
+### Added
+- Lunar phase icons for the Southern Hemisphere: new weather.hemisphere option (north | south); if omitted, the hemisphere is automatically inferred from hass.config.latitude.
+- New icons_model: metno, mapped to MET Norway’s official symbol_code values (api.met.no); requires an entity/sensor that exposes the raw symbol_code, since the standard met.no weather entity in HA only exposes normalized conditions.
+
+### Fixed
+- All times shown by the card (sun bar, hourly/daily/marine forecasts) now follow the user's Home Assistant 12h/24h clock preference (`hass.locale.time_format`) instead of being derived from the card's display language. Previously, users in 24h-clock countries running the card in English (or any unsupported language) would see times forced into 12h AM/PM format.
+
 ## [3.0.1] 2026-06-19
 ### Fixed
 - Minor bug fixing
