@@ -24,7 +24,7 @@
 - MeteoAlarm (Early Warnings for Europe) and Dipartimento Protezione Civile (Italy) alerts
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-overview.png" width="100%" height="auto" alt="Home Assistant lovelace card">
+<img src="./md.images/ha-card-weather-condition-overview.png" width="100%" height="auto" alt="Home Assistant lovelace card">
 </p>
 
 ---
