@@ -347,7 +347,7 @@ weather:
 Detailed current conditions: temperature range, humidity, wind, precipitation, and more.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-present.png" width="40%" height="auto" alt="Present layer">
+<img src="./md.images/ha-card-weather-condition-present.png" width="40%" height="auto" alt="Present layer">
 </p>
 
 ```yaml
@@ -377,7 +377,7 @@ weather:
 Multi-day overview with high/low temperatures, precipitation probability, and condition icons.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-daily-forecast.png" width="40%" height="auto" alt="Daily forecast layer">
+<img src="./md.images/ha-card-weather-condition-daily-forecast.png" width="40%" height="auto" alt="Daily forecast layer">
 </p>
 
 ```yaml
@@ -418,7 +418,7 @@ weather:
 Hour-by-hour detail: temperature, feels-like, precipitation, and wind.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-hourly-forecast.png" width="40%" height="auto" alt="Hourly forecast layer">
+<img src="./md.images/ha-card-weather-condition-hourly-forecast.png" width="40%" height="auto" alt="Hourly forecast layer">
 </p>
 
 ```yaml
@@ -469,7 +469,7 @@ weather:
 Daily marine conditions: wave height, dominant wave direction, swell and wind waves, and their periods.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-marine-daily-forecast.png" width="40%" height="auto" alt="Marine daily forecast layer">
+<img src="./md.images/ha-card-weather-condition-marine-daily-forecast.png" width="40%" height="auto" alt="Marine daily forecast layer">
 </p>
 
 ```yaml
@@ -562,7 +562,7 @@ weather:
 Weather alerts from MeteoAlarm and the Italian Civil Protection Department (DPC).
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-alarms.png" width="40%" height="auto" alt="Alerts layer">
+<img src="./md.images/ha-card-weather-condition-alarms.png" width="40%" height="auto" alt="Alerts layer">
 </p>
 
 ```yaml
@@ -582,7 +582,7 @@ weather:
 UV index, ozone concentration, protection window, and skin-type-specific safe exposure times.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-ultraviolet.png" width="40%" height="auto" alt="Ultraviolet layer">
+<img src="./md.images/ha-card-weather-condition-ultraviolet.png" width="40%" height="auto" alt="Ultraviolet layer">
 </p>
 
 ```yaml
@@ -607,7 +607,7 @@ ultraviolet:
 Airborne pollen levels for tree, weed, and grass types.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-pollen.png" width="40%" height="auto" alt="Pollen layer">
+<img src="./md.images/ha-card-weather-condition-pollen.png" width="40%" height="auto" alt="Pollen layer">
 </p>
 
 ```yaml
@@ -636,7 +636,7 @@ pollen:
 PM2.5, PM10, ozone, carbon monoxide, and EPA air quality index.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-air-quality.png" width="40%" height="auto" alt="Air quality layer">
+<img src="./md.images/ha-card-weather-condition-air-quality.png" width="40%" height="auto" alt="Air quality layer">
 </p>
 
 ```yaml
