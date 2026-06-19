@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Full English-key translation system for previously hardcoded Italian UI strings (section titles, present-conditions labels, air quality levels, alert day labels, marine forecast tooltips and legend); translated across all 13 supported languages
 
 ### Changed
+- Complete UI restyling
 - Renamed marine forecast label "Mare vento" / "Wind wave" wording for clarity
 - Marine daily forecast Y axis now scales dynamically down to 0.5 m instead of a fixed 1.0 m minimum, improving readability when wave heights are small
 - Marine daily forecast legend split into two rows: sea state (Calm/Rough/Stormy) on the first row, chart series (Max wave/Swell/Wind wave) on the second
