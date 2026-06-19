@@ -1,149 +1,137 @@
 /* eslint-disable camelcase */
 import { HomeAssistant } from 'custom-card-helpers/dist';
+import { ResolvedLocale, translate } from '../utils/locale';
 import {
   getEntityNumericValue,
   getEntityRawValue,
   getEntityUnit,
-  getLocaleInfo,
   getWindDirections,
-} from '../utils/helper';
-// import { getSensorUnit } from '../utils/helper-render';
+} from '../utils/entity';
 import { renderWeatherPresent } from '../templates/t-present';
-import { iPresentData } from '../utils/config-schema';
+import { iPresentData, SunTimeFormat } from '../utils/config-schema';
 import { iTerms } from '../base/lovelace-base';
 
-const present = (hass: HomeAssistant, language: string, cwcLocWindDirections, presentData: iPresentData, sunId: string) => {
-  const localeInfo = getLocaleInfo(language);
+const present = (
+  hass: HomeAssistant,
+  resolvedLocale: ResolvedLocale,
+  cwcLocWindDirections: Record<string, string>,
+  presentData: iPresentData,
+  sunId: string,
+  sunTimeFormat: SunTimeFormat = 'hh_mm',
+  wordDict: Record<string, string> = {},
+) => {
+  const { locale, timezone, formatterLocale } = resolvedLocale;
   const sunEntity = sunId ? hass.states[sunId] : undefined;
   const { next_rising, next_setting } = sunEntity?.attributes ?? {};
 
-  const next_rising_formatted = next_rising ? new Date(next_rising).toLocaleTimeString(localeInfo.locale, {
+  const fmtTime = (iso: string) => new Date(iso).toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
+    ...(sunTimeFormat === 'hh_mm_ss' ? { second: '2-digit' as const } : {}),
     hour12: false,
-    timeZone: localeInfo.timezone,
-  }) : undefined;
-
-  const next_setting_formatted = next_setting ? new Date(next_setting).toLocaleTimeString(localeInfo.locale, {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-    timeZone: localeInfo.timezone,
-  }) : undefined;
+    timeZone: timezone,
+  });
 
   return {
-    nextRising: { value: next_rising_formatted, icon: 'mdi:weather-sunset-up' },
-    nextSetting: { value: next_setting_formatted, icon: 'mdi:weather-sunset-down' },
-
+    nextRising: {
+      value: next_rising ? fmtTime(next_rising) : undefined,
+      icon: 'mdi:weather-sunset-up',
+      icon_color: '#fb923c',
+      label: translate('Sunrise', wordDict),
+    },
+    nextSetting: {
+      value: next_setting ? fmtTime(next_setting) : undefined,
+      icon: 'mdi:weather-sunset-down',
+      icon_color: '#f97316',
+      label: translate('Sunset', wordDict),
+    },
+    nextRisingISO: next_rising || undefined,
+    nextSettingISO: next_setting || undefined,
     lightningStrikes: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.lightning_strikes, hass, lang: language, decimals: 0 }),
-      // value: 45,
+      value: getEntityNumericValue({ entityId: presentData.lightning_strikes, hass, formatterLocale, decimals: 0 }),
       unit: null,
       icon: 'mdi:lightning-bolt',
+      icon_color: '#fbbf24',
+      label: translate('Lightning / Distance', wordDict),
     },
     lightningDistance: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.lightning_distance, hass, lang: language, decimals: 1 }),
+      value: getEntityNumericValue({ entityId: presentData.lightning_distance, hass, formatterLocale, decimals: 1 }),
       unit: getEntityUnit(hass, presentData.lightning_distance),
       icon: 'mdi:lightning-bolt',
     },
     precipitationIntensity: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.precipitation_intensity, hass, lang: language, decimals: 2 }),
+      value: getEntityNumericValue({ entityId: presentData.precipitation_intensity, hass, formatterLocale, decimals: 2 }),
       unit: getEntityUnit(hass, presentData.precipitation_intensity),
       icon: 'mdi:weather-rainy',
+      icon_color: '#38bdf8',
+      label: translate('Precipitation', wordDict),
     },
     precipitationProbability: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.precipitation_probability, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.precipitation_probability, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.precipitation_probability),
       icon: 'mdi:weather-rainy',
     },
     precipitationAccumulation: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.precipitation_accumulation, hass, lang: language, decimals: 1 }),
+      value: getEntityNumericValue({ entityId: presentData.precipitation_accumulation, hass, formatterLocale, decimals: 1 }),
       unit: getEntityUnit(hass, presentData.precipitation_accumulation),
       icon: 'mdi:weather-rainy',
     },
     humidity: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.humidity, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.humidity, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.humidity),
       icon: 'mdi:water-percent',
+      icon_color: '#60a5fa',
+      label: translate('Humidity', wordDict),
     },
-    windBearing: { value: getWindDirections(getEntityRawValue(hass, presentData.wind_bearing), cwcLocWindDirections) },
+    windBearing: {
+      value: getWindDirections(getEntityRawValue(hass, presentData.wind_bearing), cwcLocWindDirections),
+    },
     windSpeed: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.wind_speed, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.wind_speed, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.wind_speed),
       icon: 'mdi:weather-windy',
+      icon_color: '#7dd3fc',
+      label: translate('Wind', wordDict),
     },
     pressure: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.pressure, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.pressure, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.pressure),
       icon: 'mdi:gauge',
+      icon_color: '#a78bfa',
+      label: translate('Pressure', wordDict),
     },
     visibility: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.visibility, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.visibility, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.visibility),
       icon: 'mdi:weather-fog',
+      icon_color: '#94a3b8',
+      label: translate('Visibility', wordDict),
     },
     temperatureHigh: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.temperature_max, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.temperature_max, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.temperature_max),
       icon: 'mdi:thermometer',
     },
     temperatureLow: {
-      // eslint-disable-next-line object-curly-newline
-      value: getEntityNumericValue({ entityId: presentData.temperature_min, hass, lang: language, decimals: 0 }),
+      value: getEntityNumericValue({ entityId: presentData.temperature_min, hass, formatterLocale, decimals: 0 }),
       unit: getEntityUnit(hass, presentData.temperature_min),
       icon: 'mdi:thermometer',
+      icon_color: '#f87171',
+      label: 'Min / Max',
     },
   };
 };
 
-// const presentFromForecastData = (hass: HomeAssistant, language: string, forecastCfg: Forecast) => {
-//   const getValue = (obj: Record<string, string>) => {
-//     const [key, entityId] = Object.entries(obj)[0] ?? [];
-//     const state = entityId && hass.states[entityId]?.state;
-//     return state !== undefined ? formatNumber({ stringNumber: state, lang: language, fractionDigits: 0 }) : undefined;
-//   };
-
-//   const {
-//     temperature_high = {},
-//     temperature_low = {},
-//     precipitation_probability = {},
-//     precipitation_intensity = {},
-//   } = forecastCfg;
-
-//   return {
-//     temperatureHigh: { value: getValue(temperature_high), unit: getEntityUnit(hass, temperature_high), icon: 'mdi:thermometer' },
-//     temperatureLow: { value: getValue(temperature_low), unit: getEntityUnit(hass, 'temperature'), icon: 'mdi:thermometer' },
-//     precipitationProbability: { value: getValue(precipitation_probability), unit: '%', icon: 'mdi:weather-rainy' },
-//     precipitationIntensity: { value: getValue(precipitation_intensity), unit: getEntityUnit(hass, 'precipitation'), icon: 'mdi:weather-rainy' },
-//   };
-// };
-
 const buildWeatherPresent = (
   hass: HomeAssistant,
-  language: string,
+  resolvedLocale: ResolvedLocale,
   terms: iTerms,
   presentData: iPresentData,
   sunId: string,
-) => {
-  const lang = language || hass.selectedLanguage || hass.language;
-
-  const presentObj = present(hass, lang, terms.windDirections, presentData, sunId);
-  // const presentFromForecastObj = presentFromForecastData(hass, language, forecastCfg);
-
-  // console.debug('buildWeatherPresent', { presentObj });
-  return renderWeatherPresent({ ...presentObj }, lang);
-};
+  sunTimeFormat?: SunTimeFormat,
+) => renderWeatherPresent(
+  { ...present(hass, resolvedLocale, terms.windDirections, presentData, sunId, sunTimeFormat, terms.words) },
+  resolvedLocale.formatterLocale,
+);
 
 export default buildWeatherPresent;

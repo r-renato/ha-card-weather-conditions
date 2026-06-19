@@ -10,21 +10,6 @@ export const optConsoleParam3: string = 'color: black; background: white; font-w
 export const iconTemperature: string = 'mdi:thermometer';
 export const iconPrecipitation: string = 'mdi:weather-rainy';
 
-export const cwcLocale = {
-  en: 0,
-  it: 1,
-  nl: 2,
-  es: 3,
-  de: 4,
-  fr: 5,
-  'sr-latn': 6,
-  pt: 7,
-  da: 8,
-  'no-no': 9,
-  cs: 10,
-  ru: 11,
-};
-
 // 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌑
 export const cwcMoonPhaseIcons = {
   new_moon: '🌑',

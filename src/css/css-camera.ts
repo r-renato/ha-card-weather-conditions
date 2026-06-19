@@ -1,28 +1,38 @@
 import { css } from 'lit';
 
 const cameraStyle = css`
-  .camera-container {
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    align-items: stretch;
-  }
 
-  .camera-image {
-    aspect-ratio: 16 / 9;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.camera-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--cwc-space-xs);
+}
 
-  .camera-image > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.camera-header-icon {
+  --mdc-icon-size: 14px;
+  color: var(--cwc-text-muted);
+  flex-shrink: 0;
+}
+
+.camera-container {
+  width: 100%;
+  cursor: pointer;
+  border-radius: var(--cwc-radius-md);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.camera-container:hover .camera-image {
+  transform: scale(1.02);
+}
+
+.camera-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
 `;
 
 export default cameraStyle;

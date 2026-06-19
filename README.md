@@ -1,6 +1,6 @@
 # Weather Conditions Card
 
-`ha-card-weather-conditions` is a powerful and flexible Lovelace card for Home Assistant. It integrates a variety of weather-related data sources to present a comprehensive summary and forecast.
+`ha-card-weather-conditions` is a Lovelace card for Home Assistant that combines current conditions, forecasts, marine data, air quality, pollen, UV index and weather alerts into a single configurable card.
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 [![License][license-shield]](LICENSE)
@@ -18,11 +18,13 @@
 - Weather alerts (fire, storm, hydrogeological, hydraulic)
 - Lightning strike monitoring (azimuth, distance, strike count)
 - Meteogram and camera integration
-- Multilingual support
+- Wind direction map (OpenStreetMap tiles)
+- Multilingual support, with optional language/timezone/number-format overrides
+- Configurable module order and visibility
 - MeteoAlarm (Early Warnings for Europe) and Dipartimento Protezione Civile (Italy) alerts
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-overview.png" width="100%" height="auto" alt="Home Assistant lovelace card">
+<img src="./md.images/ha-card-weather-condition-overview.png" width="100%" height="auto" alt="Home Assistant lovelace card">
 </p>
 
 ---
@@ -47,16 +49,46 @@ resources:
 
 ### Top-level parameters
 
-| Parameter     | Type     | Required | Default | Description |
-| ------------- | -------- | -------- | ------- | ----------- |
-| `type`        | `string` | **Yes**  | —       | Must be `custom:ha-card-weather-conditions`. |
-| `name`        | `string` | No       | —       | Display name shown in the card header. |
-| `language`    | `string` | No       | `en`    | UI language. Supported values: `en`, `it`, `nl`, `es`, `de`, `fr`, `sr-latn`, `pt`, `da`, `no-NO`, `cs`, `ru`. |
-| `weather`     | `object` | No       | —       | Main weather data source. See [§1 `weather`](#1-weather-object). |
-| `ultraviolet` | `object` | No       | —       | UV index and skin exposure data. See [§2 `ultraviolet`](#2-ultraviolet-object). |
-| `pollen`      | `object` | No       | —       | Airborne pollen levels. See [§3 `pollen`](#3-pollen-object). |
-| `airquality`  | `object` | No       | —       | Air quality index and pollutants. See [§4 `airquality`](#4-airquality-object). |
-| `camera`      | `string` | No       | —       | Entity ID of a camera to embed in the card. |
+| Parameter      | Type       | Required | Default | Description |
+| -------------- | ---------- | -------- | ------- | ----------- |
+| `type`         | `string`   | **Yes**  | —       | Must be `custom:ha-card-weather-conditions`. |
+| `name`         | `string`   | No       | —       | Display name shown in the card header. |
+| `language`     | `string`   | No       | `en`    | UI language. Supported values: `en`, `it`, `nl`, `es`, `de`, `fr`, `sr-latn`, `pt`, `da`, `no-NO`, `cs`, `ru`. |
+| `timezone`     | `string`   | No       | —       | Time zone override (IANA name, e.g. `Europe/Rome`) used to format dates and times. If omitted, the time zone configured in Home Assistant is used. |
+| `number_format`| `string`   | No       | `language` | Number formatting style. See [Number Format](#number-format). |
+| `module_order` | `string[]` | No       | —       | Order and visibility of the card's modules. See [Module Order](#module-order). |
+| `weather`      | `object`   | **Yes**  | —       | Main weather data source. See [§1 `weather`](#1-weather-object). |
+| `ultraviolet`  | `object`   | No       | —       | UV index and skin exposure data. See [§2 `ultraviolet`](#2-ultraviolet-object). |
+| `pollen`       | `object`   | No       | —       | Airborne pollen levels. See [§3 `pollen`](#3-pollen-object). |
+| `airquality`   | `object`   | No       | —       | Air quality index and pollutants. See [§4 `airquality`](#4-airquality-object). |
+| `camera`       | `string`   | No       | —       | Entity ID of a camera to embed in the card. |
+| `wind_map`     | `object`   | No       | —       | Wind direction map. See [§5 `wind_map`](#5-wind_map-object). |
+
+#### Number Format
+
+`number_format` controls how decimal and thousands separators are rendered, independently of the selected `language`.
+
+| Value           | Description |
+| --------------- | ----------- |
+| `language`       | Use the separators conventionally associated with `language` (default). |
+| `comma_decimal`  | Decimal point as comma, thousands separator as dot (e.g. `1.234,5`). |
+| `decimal_comma`  | Decimal point as dot, thousands separator as comma (e.g. `1,234.5`). |
+| `space_comma`    | Decimal point as comma, thousands separator as space (e.g. `1 234,5`). |
+| `none`           | No thousands separator, decimal point as dot (e.g. `1234.5`). |
+
+#### Module Order
+
+By default, the card shows each module based solely on whether its configuration is present, in a fixed order. Setting `module_order` overrides this: only the listed modules are shown, in the order given.
+
+Valid values: `summary`, `present`, `daily_forecasts`, `hourly_forecasts`, `marine_daily`, `marine_hourly`, `meteoalarm`, `pollen`, `ultraviolet`, `airquality`, `camera`, `wind_map`.
+
+```yaml
+module_order:
+  - summary
+  - present
+  - daily_forecasts
+  - hourly_forecasts
+```
 
 ---
 
@@ -65,46 +97,47 @@ resources:
 Configures the main weather block: current conditions, forecasts, marine data, and alerts. Tested with `pirateweather`, `climacell`, `darksky`, and `openweathermap` integrations.
 
 | Parameter                 | Type      | Required | Default         | Description |
-| ------------------------- | --------- | -------- | --------------- | ----------- |
-| `name`                    | `string`  | No       | —               | Location name displayed in the summary section. |
-| `sun`                     | `string`  | No       | —               | Entity ID for the sun sensor (adjusts visuals for daylight, sunrise, and sunset). |
-| `moonphase`               | `string`  | No       | —               | Entity ID for the moon phase sensor. |
-| `icons_model`             | `string`  | **Yes**  | `pirateweather` | Icon set to use. Supported values: `pirateweather`, `climacell`, `darksky`, `openweathermap`, `buienradar`, `defaulthass`. |
-| `animation`               | `boolean` | No       | `false`         | Enables animated effects (moving clouds, rain, waves) based on conditions. |
-| `present`                 | `object`  | No       | —               | Current weather conditions. See [§1.1 `present`](#11-present-object). |
-| `daily_forecasts`         | `object`  | No       | —               | Multi-day forecast data. See [§1.2 `daily_forecasts`](#12-daily_forecasts-object). |
-| `hourly_forecasts`        | `object`  | No       | —               | Hourly forecast data. See [§1.3 `hourly_forecasts`](#13-hourly_forecasts-object). |
-| `marine_daily_forecasts`  | `object`  | No       | —               | Daily marine forecast (wave height, swell, wind). See [§1.4 `marine_daily_forecasts`](#14-marine_daily_forecasts-object). |
-| `marine_hourly_forecasts` | `object`  | No       | —               | Hourly marine forecast (swell, wind, water temperature). See [§1.5 `marine_hourly_forecasts`](#15-marine_hourly_forecasts-object). |
-| `meteoalarm`              | `string`  | No       | —               | Entity ID from the [Meteoalarm](https://meteoalarm.org/) integration for regional warnings. |
-| `dpcalarm`                | `object`  | No       | —               | Italian Civil Protection (DPC) alert sensors. See [§1.6 `dpcalarm`](#16-dpcalarm-object). |
+| -------------------------- | --------- | -------- | --------------- | ----------- |
+| `name`                     | `string`  | No       | —               | Location name displayed in the summary section. |
+| `sun`                      | `string`  | No       | —               | Entity ID for the sun sensor (adjusts visuals for daylight, sunrise, and sunset). |
+| `sun_time_format`          | `string`  | No       | `hh_mm`         | Time format for sunrise/sunset in the sun bar. Allowed values: `hh_mm`, `hh_mm_ss`. |
+| `moonphase`                | `string`  | No       | —               | Entity ID for the moon phase sensor. |
+| `icons_model`              | `string`  | **Yes**  | `pirateweather` | Icon set to use. Supported values: `pirateweather`, `climacell`, `darksky`, `openweathermap`, `buienradar`, `defaulthass`. |
+| `animation`                | `boolean` | No       | `false`         | Enables animated effects (moving clouds, rain, waves) based on conditions. |
+| `present`                  | `object`  | No       | —               | Current weather conditions. See [§1.1 `present`](#11-present-object). |
+| `daily_forecasts`          | `object`  | No       | —               | Multi-day forecast data. See [§1.2 `daily_forecasts`](#12-daily_forecasts-object). |
+| `hourly_forecasts`         | `object`  | No       | —               | Hourly forecast data. See [§1.3 `hourly_forecasts`](#13-hourly_forecasts-object). |
+| `marine_daily_forecasts`   | `object`  | No       | —               | Daily marine forecast (wave height, swell, wind). See [§1.4 `marine_daily_forecasts`](#14-marine_daily_forecasts-object). |
+| `marine_hourly_forecasts`  | `object`  | No       | —               | Hourly marine forecast (swell, wind, water temperature). See [§1.5 `marine_hourly_forecasts`](#15-marine_hourly_forecasts-object). |
+| `meteoalarm`               | `string`  | No       | —               | Entity ID from the [Meteoalarm](https://meteoalarm.org/) integration for regional warnings. |
+| `dpcalarm`                 | `object`  | No       | —               | Italian Civil Protection (DPC) alert sensors. See [§1.6 `dpcalarm`](#16-dpcalarm-object). |
 
 ### 1.1 `present` Object
 
 Real-time environmental data shown in the current conditions section.
 
-| Parameter                   | Type     | Required | Description |
-| --------------------------- | -------- | -------- | ----------- |
-| `condition`                 | `string` | No       | Current weather condition (e.g. `sunny`, `cloudy`, `rain`). |
-| `temperature`               | `string` | No       | Current temperature. |
-| `temperature_feelslike`     | `string` | No       | Perceived (feels-like) temperature. |
-| `temperature_min`           | `string` | No       | Daily minimum temperature. |
-| `temperature_max`           | `string` | No       | Daily maximum temperature. |
-| `humidity`                  | `string` | No       | Relative humidity (%). |
-| `pressure`                  | `string` | No       | Atmospheric pressure. |
-| `visibility`                | `string` | No       | Visibility distance. |
-| `wind_bearing`              | `string` | No       | Wind direction in degrees. |
-| `wind_speed`                | `string` | No       | Wind speed. |
-| `precipitation_intensity`   | `string` | No       | Precipitation rate (e.g. mm/h). |
-| `precipitation_probability` | `string` | No       | Probability of precipitation (%). |
-| `precipitation_accumulation`| `string` | No       | Total precipitation accumulation. |
-| `lightning_azimuth`         | `string` | No       | Bearing to the nearest detected lightning strike. |
-| `lightning_distance`        | `string` | No       | Distance to the nearest detected lightning strike. |
-| `lightning_strikes`         | `string` | No       | Number of lightning strikes in the last 30 seconds. |
+| Parameter                    | Type     | Required | Description |
+| ------------------------------ | -------- | -------- | ----------- |
+| `condition`                    | `string` | No       | Current weather condition (e.g. `sunny`, `cloudy`, `rain`). |
+| `temperature`                  | `string` | No       | Current temperature. |
+| `temperature_feelslike`        | `string` | No       | Perceived (feels-like) temperature. |
+| `temperature_min`              | `string` | No       | Daily minimum temperature. |
+| `temperature_max`              | `string` | No       | Daily maximum temperature. |
+| `humidity`                     | `string` | No       | Relative humidity (%). |
+| `pressure`                     | `string` | No       | Atmospheric pressure. |
+| `visibility`                   | `string` | No       | Visibility distance. |
+| `wind_bearing`                 | `string` | No       | Wind direction in degrees. |
+| `wind_speed`                   | `string` | No       | Wind speed. |
+| `precipitation_intensity`      | `string` | No       | Precipitation rate (e.g. mm/h). |
+| `precipitation_probability`    | `string` | No       | Probability of precipitation (%). |
+| `precipitation_accumulation`   | `string` | No       | Total precipitation accumulation. |
+| `lightning_azimuth`            | `string` | No       | Bearing to the nearest detected lightning strike. |
+| `lightning_distance`           | `string` | No       | Distance to the nearest detected lightning strike. |
+| `lightning_strikes`            | `string` | No       | Number of lightning strikes in the last 30 seconds. |
 
 ### 1.2 `daily_forecasts` Object
 
-Multi-day weather forecast. Each field uses an [`iTimeSlots`](#iTimeSlots-object) object to hold up to six daily values (e.g. `day_1` … `day_6`).
+Multi-day weather forecast. Each field uses an [`iTimeSlots`](#itimeslots-object) object to hold up to six daily values.
 
 Every entity referenced here must expose two attributes:
 
@@ -122,7 +155,7 @@ Every entity referenced here must expose two attributes:
 
 ### 1.3 `hourly_forecasts` Object
 
-Hour-by-hour forecast data. Each field uses an [`iTimeSlots`](#iTimeSlots-object) object to hold up to six hourly values.
+Hour-by-hour forecast data. Each field uses an [`iTimeSlots`](#itimeslots-object) object to hold up to six hourly values.
 
 Same `datetime` and `unit_of_measurement` attribute requirements apply as in `daily_forecasts`.
 
@@ -151,28 +184,30 @@ Represents up to six sequential time slots used by forecast objects.
 
 ### 1.4 `marine_daily_forecasts` Object
 
-Daily marine weather data. Each field uses an [`iTimeSlots`](#iTimeSlots-object) object.
+Daily marine weather data. Each field uses an [`iTimeSlots`](#itimeslots-object) object.
 
-| Parameter              | Type         | Required | Description |
-| ---------------------- | ------------ | -------- | ----------- |
-| `wave_height_max`      | `iTimeSlots` | No       | Maximum wave height per day. |
-| `wave_direction`       | `iTimeSlots` | No       | Dominant wave direction per day. |
-| `swell_wave_height_max`| `iTimeSlots` | No       | Maximum swell wave height per day. |
-| `wind_wave_height_max` | `iTimeSlots` | No       | Maximum wind wave height per day. |
+| Parameter                | Type         | Required | Description |
+| ------------------------- | ------------ | -------- | ----------- |
+| `wave_height_max`         | `iTimeSlots` | No       | Maximum overall wave height per day. |
+| `wave_direction`          | `iTimeSlots` | No       | Dominant wave direction per day. |
+| `swell_wave_height_max`   | `iTimeSlots` | No       | Maximum swell wave height per day. |
+| `wind_wave_height_max`    | `iTimeSlots` | No       | Maximum wind-generated wave height per day. |
+| `swell_wave_period_max`   | `iTimeSlots` | No       | Maximum swell wave period (seconds) per day. |
+| `wind_wave_period_max`    | `iTimeSlots` | No       | Maximum wind-generated wave period (seconds) per day. |
 
 ### 1.5 `marine_hourly_forecasts` Object
 
-Hourly marine weather data. Each field uses an [`iTimeSlots`](#iTimeSlots-object) object.
+Hourly marine weather data. Each field uses an [`iTimeSlots`](#itimeslots-object) object.
 
 | Parameter           | Type         | Required | Description |
 | ------------------- | ------------ | -------- | ----------- |
 | `swell_direction`   | `iTimeSlots` | No       | Swell direction per hour. |
 | `swell_height`      | `iTimeSlots` | No       | Swell height per hour. |
 | `swell_period`      | `iTimeSlots` | No       | Swell period (seconds) per hour. |
-| `wind_direction`    | `iTimeSlots` | No       | Wind direction per hour. |
-| `wind_speed`        | `iTimeSlots` | No       | Wind speed per hour. |
-| `air_temperature`   | `iTimeSlots` | No       | Air temperature per hour. |
-| `water_temperature` | `iTimeSlots` | No       | Sea surface water temperature per hour. |
+| `wind_direction`    | `iTimeSlots` | **Yes**  | Wind direction per hour. |
+| `wind_speed`        | `iTimeSlots` | **Yes**  | Wind speed per hour. |
+| `air_temperature`   | `iTimeSlots` | **Yes**  | Air temperature per hour. |
+| `water_temperature` | `iTimeSlots` | **Yes**  | Sea surface water temperature per hour. |
 
 ### 1.6 `dpcalarm` Object
 
@@ -191,18 +226,18 @@ Weather alerts from the Italian Civil Protection Department (Dipartimento della 
 UV radiation data including current index, ozone level, protection window, and safe exposure times for each skin type (I–VI).
 
 | Parameter           | Type     | Required | Description |
-| ------------------- | -------- | -------- | ----------- |
-| `uv_index`          | `string` | No       | Current UV index value. |
-| `uv_level`          | `string` | No       | UV risk level description (e.g. `low`, `moderate`, `high`). |
-| `max_uv_index`      | `string` | No       | Maximum forecasted UV index for the day. |
-| `ozone_level`       | `string` | No       | Current atmospheric ozone concentration. |
-| `protection_window` | `string` | No       | Time window during which sun protection is recommended. |
-| `set_skin_type_1`   | `string` | No       | Safe exposure time for skin type I. |
-| `set_skin_type_2`   | `string` | No       | Safe exposure time for skin type II. |
-| `set_skin_type_3`   | `string` | No       | Safe exposure time for skin type III. |
-| `set_skin_type_4`   | `string` | No       | Safe exposure time for skin type IV. |
-| `set_skin_type_5`   | `string` | No       | Safe exposure time for skin type V. |
-| `set_skin_type_6`   | `string` | No       | Safe exposure time for skin type VI. |
+| -------------------- | -------- | -------- | ----------- |
+| `uv_index`           | `string` | No       | Current UV index value. |
+| `uv_level`           | `string` | No       | UV risk level description (e.g. `low`, `moderate`, `high`). |
+| `max_uv_index`       | `string` | No       | Maximum forecasted UV index for the day. |
+| `ozone_level`        | `string` | No       | Current atmospheric ozone concentration. |
+| `protection_window`  | `string` | No       | Time window during which sun protection is recommended. |
+| `set_skin_type_1`    | `string` | No       | Safe exposure time for skin type I. |
+| `set_skin_type_2`    | `string` | No       | Safe exposure time for skin type II. |
+| `set_skin_type_3`    | `string` | No       | Safe exposure time for skin type III. |
+| `set_skin_type_4`    | `string` | No       | Safe exposure time for skin type IV. |
+| `set_skin_type_5`    | `string` | No       | Safe exposure time for skin type V. |
+| `set_skin_type_6`    | `string` | No       | Safe exposure time for skin type VI. |
 
 ---
 
@@ -232,16 +267,53 @@ Defines a single pollen type entry.
 Real-time air quality metrics and EPA health indicators.
 
 | Parameter               | Type     | Required | Description |
-| ----------------------- | -------- | -------- | ----------- |
-| `pm25`                  | `string` | No       | PM2.5 (fine particulate matter) concentration. |
-| `pm10`                  | `string` | No       | PM10 (coarse particulate matter) concentration. |
-| `o3`                    | `string` | No       | Ozone (O₃) concentration. |
-| `no2`                   | `string` | No       | Nitrogen Dioxide (NO₂) concentration. |
-| `co`                    | `string` | No       | Carbon Monoxide (CO) concentration. |
-| `so2`                   | `string` | No       | Sulfur Dioxide (SO₂) concentration. |
-| `epa_aqi`               | `string` | No       | EPA-computed Air Quality Index. |
-| `epa_primary_pollutant` | `string` | No       | EPA-designated primary pollutant. |
-| `epa_health_concern`    | `string` | No       | EPA health concern level (e.g. `moderate`, `unhealthy`). |
+| ------------------------ | -------- | -------- | ----------- |
+| `pm25`                   | `string` | No       | PM2.5 (fine particulate matter) concentration. |
+| `pm10`                   | `string` | No       | PM10 (coarse particulate matter) concentration. |
+| `o3`                     | `string` | No       | Ozone (O₃) concentration. |
+| `no2`                    | `string` | No       | Nitrogen Dioxide (NO₂) concentration. |
+| `co`                     | `string` | No       | Carbon Monoxide (CO) concentration. |
+| `so2`                    | `string` | No       | Sulfur Dioxide (SO₂) concentration. |
+| `epa_aqi`                | `string` | No       | EPA-computed Air Quality Index. |
+| `epa_primary_pollutant`  | `string` | No       | EPA-designated primary pollutant. |
+| `epa_health_concern`     | `string` | No       | EPA health concern level (e.g. `moderate`, `unhealthy`). |
+
+---
+
+## 5 `wind_map` Object
+
+Renders a small map showing the current wind direction using OpenStreetMap tiles. Disabled by default, since enabling it sends the configured coordinates to the tile provider.
+
+| Parameter         | Type      | Required | Default      | Description |
+| ----------------- | --------- | -------- | ------------ | ----------- |
+| `enabled`         | `boolean` | No       | `false`      | Explicit opt-in. The map is not shown unless this is set to `true`. |
+| `latitude`        | `number`  | No       | Home Assistant home latitude | Map center latitude. Falls back to `hass.config.latitude` if omitted. |
+| `longitude`       | `number`  | No       | Home Assistant home longitude | Map center longitude. Falls back to `hass.config.longitude` if omitted. |
+| `zoom`            | `number`  | No       | `12`         | Map zoom level. |
+| `tile_style`      | `string`  | No       | `standard`   | Tile style. One of `standard`, `cyclosm`, `humanitarian`, `cycle`, `transport`, `topo`. `cycle`, `transport` and `topo` require `tile_api_key`. |
+| `tile_api_key`    | `string`  | No       | —            | Personal API key for the tile provider, required only for `cycle`, `transport`, or `topo`. |
+| `tile_url`        | `string`  | No       | —            | Full tile URL template, e.g. `https://{s}.example.com/{z}/{x}/{y}.png`. Takes priority over `tile_style` when set. |
+| `tile_attribution`| `string`  | No       | —            | Attribution text to display when using a custom `tile_url`. |
+| `brightness`      | `number`  | No       | `0.65` (dark theme) / `1` (light theme or `tile_dark` enabled) | `brightness()` component of the CSS filter applied to the tiles, in the range 0–2. |
+| `tile_dark`       | `boolean` | No       | `false`      | Applies `invert(90%) hue-rotate(180deg)`, combined with `brightness`, to darken light tile sets. |
+| `tile_filter`     | `string`  | No       | —            | Full CSS filter override, e.g. `grayscale(0.3) contrast(1.1)`. Takes priority over `brightness`/`tile_dark` when set. |
+| `wind_bearing`    | `string`  | No       | `weather.present.wind_bearing` | Entity ID for wind direction. Reuses the `present` wind bearing entity if omitted. |
+| `wind_speed`      | `string`  | No       | `weather.present.wind_speed`   | Entity ID for wind speed. Reuses the `present` wind speed entity if omitted. |
+
+```yaml
+type: custom:ha-card-weather-conditions
+language: it
+weather:
+  icons_model: pirateweather
+  present:
+    wind_bearing: sensor.home_wind_bearing
+    wind_speed: sensor.home_wind_speed
+wind_map:
+  enabled: true
+  zoom: 13
+  tile_style: standard
+  tile_dark: true
+```
 
 ---
 
@@ -254,7 +326,7 @@ Each visual layer can be configured independently. Use the examples below as a r
 A concise overview of current conditions including location name, weather icon, temperature, and moon phase.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-summary.png" width="40%" height="auto" alt="Summary layer">
+<img src="./md.images/ha-card-weather-condition-summary.png" width="40%" height="auto" alt="Summary layer">
 </p>
 
 ```yaml
@@ -275,7 +347,7 @@ weather:
 Detailed current conditions: temperature range, humidity, wind, precipitation, and more.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-present.png" width="40%" height="auto" alt="Present layer">
+<img src="./md.images/ha-card-weather-condition-present.png" width="40%" height="auto" alt="Present layer">
 </p>
 
 ```yaml
@@ -284,6 +356,7 @@ language: it
 weather:
   icons_model: pirateweather
   sun: sun.sun
+  sun_time_format: hh_mm
   present:
     temperature_min: sensor.home_temperature_min
     temperature_max: sensor.home_temperature_max
@@ -304,7 +377,7 @@ weather:
 Multi-day overview with high/low temperatures, precipitation probability, and condition icons.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-daily-forecast.png" width="40%" height="auto" alt="Daily forecast layer">
+<img src="./md.images/ha-card-weather-condition-daily-forecast.png" width="40%" height="auto" alt="Daily forecast layer">
 </p>
 
 ```yaml
@@ -345,7 +418,7 @@ weather:
 Hour-by-hour detail: temperature, feels-like, precipitation, and wind.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-hourly-forecast.png" width="40%" height="auto" alt="Hourly forecast layer">
+<img src="./md.images/ha-card-weather-condition-hourly-forecast.png" width="40%" height="auto" alt="Hourly forecast layer">
 </p>
 
 ```yaml
@@ -393,10 +466,10 @@ weather:
 
 ### Marine Daily Forecast Layer
 
-Daily marine conditions: wave height, dominant wave direction, swell, and wind waves.
+Daily marine conditions: wave height, dominant wave direction, swell and wind waves, and their periods.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-marine-daily-forecast.png" width="40%" height="auto" alt="Marine daily forecast layer">
+<img src="./md.images/ha-card-weather-condition-marine-daily-forecast.png" width="40%" height="auto" alt="Marine daily forecast layer">
 </p>
 
 ```yaml
@@ -425,6 +498,16 @@ weather:
       slot2: sensor.marine_wind_wave_height_max_day_1
       slot3: sensor.marine_wind_wave_height_max_day_2
       slot4: sensor.marine_wind_wave_height_max_day_3
+    swell_wave_period_max:
+      slot1: sensor.marine_swell_wave_period_max_day_0
+      slot2: sensor.marine_swell_wave_period_max_day_1
+      slot3: sensor.marine_swell_wave_period_max_day_2
+      slot4: sensor.marine_swell_wave_period_max_day_3
+    wind_wave_period_max:
+      slot1: sensor.marine_wind_wave_period_max_day_0
+      slot2: sensor.marine_wind_wave_period_max_day_1
+      slot3: sensor.marine_wind_wave_period_max_day_2
+      slot4: sensor.marine_wind_wave_period_max_day_3
 ```
 
 ### Marine Hourly Forecast Layer
@@ -479,7 +562,7 @@ weather:
 Weather alerts from MeteoAlarm and the Italian Civil Protection Department (DPC).
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-alarms.png" width="40%" height="auto" alt="Alerts layer">
+<img src="./md.images/ha-card-weather-condition-alarms.png" width="40%" height="auto" alt="Alerts layer">
 </p>
 
 ```yaml
@@ -499,7 +582,7 @@ weather:
 UV index, ozone concentration, protection window, and skin-type-specific safe exposure times.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-ultraviolet.png" width="40%" height="auto" alt="Ultraviolet layer">
+<img src="./md.images/ha-card-weather-condition-ultraviolet.png" width="40%" height="auto" alt="Ultraviolet layer">
 </p>
 
 ```yaml
@@ -524,7 +607,7 @@ ultraviolet:
 Airborne pollen levels for tree, weed, and grass types.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-pollen.png" width="40%" height="auto" alt="Pollen layer">
+<img src="./md.images/ha-card-weather-condition-pollen.png" width="40%" height="auto" alt="Pollen layer">
 </p>
 
 ```yaml
@@ -553,7 +636,7 @@ pollen:
 PM2.5, PM10, ozone, carbon monoxide, and EPA air quality index.
 
 <p float="left">
-<img src="https://github.com/r-renato/ha-card-weather-conditions/raw/master/md.images/ha-card-weather-condition-air-quality.png" width="40%" height="auto" alt="Air quality layer">
+<img src="./md.images/ha-card-weather-condition-air-quality.png" width="40%" height="auto" alt="Air quality layer">
 </p>
 
 ```yaml
@@ -568,6 +651,29 @@ airquality:
   epa_primary_pollutant: sensor.lazio_italy_dominant_pollutant
 ```
 
+### Wind Map Layer
+
+Small map centered on the configured (or Home Assistant home) coordinates, showing the current wind direction and speed.
+
+<p float="left">
+<img src="./md.images/ha-card-weather-condition-wind-map.png" width="40%" height="auto" alt="Wind Map layer">
+</p>
+
+```yaml
+type: custom:ha-card-weather-conditions
+language: it
+weather:
+  icons_model: pirateweather
+  present:
+    wind_bearing: sensor.home_wind_bearing
+    wind_speed: sensor.home_wind_speed
+wind_map:
+  enabled: true
+  zoom: 13
+  tile_style: standard
+  tile_dark: true
+```
+
 ---
 
 ## Full Example (Rome)
@@ -578,10 +684,25 @@ A complete configuration combining all supported layers.
 type: custom:ha-card-weather-conditions
 name: "Roma"
 language: it
+number_format: comma_decimal
+module_order:
+  - summary
+  - present
+  - daily_forecasts
+  - hourly_forecasts
+  - marine_daily
+  - marine_hourly
+  - meteoalarm
+  - pollen
+  - ultraviolet
+  - airquality
+  - camera
+  - wind_map
 weather:
   icons_model: pirateweather
   animation: true
   sun: sun.sun
+  sun_time_format: hh_mm
   moonphase: sensor.moon_phase
   present:
     condition: sensor.home_rome_hourly_forecast_condition_h1
@@ -643,6 +764,14 @@ airquality:
   epa_primary_pollutant: sensor.cipro_roma_lazio_italy_dominant_pollutant
 
 camera: camera.5e0add8153fcd_streamlock_net
+
+wind_map:
+  enabled: true
+  zoom: 12
+  tile_style: standard
+  tile_dark: true
+  wind_bearing: sensor.home_rome_hourly_forecast_wind_bearing_h1
+  wind_speed: sensor.home_rome_hourly_forecast_wind_speed_h1
 ```
 
 ---

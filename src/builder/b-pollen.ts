@@ -1,30 +1,24 @@
 import { HomeAssistant } from 'custom-card-helpers/dist';
 import { iPollen } from '../utils/config-schema';
-import { getEntityRawValue, string2Number } from '../utils/helper';
+import { getEntityRawValue } from '../utils/entity';
 import { iPollenData, renderPollen } from '../templates/t-pollen';
+import { iTerms } from '../base/lovelace-base';
 
-const buildPollen = (hass: HomeAssistant, lang: string, pollen: iPollen) => {
+const buildPollen = (hass: HomeAssistant, pollen: iPollen, terms: iTerms) => {
   const allItems: iPollenData[] = [];
   if (Array.isArray(pollen.entities) && pollen.entities.length > 0) {
     pollen.entities.forEach((item) => {
       const rawvalue = getEntityRawValue(hass, item.entity);
-      if (rawvalue && rawvalue !== 'unknown' && rawvalue !== 'unavailable') {
-        let value: number = string2Number(getEntityRawValue(hass, item.entity));
-
-        if (Number.isNaN(value) || value < pollen.min || value > pollen.max) {
-          value = 0;
+      if (rawvalue) {
+        const value = parseFloat(rawvalue);
+        if (!Number.isNaN(value) && value >= pollen.min && value <= pollen.max) {
+          allItems.push({ name: item.name, value });
         }
-
-        allItems.push({
-          name: item.name,
-          value,
-        });
       }
-      // console.log(`Nome: ${item.name}, Entità: ${item.entity}`);
     });
   }
 
-  return renderPollen(allItems, pollen.min, pollen.max);
+  return renderPollen(allItems, pollen.min, pollen.max, terms.words);
 };
 
 export default buildPollen;
