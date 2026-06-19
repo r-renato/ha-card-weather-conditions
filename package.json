@@ -1,6 +1,6 @@
 {
   "name": "ha-card-weather-conditions",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Home Assistant lovelace card for display weather data.",
   "keywords": [
     "home-assistant",
