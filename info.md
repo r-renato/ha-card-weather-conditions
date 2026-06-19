@@ -655,6 +655,10 @@ airquality:
 
 Small map centered on the configured (or Home Assistant home) coordinates, showing the current wind direction and speed.
 
+<p float="left">
+<img src="./md.images/ha-card-weather-condition-wind-map.png" width="40%" height="auto" alt="Wind Map layer">
+</p>
+
 ```yaml
 type: custom:ha-card-weather-conditions
 language: it
