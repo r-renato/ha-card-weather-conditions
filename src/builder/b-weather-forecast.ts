@@ -42,7 +42,7 @@ const buildHourlyForecastSlot = (
   slotId: string,
 ) => {
   const record: Record<string, iForecastDataItem> = {};
-  const { locale, timezone, formatterLocale } = resolvedLocale;
+  const { locale, timezone, formatterLocale, timeFormat } = resolvedLocale;
 
   let datetime: Date;
 
@@ -87,6 +87,7 @@ const buildHourlyForecastSlot = (
     const hourTime = datetime.toLocaleTimeString(locale, {
       hour: '2-digit',
       minute: '2-digit',
+      hour12: timeFormat === '12h',
       timeZone: timezone,
     });
     record['reference'] = { value: hourTime };
@@ -107,7 +108,7 @@ const buildDailyForecastSlot = (
   slotId: string,
 ) => {
   const record: Record<string, iForecastDataItem> = {};
-  const { locale, timezone, formatterLocale } = resolvedLocale;
+  const { locale, timezone, formatterLocale, timeFormat } = resolvedLocale;
 
   let datetime: Date;
 
@@ -148,6 +149,7 @@ const buildDailyForecastSlot = (
     const hourday = datetime.toLocaleTimeString(locale, {
       hour: '2-digit',
       minute: '2-digit',
+      hour12: timeFormat === '12h',
       timeZone: timezone,
     });
     record['reference'] = { value: forecastType === 0 ? weekday.toUpperCase() : hourday };
@@ -181,7 +183,7 @@ const buildMarineDailyForecastSlot = (
     return 'green';
   };
 
-  const { locale, timezone, formatterLocale } = resolvedLocale;
+  const { locale, timezone, formatterLocale, timeFormat } = resolvedLocale;
 
   let datetime: Date;
 
@@ -240,6 +242,7 @@ const buildMarineDailyForecastSlot = (
     const hourday = datetime.toLocaleTimeString(locale, {
       hour: '2-digit',
       minute: '2-digit',
+      hour12: timeFormat === '12h',
       timeZone: timezone,
     });
     record['reference'] = { value: forecastType === 2 ? weekday.toUpperCase() : hourday };
@@ -256,7 +259,7 @@ const buildMarineHourlyForecastSlot = (
   slotId: string,
 ): Record<string, iForecastDataItem> => {
   const record: Record<string, iForecastDataItem> = {};
-  const { locale, timezone, formatterLocale } = resolvedLocale;
+  const { locale, timezone, formatterLocale, timeFormat } = resolvedLocale;
 
   let datetime: Date;
 
@@ -286,6 +289,7 @@ const buildMarineHourlyForecastSlot = (
       value: datetime.toLocaleTimeString(locale, {
         hour: '2-digit',
         minute: '2-digit',
+        hour12: timeFormat === '12h',
         timeZone: timezone,
       }),
     };

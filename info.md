@@ -100,9 +100,10 @@ Configures the main weather block: current conditions, forecasts, marine data, a
 | -------------------------- | --------- | -------- | --------------- | ----------- |
 | `name`                     | `string`  | No       | —               | Location name displayed in the summary section. |
 | `sun`                      | `string`  | No       | —               | Entity ID for the sun sensor (adjusts visuals for daylight, sunrise, and sunset). |
-| `sun_time_format`          | `string`  | No       | `hh_mm`         | Time format for sunrise/sunset in the sun bar. Allowed values: `hh_mm`, `hh_mm_ss`. |
+| `sun_time_format`          | `string`  | No       | `hh_mm`         | Whether sunrise/sunset in the sun bar also shows seconds. Allowed values: `hh_mm`, `hh_mm_ss`. (The 12h/24h clock style itself is detected automatically from Home Assistant — see note below.) |
 | `moonphase`                | `string`  | No       | —               | Entity ID for the moon phase sensor. |
-| `icons_model`              | `string`  | **Yes**  | `pirateweather` | Icon set to use. Supported values: `pirateweather`, `climacell`, `darksky`, `openweathermap`, `buienradar`, `defaulthass`. |
+| `hemisphere`                | `string`  | No       | auto (from `hass.config.latitude`) | Hemisphere used to pick the correct moon phase icon orientation. Allowed values: `north`, `south`. If omitted, it's derived automatically from Home Assistant's configured latitude. |
+| `icons_model`              | `string`  | **Yes**  | `pirateweather` | Icon set to use. Supported values: `pirateweather`, `climacell`, `darksky`, `openweathermap`, `buienradar`, `defaulthass`, `metno`. |
 | `animation`                | `boolean` | No       | `false`         | Enables animated effects (moving clouds, rain, waves) based on conditions. |
 | `present`                  | `object`  | No       | —               | Current weather conditions. See [§1.1 `present`](#11-present-object). |
 | `daily_forecasts`          | `object`  | No       | —               | Multi-day forecast data. See [§1.2 `daily_forecasts`](#12-daily_forecasts-object). |
@@ -111,6 +112,8 @@ Configures the main weather block: current conditions, forecasts, marine data, a
 | `marine_hourly_forecasts`  | `object`  | No       | —               | Hourly marine forecast (swell, wind, water temperature). See [§1.5 `marine_hourly_forecasts`](#15-marine_hourly_forecasts-object). |
 | `meteoalarm`               | `string`  | No       | —               | Entity ID from the [Meteoalarm](https://meteoalarm.org/) integration for regional warnings. |
 | `dpcalarm`                 | `object`  | No       | —               | Italian Civil Protection (DPC) alert sensors. See [§1.6 `dpcalarm`](#16-dpcalarm-object). |
+
+> **Clock style (12h / 24h).** All times shown by the card (sun bar, hourly/daily/marine forecasts) automatically follow the 12h/24h preference set in your Home Assistant user profile (**Settings → People → \<your user\> → Time format**), regardless of the card's display language. This means users in 24h-clock countries who run the card in English (or any other language without a translation) still see times in 24h format instead of being forced into AM/PM. There is no separate card option for this — it's not configurable per-card, only via your Home Assistant profile.
 
 ### 1.1 `present` Object
 

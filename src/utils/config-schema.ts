@@ -109,6 +109,7 @@ export interface iWeather {
   sun?: string;
   sun_time_format?: SunTimeFormat; // Formato orario alba/tramonto nella sun bar. Default: 'hh_mm'.
   moonphase?: string;
+  hemisphere?: 'north' | 'south'; // Forza l'emisfero per le icone lunari; se omesso, derivato da hass.config.latitude.
   icons_model: string;
   animation?: boolean;
   present?: iPresentData ;

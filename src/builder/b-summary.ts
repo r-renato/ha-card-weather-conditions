@@ -2,7 +2,7 @@ import { HomeAssistant } from 'custom-card-helpers/dist';
 import { ResolvedLocale, translate } from '../utils/locale';
 import { getEntityNumericValue, getEntityRawValue, getEntityUnit } from '../utils/entity';
 import renderWeatherSummary from '../templates/t-summary';
-import { getMoonIcon, getWeatherIcon } from '../utils/helper-render';
+import { getMoonIcon, getWeatherIcon, MoonHemisphere } from '../utils/helper-render';
 import { iPresentData } from '../utils/config-schema';
 import { iIconsConfig, iTerms } from '../base/lovelace-base';
 
@@ -15,10 +15,11 @@ const buildWeatherSummary = (
   presentData: iPresentData,
   sunId: string,
   moonphase: string,
+  hemisphere: MoonHemisphere = 'north',
 ) => {
   const { formatterLocale } = resolvedLocale;
   const moonPhase = getEntityRawValue(hass, moonphase);
-  const moonIcon: string = moonPhase ? getMoonIcon(moonPhase) : '';
+  const moonIcon: string = moonPhase ? getMoonIcon(moonPhase, hemisphere) : '';
   const sun = getEntityRawValue(hass, sunId);
   const currentConditions = getEntityRawValue(hass, presentData.condition)?.toLowerCase() || 'na';
 

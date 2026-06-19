@@ -5,6 +5,7 @@ import { customElement } from 'lit/decorators.js';
 import { LovelaceBaseElement } from './base/lovelace-base';
 import { CwcModuleName } from './utils/config-schema';
 import { logo } from './utils/const';
+import { MoonHemisphere } from './utils/helper-render';
 
 import buildWeatherSummary from './builder/b-summary';
 import buildWeatherPresent from './builder/b-present';
@@ -61,6 +62,9 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
     );
 
     if (this._hasPresent) {
+      const resolvedHemisphere: MoonHemisphere = this._config?.weather?.hemisphere
+        ?? ((this.hass?.config?.latitude ?? 0) < 0 ? 'south' : 'north');
+
       modules.summary = buildWeatherSummary(
         this.hass,
         this._resolvedLocale,
@@ -70,6 +74,7 @@ export class HaCardWeatherConditions extends LovelaceBaseElement {
         this._config?.weather?.present || null,
         this._config?.weather?.sun,
         this._config?.weather?.moonphase,
+        resolvedHemisphere,
       );
 
       modules.present = buildWeatherPresent(

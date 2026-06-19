@@ -1,4 +1,4 @@
-export const logo: string = '%c WEATHER-CONDITION-CARD %c 3.0.1';
+export const logo: string = '%c WEATHER-CONDITION-CARD %c 3.1.0';
 
 export const hacsImagePath: string = '/local/community/ha-card-weather-conditions/icons';
 export const manImagePath: string = '/local/ha-card-weather-conditions/icons';
@@ -11,6 +11,7 @@ export const iconTemperature: string = 'mdi:thermometer';
 export const iconPrecipitation: string = 'mdi:weather-rainy';
 
 // 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌑
+// Icone per emisfero nord (default)
 export const cwcMoonPhaseIcons = {
   new_moon: '🌑',
   new: '🌑',
@@ -23,4 +24,20 @@ export const cwcMoonPhaseIcons = {
   third_quarter: '🌗',
   last_quarter: '🌗',
   waning_crescent: '🌘',
+};
+
+// Icone per emisfero sud: la fase è la stessa ma l'aspetto visivo della
+// falce è speculare rispetto all'emisfero nord (new/full restano invariate).
+export const cwcMoonPhaseIconsSouthern = {
+  new_moon: '🌑',
+  new: '🌑',
+  waxing_crescent: '🌘',
+  first_quarter: '🌗',
+  waxing_gibbous: '🌖',
+  full: '🌕',
+  full_moon: '🌕',
+  waning_gibbous: '🌔',
+  third_quarter: '🌓',
+  last_quarter: '🌓',
+  waning_crescent: '🌒',
 };

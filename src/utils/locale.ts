@@ -1,4 +1,4 @@
-import { HomeAssistant, NumberFormat } from 'custom-card-helpers';
+import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { iLocaleOverride } from './config-schema';
 
 export const cwcLocale: Record<string, number> = {
@@ -22,6 +22,7 @@ export interface ResolvedLocale {
   locale: string;
   timezone: string;
   formatterLocale: string;
+  timeFormat: '12h' | '24h';
 }
 
 const localeMap: Record<string, string> = {
@@ -90,14 +91,23 @@ interface HassLocale {
   language?: string;
   number_format?: NumberFormat;
   time_zone?: 'local' | 'server';
+  time_format?: TimeFormat | '12h' | '24h';
 }
+
+const usesAmPm = (timeFormat: HassLocale['time_format'], language: string): boolean => {
+  if (timeFormat === TimeFormat.am_pm || timeFormat === '12h') return true;
+  if (timeFormat === TimeFormat.twenty_four || timeFormat === '24h') return false;
+
+  const testLanguage = timeFormat === TimeFormat.language ? language : undefined;
+  const formattedDate = new Date().toLocaleString(testLanguage);
+  return formattedDate.includes('AM') || formattedDate.includes('PM');
+};
 
 export function resolveLocale(
   hass: HomeAssistant | undefined,
   cardConfig: { language?: string; timezone?: string; number_format?: NumberFormat } = {},
 ): ResolvedLocale {
-  // const hassLocale = (hass as unknown as { locale?: HassLocale } | undefined)?.locale;
-  const hassLocale = hass?.locale;
+  const hassLocale = (hass as unknown as { locale?: HassLocale } | undefined)?.locale;
   const hassConfig = hass?.config;
 
   const language = (
@@ -119,12 +129,14 @@ export function resolveLocale(
   const numberFormat = cardConfig.number_format ?? hassLocale?.number_format;
   const locale = localeMap[language] ?? language;
   const formatterLocale = formatterLocaleFor(numberFormat, locale);
+  const timeFormat = usesAmPm(hassLocale?.time_format, language) ? '12h' : '24h';
 
   const resolved: ResolvedLocale = {
     language,
     locale,
     timezone,
     formatterLocale,
+    timeFormat,
   };
 
   // console.debug('[resolveLocale] resolved locale:', resolved, 'from', {

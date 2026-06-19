@@ -20,7 +20,7 @@ const present = (
   sunTimeFormat: SunTimeFormat = 'hh_mm',
   wordDict: Record<string, string> = {},
 ) => {
-  const { locale, timezone, formatterLocale } = resolvedLocale;
+  const { locale, timezone, formatterLocale, timeFormat } = resolvedLocale;
   const sunEntity = sunId ? hass.states[sunId] : undefined;
   const { next_rising, next_setting } = sunEntity?.attributes ?? {};
 
@@ -28,7 +28,7 @@ const present = (
     hour: '2-digit',
     minute: '2-digit',
     ...(sunTimeFormat === 'hh_mm_ss' ? { second: '2-digit' as const } : {}),
-    hour12: false,
+    hour12: timeFormat === '12h',
     timeZone: timezone,
   });
 

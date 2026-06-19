@@ -1,7 +1,7 @@
 import { css } from 'lit';
 // import { HomeAssistant } from 'custom-card-helpers/dist';
 
-import { cwcMoonPhaseIcons } from './const';
+import { cwcMoonPhaseIcons, cwcMoonPhaseIconsSouthern } from './const';
 
 import cardStyle from '../css/css-base-card';
 import summaryStyles from '../css/css-summary';
@@ -15,7 +15,12 @@ import meteodcpalarmStyle from '../css/css-meteoalarm';
 import airqualityStyle from '../css/css-airquality';
 import windMapStyle from '../css/css-wind-map';
 
-export const getMoonIcon = (phase: string): string => cwcMoonPhaseIcons[phase.toLowerCase()];
+export type MoonHemisphere = 'north' | 'south';
+
+export const getMoonIcon = (phase: string, hemisphere: MoonHemisphere = 'north'): string => {
+  const iconsMap = hemisphere === 'south' ? cwcMoonPhaseIconsSouthern : cwcMoonPhaseIcons;
+  return iconsMap[phase.toLowerCase()];
+};
 
 export const getWeatherIcon = (
   condition: string,
