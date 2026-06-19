@@ -2,11 +2,13 @@
 # Folders
 
 .idea
+/.vscode/
 __pycache__
 /node_modules/
 /.rpt2_cache/
 /trash/
 /backup/
+
 
 # ####### ####### #######
 # Files
