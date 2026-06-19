@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.1] 2026-06-19
+### Fixed
+- Minor bug fixing
+
 ## [3.0.0] 2026-06-19
 ### Breaking
 - Sun bar (sunrise/sunset) now defaults to `hh:mm` instead of `hh:mm:ss`; use `weather.sun_time_format: hh_mm_ss` to restore seconds

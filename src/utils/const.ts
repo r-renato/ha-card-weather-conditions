@@ -1,4 +1,4 @@
-export const logo: string = '%c WEATHER-CONDITION-CARD %c 2.1.0';
+export const logo: string = '%c WEATHER-CONDITION-CARD %c 3.0.1';
 
 export const hacsImagePath: string = '/local/community/ha-card-weather-conditions/icons';
 export const manImagePath: string = '/local/ha-card-weather-conditions/icons';
