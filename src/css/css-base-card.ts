@@ -100,6 +100,17 @@ const cardStyle = css`
     background: var(--cwc-separator);
   }
 
+  /* Quando la sezione è il primo modulo visibile della card (subito dopo
+     l'eventuale header nativo di Lovelace), il border-top e la linea
+     decorativa accanto al titolo non separano nulla: si nascondono. */
+  .nd-container > .cwc-section:first-child {
+    border-top: none;
+  }
+
+  .nd-container > .cwc-section:first-child .cwc-section-line {
+    display: none;
+  }
+
   /* ── Background dinamico (invariato) ───────────────────────── */
 
   .nd-container.sunny {

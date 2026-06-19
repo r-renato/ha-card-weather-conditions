@@ -40,19 +40,50 @@ const localeMap: Record<string, string> = {
   is: 'is-IS',
 };
 
-const formatterLocaleFor = (fmt: NumberFormat | undefined, defaultLocale: string): string => {
+// Locale "proxy" usati solo come fallback quando il locale risolto dalla lingua
+// non produce nativamente lo stile numerico richiesto da hass.locale.number_format.
+const PROXY_LOCALE: Record<'comma_decimal' | 'decimal_comma' | 'space_comma', string> = {
+  comma_decimal: 'en-US', // 1,234.56
+  decimal_comma: 'de-DE', // 1.234,56
+  space_comma: 'fr-FR', // 1 234,56
+};
+
+const numberStyleOf = (locale: string): { group: string; decimal: string } => {
+  try {
+    const parts = new Intl.NumberFormat(locale).formatToParts(1234.5);
+    return {
+      group: parts.find((p) => p.type === 'group')?.value ?? '',
+      decimal: parts.find((p) => p.type === 'decimal')?.value ?? '.',
+    };
+  } catch {
+    return { group: ',', decimal: '.' };
+  }
+};
+
+const matchesNumberFormat = (locale: string, fmt: 'comma_decimal' | 'decimal_comma' | 'space_comma'): boolean => {
+  const { group, decimal } = numberStyleOf(locale);
   switch (fmt) {
     case 'comma_decimal':
-      return 'en-US';
+      return decimal === '.' && group === ',';
     case 'decimal_comma':
-      return 'de-DE';
+      return decimal === ',' && (group === '.' || group === '');
     case 'space_comma':
-      return 'fr-FR';
-    case 'none':
-      return 'en-US';
+      return decimal === ',' && (group === ' ' || group === '\u00a0' || group === '\u202f');
     default:
-      return defaultLocale;
+      return false;
   }
+};
+
+// Deriva il locale da usare per Intl.NumberFormat: se la lingua/locale già risolta
+// (es. it-IT) produce nativamente lo stile numerico richiesto da HA, lo riusa
+// senza cambiare lingua; altrimenti ricade su un locale proxy dedicato a quello stile.
+const formatterLocaleFor = (fmt: NumberFormat | undefined, defaultLocale: string): string => {
+  if (fmt === 'none' || fmt === undefined) return defaultLocale;
+  if (fmt !== 'comma_decimal' && fmt !== 'decimal_comma' && fmt !== 'space_comma') return defaultLocale;
+
+  if (matchesNumberFormat(defaultLocale, fmt)) return defaultLocale;
+
+  return PROXY_LOCALE[fmt];
 };
 
 interface HassLocale {
@@ -85,9 +116,6 @@ export function resolveLocale(
     timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
 
-  console.info(`[hassLocale] language: ${hassLocale?.language}, timezone: ${hassConfig?.time_zone}, number_format: ${hassLocale?.number_format}`);
-   console.info(`[cardLocale] language: ${cardConfig?.language}, timezone: ${cardConfig?.timezone}, number_format: ${cardConfig?.number_format}`);
-
   const numberFormat = cardConfig.number_format ?? hassLocale?.number_format;
   const locale = localeMap[language] ?? language;
   const formatterLocale = formatterLocaleFor(numberFormat, locale);
@@ -99,8 +127,11 @@ export function resolveLocale(
     formatterLocale,
   };
 
-  console.info(`[resolveLocale] language: ${language}, locale: ${locale}, timezone: ${timezone}, formatterLocale: ${formatterLocale}`);
-  
+  // console.debug('[resolveLocale] resolved locale:', resolved, 'from', {
+  //   cardConfig,
+  //   hassLocale,
+  //   hassConfig,
+  // });
   return resolved;
 }
 

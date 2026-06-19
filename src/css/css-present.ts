@@ -10,6 +10,14 @@ const presentStyle = css`
   gap: var(--cwc-space-xs);
 }
 
+/* Quando la sun bar segue immediatamente il blocco hero (nessuna sezione
+   con header in mezzo), il gap standard del container risulta troppo largo:
+   lo si riduce avvicinando la barra al riquadro sopra senza toccare il gap
+   generale tra le altre sezioni della card. */
+.summary-wrapper + .sun-bar-row {
+  margin-top: calc(-1 * var(--cwc-space-sm));
+}
+
 .sun-bar-icon {
   --mdc-icon-size: 18px;
   flex-shrink: 0;

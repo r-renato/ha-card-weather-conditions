@@ -2,6 +2,7 @@
 /* eslint-disable camelcase */
 import { html, nothing, TemplateResult } from 'lit';
 import { renderSectionHeader } from '../utils/render-section';
+import { translate } from '../utils/locale';
 
 export interface iForecastDataItem {
   value?: number | string | Date;
@@ -11,7 +12,10 @@ export interface iForecastDataItem {
   iconColor?: string;
 }
 
-export const renderHourlyForecast = (data: Record<string, iForecastDataItem>[]) => {
+export const renderHourlyForecast = (
+  data: Record<string, iForecastDataItem>[],
+  wordDict: Record<string, string> = {},
+) => {
   if (data.length === 0) return html``;
 
   const now = Date.now();
@@ -90,7 +94,7 @@ export const renderHourlyForecast = (data: Record<string, iForecastDataItem>[]) 
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Previsioni orarie')}
+      ${renderSectionHeader(translate('Hourly forecast', wordDict))}
       <div class="fc-hourly-grid">
         ${slots}
       </div>
@@ -98,7 +102,10 @@ export const renderHourlyForecast = (data: Record<string, iForecastDataItem>[]) 
   `;
 };
 
-export const renderDailyForecast = (data: Record<string, iForecastDataItem>[]) => {
+export const renderDailyForecast = (
+  data: Record<string, iForecastDataItem>[],
+  wordDict: Record<string, string> = {},
+) => {
   if (data.length === 0) return html``;
 
   const slots = data.map((item) => {
@@ -151,7 +158,7 @@ export const renderDailyForecast = (data: Record<string, iForecastDataItem>[]) =
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Previsioni giornaliere')}
+      ${renderSectionHeader(translate('Daily forecast', wordDict))}
       <div class="fc-daily-grid">
         ${slots}
       </div>
@@ -160,9 +167,9 @@ export const renderDailyForecast = (data: Record<string, iForecastDataItem>[]) =
 };
 
 const SEA_STATE_MAP: Record<string, { label: string; color: string }> = {
-  green: { label: 'Calmo', color: '#10b981' },
-  yellow: { label: 'Mosso', color: '#f59e0b' },
-  red: { label: 'Agitato', color: '#ef4444' },
+  green: { label: 'Calm', color: '#10b981' },
+  yellow: { label: 'Rough', color: '#f59e0b' },
+  red: { label: 'Stormy', color: '#ef4444' },
 };
 
 const buildSmoothPath = (points: { x: number; y: number }[]): string => {
@@ -197,7 +204,10 @@ const toNumber = (val: number | string | Date | undefined): number => {
   return Number(normalized);
 };
 
-export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem>[]) => {
+export const renderMarineDailyForecast = (
+  data: Record<string, iForecastDataItem>[],
+  wordDict: Record<string, string> = {},
+) => {
   if (data.length === 0) return html``;
 
   const slots = data.map((item) => {
@@ -219,7 +229,6 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
     const windWavePeriodUnit = item.wind_wave_period_max?.unit;
 
     const waveDir = item.wave_direction?.value;
-    const waveDirDeg = item.wave_direction?.icon;
 
     return html`
       <div class="fc-marine-slot">
@@ -233,25 +242,18 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
           <span
             class="fc-marine-badge"
             style="background: ${seaState.color}26; color: ${seaState.color}"
-            title="Bandiera spiaggia"
-          >${seaState.label}</span>
+            title="${translate('Beach flag', wordDict)}"
+          >${translate(seaState.label, wordDict)}</span>
         ` : nothing}
 
         ${waveDir ? html`
           <div class="fc-marine-dir">
-            <div class="fc-marine-compass">
-              <ha-icon
-                class="fc-marine-compass-arrow"
-                icon="mdi:navigation"
-                style="transform: rotate(${waveDirDeg ?? 0}deg)"
-              ></ha-icon>
-            </div>
             <span class="fc-marine-dir-label">${waveDir}</span>
           </div>
         ` : nothing}
 
         ${swellHeight !== undefined ? html`
-          <div class="fc-marine-component" title="Swell">
+          <div class="fc-marine-component" title="${translate('Swell', wordDict)}">
             <ha-icon class="fc-marine-mini-icon" icon="mdi:waves"></ha-icon>
             <span class="fc-marine-component-value">
               ${swellHeight}${swellHeightUnit ? ` ${swellHeightUnit}` : ''}${swellPeriod !== undefined
@@ -262,7 +264,7 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
         ` : nothing}
 
         ${windWaveHeight !== undefined ? html`
-          <div class="fc-marine-component" title="Mare vento">
+          <div class="fc-marine-component" title="${translate('Wind wave', wordDict)}">
             <ha-icon class="fc-marine-mini-icon" icon="mdi:weather-windy"></ha-icon>
             <span class="fc-marine-component-value">
               ${windWaveHeight}${windWaveHeightUnit ? ` ${windWaveHeightUnit}` : ''}${windWavePeriod !== undefined
@@ -286,7 +288,7 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
   let chart = html``;
   if (validWaveHeights.length >= 2 && allValidHeights.length > 0) {
     const maxHeight = Math.max(...allValidHeights);
-    const domainTop = Math.max(1, Math.ceil(maxHeight / 0.5) * 0.5);
+    const domainTop = Math.max(0.5, Math.ceil(maxHeight / 0.5) * 0.5);
     const domainMid = domainTop / 2;
 
     const plotLeft = 40;
@@ -330,7 +332,7 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
 
     chart = html`
       <div class="fc-marine-chart-wrap">
-        <div class="fc-marine-chart-title">Andamento altezza onda</div>
+        <div class="fc-marine-chart-title">${translate('Wave height trend', wordDict)}</div>
         <svg class="fc-marine-chart-svg" viewBox="0 0 308 56" preserveAspectRatio="none">
           <line x1="${plotLeft}" y1="${plotTop}" x2="${plotRight}" y2="${plotTop}" class="fc-marine-chart-grid" />
           <line
@@ -372,47 +374,48 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
 
   const legend = html`
     <div class="fc-marine-legend">
-      <span class="fc-marine-legend-item">
-        <span
-          class="fc-marine-legend-dot"
-          style="background: #10b981"
-          title="Onda max inferiore a 1,0 m"
-        ></span>Calmo
-      </span>
-      <span class="fc-marine-legend-item">
-        <span
-          class="fc-marine-legend-dot"
-          style="background: #f59e0b"
-          title="Onda max 1,0–1,8 m, oppure swell ≥ 0,8 m o mare vento ≥ 0,6 m"
-        ></span>Mosso
-      </span>
-      <span class="fc-marine-legend-item">
-        <span
-          class="fc-marine-legend-dot"
-          style="background: #ef4444"
-          title="Onda max 1,8 m o superiore, oppure swell ≥ 1,5 m con mare vento ≥ 0,8 m"
-        ></span>Agitato
-      </span>
-      <span class="fc-marine-legend-item">
-        <span class="fc-marine-legend-line fc-marine-legend-line--wave"></span>Onda max
-      </span>
-      <span class="fc-marine-legend-item">
-        <span class="fc-marine-legend-line fc-marine-legend-line--swell"></span>
-        <ha-icon class="fc-marine-legend-icon" icon="mdi:waves"></ha-icon>Swell
-      </span>
-      <span class="fc-marine-legend-item">
-        <span class="fc-marine-legend-line fc-marine-legend-line--windwave"></span>
-        <ha-icon class="fc-marine-legend-icon" icon="mdi:weather-windy"></ha-icon>Mare vento
-      </span>
-      <div class="fc-marine-legend-note">
-        Calmo &lt;1,0 m · Mosso 1,0–1,8 m · Agitato ≥1,8 m (combinato con swell e mare vento)
+      <div class="fc-marine-legend-row">
+        <span class="fc-marine-legend-item">
+          <span
+            class="fc-marine-legend-dot"
+            style="background: #10b981"
+            title="${translate('Max wave below 1.0 m', wordDict)}"
+          ></span>${translate('Calm', wordDict)}
+        </span>
+        <span class="fc-marine-legend-item">
+          <span
+            class="fc-marine-legend-dot"
+            style="background: #f59e0b"
+            title="${translate('Max wave 1.0-1.8 m, or swell >= 0.8 m or wind wave >= 0.6 m', wordDict)}"
+          ></span>${translate('Rough', wordDict)}
+        </span>
+        <span class="fc-marine-legend-item">
+          <span
+            class="fc-marine-legend-dot"
+            style="background: #ef4444"
+            title="${translate('Max wave 1.8 m or more, or swell >= 1.5 m with wind wave >= 0.8 m', wordDict)}"
+          ></span>${translate('Stormy', wordDict)}
+        </span>
+      </div>
+      <div class="fc-marine-legend-row">
+        <span class="fc-marine-legend-item">
+          <span class="fc-marine-legend-line fc-marine-legend-line--wave"></span>${translate('Max wave', wordDict)}
+        </span>
+        <span class="fc-marine-legend-item">
+          <span class="fc-marine-legend-line fc-marine-legend-line--swell"></span>
+          <ha-icon class="fc-marine-legend-icon" icon="mdi:waves"></ha-icon>${translate('Swell', wordDict)}
+        </span>
+        <span class="fc-marine-legend-item">
+          <span class="fc-marine-legend-line fc-marine-legend-line--windwave"></span>
+          <ha-icon class="fc-marine-legend-icon" icon="mdi:weather-windy"></ha-icon>${translate('Wind wave', wordDict)}
+        </span>
       </div>
     </div>
   `;
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Previsioni marine giornaliere')}
+      ${renderSectionHeader(translate('Marine daily forecast', wordDict))}
       <div class="fc-marine-grid">
         ${slots}
       </div>
@@ -422,7 +425,11 @@ export const renderMarineDailyForecast = (data: Record<string, iForecastDataItem
   `;
 };
 
-export const renderWeatherForecast = (forecastType: number, data: Record<string, iForecastDataItem>[]) => {
+export const renderWeatherForecast = (
+  forecastType: number,
+  data: Record<string, iForecastDataItem>[],
+  wordDict: Record<string, string> = {},
+) => {
   const rows = data.map((dayData) => {
     const day = dayData.reference?.value;
     const img = dayData.condition?.img;
@@ -446,7 +453,6 @@ export const renderWeatherForecast = (forecastType: number, data: Record<string,
     const swell_wave_height_max = dayData.swell_wave_height_max?.value;
     const wave_height_max = dayData.wave_height_max?.value;
     const wave_direction = dayData.wave_direction?.value;
-    const wave_direction_degrees = dayData.wave_direction?.icon;
     const wave_height_max_unit = dayData.wave_height_max?.unit;
 
     return html`
@@ -494,10 +500,7 @@ export const renderWeatherForecast = (forecastType: number, data: Record<string,
   wave_direction !== undefined
     ? html`
                 <div class="weather-forecast-temperature">
-                  ${wave_direction_degrees ? html`<ha-icon
-                        icon="mdi:arrow-up-thin"
-                        style="display:inline-block; transform: rotate(${wave_direction_degrees}deg);"
-                      ></ha-icon>` : ''} ${wave_direction}
+                  ${wave_direction}
                 </div>
               `
     : ''
@@ -524,18 +527,18 @@ export const renderWeatherForecast = (forecastType: number, data: Record<string,
     `;
   });
 
-  let title = 'Daily';
+  let title = translate('Daily forecast', wordDict);
   if (forecastType === 1) {
-    title = 'Hourly';
+    title = translate('Hourly forecast', wordDict);
   } else if (forecastType === 2) {
-    title = 'Marine daily';
+    title = translate('Marine daily forecast', wordDict);
   } else if (forecastType === 3) {
-    title = 'Marine hourly';
+    title = translate('Marine hourly forecast', wordDict);
   }
 
   return html`
   <div class="weather-forecast-grid-wrapper">
-    <div class="weather-forecast-title">${title} forecast</div>
+    <div class="weather-forecast-title">${title}</div>
     <div class="weather-forecast-grid-container">
       ${rows}
     </div>

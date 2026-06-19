@@ -17,7 +17,7 @@ const summaryStyle = css`
   grid-template-columns: 72px 1fr auto;
   align-items: center;
   gap: var(--cwc-space-xs) var(--cwc-space-md);
-  padding: var(--cwc-space-lg) var(--cwc-space-lg) var(--cwc-space-md);
+  padding: var(--cwc-space-lg) var(--cwc-space-lg) var(--cwc-space-xs);
 }
 
 /* Icona meteo */

@@ -76,13 +76,13 @@ const resolveTileStyle = (windMapConfig: iWindMap): iTileStyleDefinition => {
 /**
  * Calcola il filtro CSS applicato al mosaico di tile. tile_filter, se
  * presente, ha sempre priorità assoluta (controllo completo per l'utente).
- * Altrimenti si compone da dark_invert (per un tema scuro "vero" via
+ * Altrimenti si compone da tile_dark (per un tema scuro "vero" via
  * invert+hue-rotate, utile su layer chiari come Standard) e da brightness
- * (di default 0.65 con tema HA scuro/1 con tema chiaro, 1 se dark_invert è
+ * (di default 0.65 con tema HA scuro/1 con tema chiaro, 1 se tile_dark è
  * attivo, salvo override esplicito).
  */
 const resolveDefaultBrightness = (windMapConfig: iWindMap, hass: HomeAssistant): number => {
-  if (windMapConfig.dark_invert) return 1;
+  if (windMapConfig.tile_dark) return 1;
   return computeDarkMode(hass) ? 0.65 : 1;
 };
 
@@ -91,7 +91,7 @@ const buildTileFilter = (windMapConfig: iWindMap, hass: HomeAssistant): string =
 
   const brightness = windMapConfig.brightness ?? resolveDefaultBrightness(windMapConfig, hass);
 
-  return windMapConfig.dark_invert
+  return windMapConfig.tile_dark
     ? `invert(90%) hue-rotate(180deg) brightness(${brightness})`
     : `brightness(${brightness})`;
 };
@@ -101,12 +101,13 @@ const buildWindMap = (
   cwcLocWindDirections: Record<string, string>,
   windMapConfig?: iWindMap,
   presentData?: iPresentData,
+  wordDict: Record<string, string> = {},
 ): ReturnType<typeof renderWindMap> => {
-  if (!windMapConfig?.enabled) return renderWindMap(null);
+  if (!windMapConfig?.enabled) return renderWindMap(null, wordDict);
 
   const latitude = windMapConfig.latitude ?? hass.config.latitude;
   const longitude = windMapConfig.longitude ?? hass.config.longitude;
-  if (latitude === undefined || longitude === undefined) return renderWindMap(null);
+  if (latitude === undefined || longitude === undefined) return renderWindMap(null, wordDict);
 
   const zoom = windMapConfig.zoom ?? DEFAULT_ZOOM;
 
@@ -131,7 +132,7 @@ const buildWindMap = (
   }));
 
   // Niente provider "scuro" separato (si usa sempre OSM): l'adattamento al tema
-  // HA passa da un filtro CSS (brightness/dark_invert/tile_filter).
+  // HA passa da un filtro CSS (brightness/tile_dark/tile_filter).
   const filter = buildTileFilter(windMapConfig, hass);
 
   const windMapData: iWindMapData = {
@@ -147,7 +148,7 @@ const buildWindMap = (
     attribution,
   };
 
-  return renderWindMap(windMapData);
+  return renderWindMap(windMapData, wordDict);
 };
 
 export default buildWindMap;

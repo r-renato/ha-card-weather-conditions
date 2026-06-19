@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit';
 import { renderSectionHeader } from '../utils/render-section';
+import { translate } from '../utils/locale';
 
 export interface iWeatherMeteoDPCAlarmDataInterface {
   event?: string,
@@ -28,6 +29,7 @@ const colorToModifier = (color: string): string => {
 
 const renderMeteoDPCalarm = (
   meteoDPCalarmData: Record<string, iWeatherMeteoDPCAlarmDataInterface> | null,
+  wordDict: Record<string, string> = {},
 ) => {
   if (!meteoDPCalarmData || Object.keys(meteoDPCalarmData).length === 0) return html``;
 
@@ -47,7 +49,7 @@ const renderMeteoDPCalarm = (
         ${hasSeverity ? html`
           <span
             class="alarm-banner__badge ${modifier}__badge"
-            title="Livello di criticità"
+            title="${translate('Severity level', wordDict)}"
           >${data.severity}</span>
         ` : nothing}
       </div>
@@ -56,7 +58,7 @@ const renderMeteoDPCalarm = (
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Allerte')}
+      ${renderSectionHeader(translate('Alerts', wordDict))}
       ${banners}
     </div>
   `;

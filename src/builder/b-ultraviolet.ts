@@ -3,6 +3,7 @@ import { ResolvedLocale } from '../utils/locale';
 import { getEntityNumericValue, getEntityRawValue } from '../utils/entity';
 import renderUltraviolet from '../templates/t-ultraviolet';
 import { iUltraviolet } from '../utils/config-schema';
+import { iTerms } from '../base/lovelace-base';
 
 const getTime = (state?: string | number): string => {
   const value = typeof state === 'string' && state.toLowerCase() === 'unknown'
@@ -55,10 +56,11 @@ const skinData = (hass: HomeAssistant, formatterLocale: string, uv: iUltraviolet
   skinType6: { value: getTime(getEntityNumericValue({ entityId: uv.set_skin_type_6, hass, formatterLocale })) },
 });
 
-const buildUltraviolet = (hass: HomeAssistant, resolvedLocale: ResolvedLocale, uv: iUltraviolet) => {
+const buildUltraviolet = (hass: HomeAssistant, resolvedLocale: ResolvedLocale, uv: iUltraviolet, terms: iTerms) => {
   return renderUltraviolet(
     { ...summaryData(hass, resolvedLocale.formatterLocale, uv) },
     { ...skinData(hass, resolvedLocale.formatterLocale, uv) },
+    terms.words,
   );
 };
 

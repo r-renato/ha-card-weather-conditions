@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit';
 import { renderSectionHeader } from '../utils/render-section';
+import { translate } from '../utils/locale';
 
 export interface RenderDataItem {
   value?: number | string | Date;
@@ -35,7 +36,11 @@ const getTextColor = (hex: string): string => {
   return brightness > 125 ? '#000' : '#fff';
 };
 
-const renderUltraviolet = (data: RenderData, skinData: RenderSkinData) => {
+const renderUltraviolet = (
+  data: RenderData,
+  skinData: RenderSkinData,
+  wordDict: Record<string, string> = {},
+) => {
   const hasIndex = data.currentUVIndex?.value !== undefined
     && data.maxUVIndex?.value !== undefined;
 
@@ -52,7 +57,7 @@ const renderUltraviolet = (data: RenderData, skinData: RenderSkinData) => {
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Radiazione UV')}
+      ${renderSectionHeader(translate('UV radiation', wordDict))}
 
       <!-- Riga summary: indice/livello a sinistra, ozono a destra -->
       <div class="uv-summary-row">
@@ -77,7 +82,7 @@ const renderUltraviolet = (data: RenderData, skinData: RenderSkinData) => {
       ${protectionOn ? html`
         <div class="uv-protection-on">
           <ha-icon icon="mdi:sunglasses"></ha-icon>
-          <span>Protezione consigliata</span>
+          <span>${translate('Recommended protection', wordDict)}</span>
         </div>
       ` : nothing}
 
@@ -90,7 +95,7 @@ const renderUltraviolet = (data: RenderData, skinData: RenderSkinData) => {
             <div
               class="ultraviolet-skin-type-cell"
               style="background: ${bgColor};"
-              title="Fototipo ${num[i]}"
+              title="${translate('Skin type', wordDict)} ${num[i]}"
             >
               <div class="ultraviolet-skin-type-label" style="color: ${textColor};">${num[i]}</div>
               <div class="ultraviolet-exposure-time" style="color: ${textColor};">${item.value || '--'}</div>

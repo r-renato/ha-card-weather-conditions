@@ -363,11 +363,11 @@ const buildWeatherForecast = (
   }
 
   switch (forecastType) {
-    case 0: return renderDailyForecast(dailyForecastData);
-    case 1: return renderHourlyForecast(hourlyforecastData);
-    case 2: return renderMarineDailyForecast(marineDailyForecastData);
-    case 3: return renderWeatherForecast(forecastType, marineHourlyForecastData);
-    default: return renderWeatherForecast(forecastType, voidRecord);
+    case 0: return renderDailyForecast(dailyForecastData, terms.words);
+    case 1: return renderHourlyForecast(hourlyforecastData, terms.words);
+    case 2: return renderMarineDailyForecast(marineDailyForecastData, terms.words);
+    case 3: return renderWeatherForecast(forecastType, marineHourlyForecastData, terms.words);
+    default: return renderWeatherForecast(forecastType, voidRecord, terms.words);
   }
 };
 

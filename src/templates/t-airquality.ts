@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit';
 import { renderSectionHeader } from '../utils/render-section';
+import { translate } from '../utils/locale';
 
 export interface iAirQualityPollutant {
   name: string;
@@ -15,13 +16,13 @@ export interface iAirQualityRenderData {
   pollutants: iAirQualityPollutant[];
 }
 
-export const renderAirQuality = (data: iAirQualityRenderData) => {
+export const renderAirQuality = (data: iAirQualityRenderData, wordDict: Record<string, string> = {}) => {
   const hasAqi = data.aqiValue !== undefined && data.aqiValue !== null;
   if (!hasAqi && data.pollutants.length === 0) return html``;
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Qualità dell\'aria')}
+      ${renderSectionHeader(translate('Air quality', wordDict))}
 
       ${hasAqi ? html`
         <div class="aqi-summary-row">
@@ -34,7 +35,7 @@ export const renderAirQuality = (data: iAirQualityRenderData) => {
               <div class="aqi-quality-label">${data.aqiLabel}</div>
             ` : nothing}
             ${data.primaryPollutant ? html`
-              <div class="aqi-primary-pollutant">Primario ${data.primaryPollutant}</div>
+              <div class="aqi-primary-pollutant">${translate('Primary', wordDict)} ${data.primaryPollutant}</div>
             ` : nothing}
           </div>
         </div>

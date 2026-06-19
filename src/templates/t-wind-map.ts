@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit';
 import { renderSectionHeader } from '../utils/render-section';
+import { translate } from '../utils/locale';
 
 export interface iWindMapData {
   /** 9 URL di tile, ordine riga per riga (griglia 3x3, 768x768px). */
@@ -16,7 +17,7 @@ export interface iWindMapData {
   attribution: string;
 }
 
-const renderWindMap = (data: iWindMapData | null) => {
+const renderWindMap = (data: iWindMapData | null, wordDict: Record<string, string> = {}) => {
   if (!data) return html``;
 
   const {
@@ -40,7 +41,7 @@ const renderWindMap = (data: iWindMapData | null) => {
 
   return html`
     <div class="cwc-section">
-      ${renderSectionHeader('Direzione vento')}
+      ${renderSectionHeader(translate('Wind direction', wordDict))}
       <div class="windmap-container">
         <div
           class="windmap-mosaic"

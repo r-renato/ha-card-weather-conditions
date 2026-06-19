@@ -3,6 +3,25 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] 2026-06-19
+### Breaking
+- Sun bar (sunrise/sunset) now defaults to `hh:mm` instead of `hh:mm:ss`; use `weather.sun_time_format: hh_mm_ss` to restore seconds
+
+### Added
+- `weather.sun_time_format` option to choose sunrise/sunset time format (`hh_mm` or `hh_mm_ss`, default `hh_mm`)
+- `module_order` config option to choose which card modules are shown and in what order
+- Full English-key translation system for previously hardcoded Italian UI strings (section titles, present-conditions labels, air quality levels, alert day labels, marine forecast tooltips and legend); translated across all 13 supported languages
+
+### Changed
+- Renamed marine forecast label "Mare vento" / "Wind wave" wording for clarity
+- Marine daily forecast Y axis now scales dynamically down to 0.5 m instead of a fixed 1.0 m minimum, improving readability when wave heights are small
+- Marine daily forecast legend split into two rows: sea state (Calm/Rough/Stormy) on the first row, chart series (Max wave/Swell/Wind wave) on the second
+- Removed compass direction icon from marine forecast cards, keeping only the text label
+- Hidden the decorative section-line and top border for the first visible module in the card
+
+### Fixed
+- `formatterLocale` resolution now derives the numeric formatting locale from the resolved language locale when it already matches the requested `number_format`
+
 ## [2.1.0] 2026-05-15
 ### Fixed
 - Minor bug fixing

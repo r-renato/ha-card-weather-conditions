@@ -50,25 +50,7 @@ const weatherForecastStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4px;
   margin-top: 3px;
-}
-
-.fc-marine-compass {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.fc-marine-compass-arrow {
-  --mdc-icon-size: 12px;
-  color: #7dd3fc;
 }
 
 .fc-marine-dir-label {
@@ -167,10 +149,17 @@ const weatherForecastStyle = css`
 
 .fc-marine-legend {
   display: flex;
-  gap: var(--cwc-space-sm);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--cwc-space-xs);
   padding-top: var(--cwc-space-xs);
   border-top: 0.5px solid var(--cwc-separator);
+}
+
+.fc-marine-legend-row {
+  display: flex;
+  align-items: center;
+  gap: var(--cwc-space-sm);
+  flex-wrap: wrap;
 }
 
 .fc-marine-legend-item {
@@ -211,14 +200,6 @@ const weatherForecastStyle = css`
 .fc-marine-legend-icon {
   --mdc-icon-size: 10px;
   color: var(--cwc-text-muted);
-}
-
-.fc-marine-legend-note {
-  width: 100%;
-  font-size: 8px;
-  color: var(--cwc-text-muted);
-  opacity: 0.8;
-  margin-top: 2px;
 }
 
 .fc-daily-grid {

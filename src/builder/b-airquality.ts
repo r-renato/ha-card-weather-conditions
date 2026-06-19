@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
 import { HomeAssistant } from 'custom-card-helpers/dist';
-import { ResolvedLocale } from '../utils/locale';
+import { ResolvedLocale, translate } from '../utils/locale';
 import { iAirQuality } from '../utils/config-schema';
 import { getEntityNumericValue, getEntityRawValue, getEntityUnit } from '../utils/entity';
 import { renderAirQuality, iAirQualityPollutant } from '../templates/t-airquality';
+import { iTerms } from '../base/lovelace-base';
 
 const getAQIColor = (aqi: number): string => {
   if (aqi <= 50) return '#009966';
@@ -14,13 +15,13 @@ const getAQIColor = (aqi: number): string => {
   return '#7e0023';
 };
 
-const getAQILabel = (aqi: number): string => {
-  if (aqi <= 50) return 'Buona';
-  if (aqi <= 100) return 'Moderata';
-  if (aqi <= 150) return 'Non salutare (sensibili)';
-  if (aqi <= 200) return 'Non salutare';
-  if (aqi <= 300) return 'Molto non salutare';
-  return 'Pericolosa';
+const getAQILabel = (aqi: number, wordDict: Record<string, string>): string => {
+  if (aqi <= 50) return translate('Good', wordDict);
+  if (aqi <= 100) return translate('Moderate', wordDict);
+  if (aqi <= 150) return translate('Unhealthy for sensitive groups', wordDict);
+  if (aqi <= 200) return translate('Unhealthy', wordDict);
+  if (aqi <= 300) return translate('Very unhealthy', wordDict);
+  return translate('Hazardous', wordDict);
 };
 
 const formatPollutantName = (raw: string): string => {
@@ -41,6 +42,7 @@ const buildAirQuality = (
   hass: HomeAssistant,
   resolvedLocale: ResolvedLocale,
   airquality: iAirQuality,
+  terms: iTerms,
 ) => {
   const { formatterLocale } = resolvedLocale;
 
@@ -87,10 +89,10 @@ const buildAirQuality = (
   return renderAirQuality({
     aqiValue: aqiDisplay,
     aqiColor: aqiNum !== undefined && !Number.isNaN(aqiNum) ? getAQIColor(aqiNum) : undefined,
-    aqiLabel: aqiNum !== undefined && !Number.isNaN(aqiNum) ? getAQILabel(aqiNum) : undefined,
+    aqiLabel: aqiNum !== undefined && !Number.isNaN(aqiNum) ? getAQILabel(aqiNum, terms.words) : undefined,
     primaryPollutant: primaryRaw ? formatPollutantName(primaryRaw) : undefined,
     pollutants,
-  });
+  }, terms.words);
 };
 
 export default buildAirQuality;

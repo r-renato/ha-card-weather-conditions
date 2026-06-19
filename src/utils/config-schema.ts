@@ -95,16 +95,19 @@ export interface iWindMap {
   tile_api_key?: string; // API key personale del provider, necessaria solo per 'cycle' | 'transport' | 'topo'.
   tile_url?: string; // Override completo del template tile (ha priorità su tile_style), es. 'https://{s}.example.com/{z}/{x}/{y}.png'.
   tile_attribution?: string; // Testo di attribuzione da mostrare quando si usa tile_url personalizzato.
-  brightness?: number; // Componente brightness() del filtro CSS (0-2). Default: 0.65 (tema scuro) / 1 (tema chiaro o dark_invert attivo).
-  dark_invert?: boolean; // Applica invert(90%) hue-rotate(180deg) per un tema scuro su tile chiare, combinato con brightness.
-  tile_filter?: string; // Override completo del filtro CSS (ha priorità su brightness/dark_invert), es. 'grayscale(0.3) contrast(1.1)'.
+  brightness?: number; // Componente brightness() del filtro CSS (0-2). Default: 0.65 (tema scuro) / 1 (tema chiaro o tile_dark attivo).
+  tile_dark?: boolean; // Applica invert(90%) hue-rotate(180deg) per un tema scuro su tile chiare, combinato con brightness.
+  tile_filter?: string; // Override completo del filtro CSS (ha priorità su brightness/tile_dark), es. 'grayscale(0.3) contrast(1.1)'.
   wind_bearing?: string; // Entity id dei gradi vento; se omesso riusa weather.present.wind_bearing.
   wind_speed?: string; // Entity id della velocità vento; se omesso riusa weather.present.wind_speed.
 }
 
+export type SunTimeFormat = 'hh_mm' | 'hh_mm_ss';
+
 export interface iWeather {
   name?: string; // location name, in summary
   sun?: string;
+  sun_time_format?: SunTimeFormat; // Formato orario alba/tramonto nella sun bar. Default: 'hh_mm'.
   moonphase?: string;
   icons_model: string;
   animation?: boolean;
@@ -162,12 +165,32 @@ export interface iLocaleOverride {
   number_format?: NumberFormat;
 }
 
+export type CwcModuleName =
+  | 'summary'
+  | 'present'
+  | 'daily_forecasts'
+  | 'hourly_forecasts'
+  | 'marine_daily'
+  | 'marine_hourly'
+  | 'meteoalarm'
+  | 'pollen'
+  | 'ultraviolet'
+  | 'airquality'
+  | 'camera'
+  | 'wind_map';
+
 export interface iCardConfig {
   type: string; // ha-card-weather-conditions
   language?: string ; // Card language (language code ISO 639 'en' or language tag BCP 47 'en-GB')
   timezone?: string;
   number_format?: NumberFormat;
   // locale?: iLocaleOverride ;
+
+  // Ordine e visibilità dei moduli della card. Se presente, SOSTITUISCE
+  // l'ordine di default: solo i moduli elencati qui vengono mostrati,
+  // nell'ordine indicato. Se assente, si usa l'ordine/visibilità di default
+  // basato sulla sola presenza della relativa configurazione (retrocompatibile).
+  module_order?: CwcModuleName[];
 
   weather: iWeather;
   ultraviolet?: iUltraviolet;
@@ -178,8 +201,6 @@ export interface iCardConfig {
   camera?: string;
 
   wind_map?: iWindMap;
-
-  // display: string[]
 
   // alert: Alert ;
   // sea: Sea ;

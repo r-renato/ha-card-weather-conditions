@@ -1,20 +1,20 @@
 /* eslint-disable camelcase */
 /* eslint-disable quote-props */
 import { HomeAssistant } from 'custom-card-helpers/dist';
-import { ResolvedLocale } from '../utils/locale';
+import { ResolvedLocale, translate } from '../utils/locale';
 import { iTerms } from '../base/lovelace-base';
 import { iDPCAlert } from '../utils/config-schema';
 import renderMeteoDPCalarm, { iWeatherMeteoDPCAlarmDataInterface } from '../templates/t-meteoalarm';
 
-const getEffectiveLabel = (effective: string) => {
+const getEffectiveLabel = (effective: string, wordDict: Record<string, string>) => {
   const effectiveDatetime = new Date(effective);
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const effDate = new Date(effectiveDatetime.getFullYear(), effectiveDatetime.getMonth(), effectiveDatetime.getDate());
   const dayDiff = Math.round((effDate.getTime() - today.getTime()) / 86400000);
-  if (dayDiff === 0) return 'oggi';
-  if (dayDiff === 1) return 'domani';
-  if (dayDiff === 2) return 'dopodomani';
+  if (dayDiff === 0) return translate('today', wordDict);
+  if (dayDiff === 1) return translate('tomorrow', wordDict);
+  if (dayDiff === 2) return translate('day after tomorrow', wordDict);
   return undefined;
 };
 
@@ -22,6 +22,7 @@ const buildMeteoAlarmData = (
   hass: HomeAssistant,
   resolvedLocale: ResolvedLocale,
   meteoalarmId: string,
+  wordDict: Record<string, string>,
 ): Record<string, iWeatherMeteoDPCAlarmDataInterface> => {
   const eventIcon: Record<string, string> = {
     'wind': 'mdi:weather-windy',
@@ -58,7 +59,7 @@ const buildMeteoAlarmData = (
       awareness_level,
       effective,
     } = meteoalarm.attributes;
-    const effectiveDatetime = getEffectiveLabel(effective);
+    const effectiveDatetime = getEffectiveLabel(effective, wordDict);
 
     fpcData['meteoalarm'] = {
       event: event || '',
@@ -78,6 +79,7 @@ const buildDPCAlarmData = (
   hass: HomeAssistant,
   resolvedLocale: ResolvedLocale,
   dpcalarm: iDPCAlert,
+  wordDict: Record<string, string>,
 ): Record<string, iWeatherMeteoDPCAlarmDataInterface> => {
   if (!dpcalarm) return {};
   const eventIconColor: Record<number, string> = {
@@ -96,7 +98,7 @@ const buildDPCAlarmData = (
       const { level, info, icon } = entity.attributes;
       fpcData[key] = {
         event: info,
-        severity: level !== undefined && level !== null ? `Liv. ${level}` : undefined,
+        severity: level !== undefined && level !== null ? `${translate('Level', wordDict)} ${level}` : undefined,
         icon,
         icon_color: eventIconColor[level],
         datetime: new Date().toLocaleDateString(resolvedLocale.locale, {
@@ -116,8 +118,8 @@ const buildMeteoDPCalarm = (
   meteoalarmId: string,
   dpcalarm: iDPCAlert,
 ) => renderMeteoDPCalarm({
-  ...buildMeteoAlarmData(hass, resolvedLocale, meteoalarmId),
-  ...buildDPCAlarmData(hass, resolvedLocale, dpcalarm),
-});
+  ...buildMeteoAlarmData(hass, resolvedLocale, meteoalarmId, terms.words),
+  ...buildDPCAlarmData(hass, resolvedLocale, dpcalarm, terms.words),
+}, terms.words);
 
 export default buildMeteoDPCalarm;
