@@ -50,15 +50,19 @@ const cardStyle = css`
     --cwc-font-lg:  1rem;       /* ~16px */
     --cwc-font-xl:  1.25rem;    /* ~20px */
 
-    /* Colori testo */
+    /* Colori testo
+       Derivati dal tema HA, con i valori chiari come fallback: su un tema
+       light i valori fissi bianchi risultavano invisibili (issue #133).
+       Nota: --disabled-text-color non viene usato: e' pensato per i
+       controlli disabilitati ed e' troppo chiaro per del testo leggibile. */
     --cwc-text-primary:   var(--primary-text-color, rgba(255, 255, 255, 0.92));
-    --cwc-text-secondary: rgba(255, 255, 255, 0.55);
-    --cwc-text-muted:     rgba(255, 255, 255, 0.32);
+    --cwc-text-secondary: var(--secondary-text-color, rgba(255, 255, 255, 0.55));
+    --cwc-text-muted:     var(--secondary-text-color, rgba(255, 255, 255, 0.32));
 
     /* Separatori e superfici */
-    --cwc-separator:      rgba(255, 255, 255, 0.07);
-    --cwc-chip-bg:        rgba(255, 255, 255, 0.055);
-    --cwc-chip-border:    rgba(255, 255, 255, 0.09);
+    --cwc-separator:      var(--divider-color, rgba(255, 255, 255, 0.07));
+    --cwc-chip-bg:        var(--secondary-background-color, rgba(255, 255, 255, 0.055));
+    --cwc-chip-border:    var(--divider-color, rgba(255, 255, 255, 0.09));
 
     /* Raggi */
     --cwc-radius-sm:  6px;
