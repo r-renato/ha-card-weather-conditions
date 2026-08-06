@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.1] 2026-08-06
+### Fixed
+- Fixed invisible or low-contrast secondary text, separators, and chip styling on light themes by deriving their colors from Home Assistant theme variables, while preserving the previous values as fallbacks (#133 #134) — thanks to Jan Vilhuber (https://github.com/jvilhuber).
+
 ## [3.1.0] 2026-06-19
 ### Added
 - Lunar phase icons for the Southern Hemisphere: new weather.hemisphere option (north | south); if omitted, the hemisphere is automatically inferred from hass.config.latitude.
