@@ -1,4 +1,6 @@
 import { html, nothing } from 'lit';
+import { HomeAssistant } from 'custom-card-helpers/dist';
+import { HassEntity } from 'home-assistant-js-websocket';
 import { renderSectionHeader } from '../utils/render-section';
 import { translate } from '../utils/locale';
 
@@ -6,6 +8,7 @@ export interface iWeatherMeteoDPCAlarmDataInterface {
   event?: string,
   severity?: string,
   icon?: string,
+  stateObj?: HassEntity, // shown with its own icon, as Home Assistant shows it
   icon_color?: string,
   datetime?: string,
 }
@@ -29,7 +32,8 @@ const colorToModifier = (color: string): string => {
 
 const renderMeteoDPCalarm = (
   meteoDPCalarmData: Record<string, iWeatherMeteoDPCAlarmDataInterface> | null,
-  wordDict: Record<string, string> = {},
+  wordDict: Record<string, string>,
+  hass?: HomeAssistant,
 ) => {
   if (!meteoDPCalarmData || Object.keys(meteoDPCalarmData).length === 0) return html``;
 
@@ -39,7 +43,13 @@ const renderMeteoDPCalarm = (
 
     return html`
       <div class="alarm-banner ${modifier}">
-        <ha-icon class="alarm-banner__icon" icon="${data.icon}"></ha-icon>
+        ${data.stateObj && hass ? html`
+          <ha-state-icon
+            class="alarm-banner__icon"
+            .hass=${hass}
+            .stateObj=${data.stateObj}
+          ></ha-state-icon>
+        ` : html`<ha-icon class="alarm-banner__icon" icon="${data.icon}"></ha-icon>`}
         <div class="alarm-banner__body">
           <div class="alarm-banner__event">${data.event}</div>
           ${data.datetime ? html`

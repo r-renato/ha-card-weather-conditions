@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable quote-props */
 import { HomeAssistant } from 'custom-card-helpers/dist';
+import { HassEntity } from 'home-assistant-js-websocket';
 import { ResolvedLocale, translate } from '../utils/locale';
 import { iTerms } from '../base/lovelace-base';
 import { iDPCAlert } from '../utils/config-schema';
@@ -75,6 +76,68 @@ const buildMeteoAlarmData = (
   return fpcData;
 };
 
+/**
+ * What the frontend of Home Assistant knows of the registries, and how it
+ * formats a state, which custom-card-helpers does not declare.
+ */
+interface iRegistries {
+  entities?: Record<string, {
+    entity_id: string,
+    device_id?: string | null,
+    translation_key?: string | null,
+  }>,
+  devices?: Record<string, { identifiers?: Array<[string, string]> }>,
+  formatEntityState?: (stateObj: HassEntity) => string,
+}
+
+/** The days of DPC Alert, as the identifiers of their devices end: days after today. */
+const DPC_DAYS: Record<string, number> = { today: 0, tomorrow: 1, aftertomorrow: 2 };
+
+/** The color of each alert level of DPC Alert 2026.11.1 and newer. */
+const dpcLevelColor: Record<string, string> = {
+  green: 'green',
+  yellow: '#ffa600',
+  orange: 'orange',
+  red: 'red',
+};
+
+/**
+ * Return the level of a risk of DPC Alert 2026.11.1 and newer, and its day.
+ *
+ * The binary sensor of a risk is on the device of its day, next to the sensor
+ * of its level (translation key `<risk>_level`); the identifier of the device
+ * ends with the day. None for earlier versions, whose attributes have the level.
+ */
+const dpcLevelOf = (
+  hass: HomeAssistant,
+  entityId: string,
+): { level: HassEntity, offset: number } | undefined => {
+  const registries = hass as unknown as iRegistries;
+  const entry = registries.entities?.[entityId];
+  if (!entry?.device_id || !entry.translation_key) return undefined;
+  const levelEntry = Object.values(registries.entities ?? {}).find(
+    (candidate) => candidate.device_id === entry.device_id
+      && candidate.translation_key === `${entry.translation_key}_level`,
+  );
+  const level = levelEntry && hass.states[levelEntry.entity_id];
+  if (!level) return undefined;
+  const identifiers = registries.devices?.[entry.device_id]?.identifiers ?? [];
+  const day = Object.keys(DPC_DAYS).find((candidate) => identifiers.some(
+    ([domain, id]) => domain === 'dpc' && String(id).endsWith(`-${candidate}`),
+  ));
+  return { level, offset: day === undefined ? 0 : DPC_DAYS[day] };
+};
+
+/** Return the short weekday of a day after today, e.g. "MAR." for a Tuesday in Italian. */
+const weekdayOf = (offset: number, resolvedLocale: ResolvedLocale) => {
+  const date = new Date();
+  date.setDate(date.getDate() + offset);
+  return date.toLocaleDateString(resolvedLocale.locale, {
+    weekday: 'short',
+    timeZone: resolvedLocale.timezone,
+  }).toLocaleUpperCase();
+};
+
 const buildDPCAlarmData = (
   hass: HomeAssistant,
   resolvedLocale: ResolvedLocale,
@@ -95,6 +158,22 @@ const buildDPCAlarmData = (
     const entityId = dpcalarm[key];
     const entity = entityId && hass.states[entityId];
     if (entity?.state === 'on' && entity.attributes) {
+      const dpc = dpcLevelOf(hass, entityId);
+      if (dpc) {
+        // The level and the day are entities of the day of the risk
+        const options: string[] = dpc.level.attributes.options ?? [];
+        const position = options.indexOf(dpc.level.state);
+        const { formatEntityState } = hass as unknown as iRegistries;
+        fpcData[key] = {
+          event: formatEntityState ? formatEntityState(dpc.level) : dpc.level.state,
+          severity: position >= 0 ? `${translate('Level', wordDict)} ${position + 1}` : undefined,
+          stateObj: entity,
+          icon_color: dpcLevelColor[dpc.level.state],
+          datetime: weekdayOf(dpc.offset, resolvedLocale),
+        };
+        return;
+      }
+      // DPC Alert before 2026.11.1: the level is an attribute
       const { level, info, icon } = entity.attributes;
       fpcData[key] = {
         event: info,
@@ -120,6 +199,6 @@ const buildMeteoDPCalarm = (
 ) => renderMeteoDPCalarm({
   ...buildMeteoAlarmData(hass, resolvedLocale, meteoalarmId, terms.words),
   ...buildDPCAlarmData(hass, resolvedLocale, dpcalarm, terms.words),
-}, terms.words);
+}, terms.words, hass);
 
 export default buildMeteoDPCalarm;

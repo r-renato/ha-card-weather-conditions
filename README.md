@@ -222,6 +222,8 @@ Weather alerts from the Italian Civil Protection Department (Dipartimento della 
 | `hydraulic`       | `string` | No       | Hydraulic (river/stream flooding) alert sensor. |
 | `hydrogeological` | `string` | No       | Hydrogeological (landslide/soil instability) alert sensor. |
 
+With [DPC Alert](https://github.com/caiosweet/Home-Assistant-custom-components-DPC-Alert) 2026.11.1 or newer, each day of a place is a device with the binary sensor and the level of each risk, such as `binary_sensor.dpc_portula_tomorrow_hydrogeological_risk`: the card shows the level of the risk in the language of Home Assistant and in its color, with the weekday of the day of the sensor. Earlier versions of DPC Alert keep working as before.
+
 ---
 
 ## 2 `ultraviolet` Object
